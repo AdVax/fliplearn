@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed background (maskable icons need solid fill edge-to-edge) -->
+  <rect width="512" height="512" fill="#0b0b12"/>
+
+  <!-- Back card -->
+  <rect x="108" y="160" width="260" height="192" rx="20"
+        fill="#1c1c2a" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"
+        transform="rotate(-7 238 256)"/>
+
+  <!-- Front card -->
+  <rect x="148" y="152" width="260" height="192" rx="20" fill="#fefcf7"/>
+
+  <!-- Sentence lines -->
+  <rect x="174" y="208" width="88" height="5" rx="2.5" fill="#d4c4a0"/>
+  <rect x="270" y="208" width="62" height="5" rx="2.5" fill="#c8901a"/>
+  <rect x="340" y="208" width="52" height="5" rx="2.5" fill="#d4c4a0"/>
+  <rect x="174" y="230" width="216" height="5" rx="2.5" fill="#d4c4a0"/>
+  <rect x="174" y="252" width="160" height="5" rx="2.5" fill="#d4c4a0"/>
+
+  <!-- Word badge -->
+  <rect x="200" y="278" width="108" height="28" rx="14"
+        fill="rgba(200,144,26,0.15)" stroke="rgba(200,144,26,0.4)" stroke-width="1.5"/>
+  <rect x="218" y="288" width="72" height="7" rx="3.5" fill="#c8901a" opacity="0.85"/>
+
+  <!-- Sparkle -->
+  <text x="376" y="178" font-size="26" text-anchor="middle" font-family="serif" fill="#c8901a">✦</text>
+</svg>

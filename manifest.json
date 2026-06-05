@@ -1,0 +1,29 @@
+{
+  "name": "FlipLearn · بطاقات التعلم",
+  "short_name": "FlipLearn",
+  "description": "بطاقات ذكية لحفظ المفردات الإنجليزية",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b0b12",
+  "theme_color": "#c8901a",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": []
+}
