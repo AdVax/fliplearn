@@ -1,1577 +1,1786 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FlipLearn · بطاقات التعلم</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#c8901a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="FlipLearn">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FlipLearn · بطاقات التعلم</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c8901a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FlipLearn">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* =============================================
-   RESET & VARIABLES
-   ============================================= */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg:          #0b0b12;
-  --surf-1:      #13131e;
-  --surf-2:      #1c1c2a;
-  --surf-3:      #252535;
-  --card-bg:     #fefcf7;
-  --accent:      #c8901a;
-  --accent-lt:   #e8a828;
-  --accent-dim:  rgba(200,144,26,.14);
-  --txt-1:       #eceae4;
-  --txt-2:       #9490a2;
-  --txt-3:       #524f60;
-  --border:      rgba(255,255,255,.07);
-  --danger:      #e05555;
-  --success:     #4ec98a;
-  --r:           16px;
-  --r-sm:        10px;
-  --r-lg:        24px;
-  --f-ar:        'Tajawal', sans-serif;
-  --f-en:        'Playfair Display', serif;
-  --ease:        cubic-bezier(.4,0,.2,1);
-}
-
-html, body { height: 100%; overflow: hidden; }
-
-body {
-  font-family: var(--f-ar);
-  background: var(--bg);
-  color: var(--txt-1);
-  -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
-}
-
-button { font-family: inherit; border: none; outline: none; background: none; cursor: pointer; }
-input, textarea { font-family: inherit; outline: none; border: none; background: none; }
-
-/* =============================================
-   APP SHELL
-   ============================================= */
-#app {
-  height: 100dvh;
-  position: relative;
-  overflow: hidden;
-}
-
-/* =============================================
-   SCREENS
-   ============================================= */
-.screen {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  transition: transform .32s var(--ease), opacity .32s var(--ease);
-  will-change: transform, opacity;
-}
-
-.screen.slide-right  { transform: translateX(100%);  pointer-events: none; }
-.screen.slide-left   { transform: translateX(-28%); opacity: .3; pointer-events: none; }
-
-/* =============================================
-   SCROLL
-   ============================================= */
-.scroll {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.scroll::-webkit-scrollbar { display: none; }
-
-/* =============================================
-   TOP BAR
-   ============================================= */
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: max(14px, env(safe-area-inset-top, 14px)) 18px 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  background: var(--bg);
-}
-
-.topbar-title {
-  flex: 1;
-  font-size: 17px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.icon-btn {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: var(--surf-2);
-  color: var(--txt-1);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: background .18s, transform .12s;
-}
-.icon-btn:active { transform: scale(.9); }
-.icon-btn:hover  { background: var(--surf-3); }
-
-/* =============================================
-   HOME SCREEN
-   ============================================= */
-.home-head {
-  padding: 28px 22px 20px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.brand-icon {
-  width: 42px; height: 42px;
-  background: var(--accent);
-  border-radius: 13px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 21px;
-  box-shadow: 0 4px 16px rgba(200,144,26,.35);
-}
-
-.brand-name {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -.4px;
-}
-
-.brand-name span { color: var(--accent); }
-
-.home-sub {
-  font-size: 13px;
-  color: var(--txt-2);
-  margin-bottom: 22px;
-}
-
-/* Stats */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.stat-box {
-  background: var(--surf-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 10px 10px;
-}
-
-.stat-val {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--accent-lt);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.stat-lbl {
-  font-size: 11px;
-  color: var(--txt-2);
-  margin-top: 3px;
-  font-weight: 500;
-}
-
-/* Install Banner */
-.install-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 4px 16px 10px;
-  padding: 11px 14px;
-  background: var(--accent-dim);
-  border: 1px solid rgba(200,144,26,.28);
-  border-radius: var(--r);
-  cursor: pointer;
-  transition: opacity .2s;
-}
-.install-bar.gone { display: none; }
-.install-bar-text { flex: 1; }
-.install-bar-title { font-size: 13px; font-weight: 700; color: var(--accent-lt); }
-.install-bar-sub   { font-size: 11px; color: var(--txt-2); margin-top: 2px; }
-
-/* Section header */
-.sec-head {
-  padding: 18px 22px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--txt-3);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-}
-
-/* Deck list */
-.deck-list {
-  padding: 0 14px 110px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.deck-card {
-  background: var(--surf-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  transition: transform .16s, background .16s;
-  position: relative;
-  overflow: hidden;
-  animation: fadeUp .3s var(--ease) both;
-}
-
-.deck-card::after {
-  content: '';
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity .2s;
-}
-
-.deck-card:active { transform: scale(.98); }
-.deck-card:hover  { background: var(--surf-2); }
-.deck-card:hover::after { opacity: 1; }
-
-.deck-icon {
-  width: 50px; height: 50px;
-  background: var(--accent-dim);
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.deck-info { flex: 1; min-width: 0; }
-
-.deck-name {
-  font-size: 15px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.deck-meta {
-  font-size: 12px;
-  color: var(--txt-2);
-  margin-top: 3px;
-}
-
-.deck-arr { color: var(--txt-3); flex-shrink: 0; }
-
-/* Empty state */
-.empty {
-  text-align: center;
-  padding: 52px 28px;
-}
-
-.empty-ic { font-size: 60px; margin-bottom: 14px; display: block; }
-.empty-ti { font-size: 17px; font-weight: 700; margin-bottom: 7px; }
-.empty-de { font-size: 13px; color: var(--txt-2); line-height: 1.65; }
-
-/* =============================================
-   FAB
-   ============================================= */
-.fab {
-  position: fixed;
-  bottom: max(22px, env(safe-area-inset-bottom, 22px));
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent);
-  color: #fff;
-  border-radius: 30px;
-  height: 54px;
-  padding: 0 26px;
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  box-shadow: 0 8px 28px rgba(200,144,26,.42);
-  transition: transform .15s, box-shadow .15s, background .15s;
-  white-space: nowrap;
-  z-index: 10;
-}
-.fab:active { transform: translateX(-50%) scale(.95); box-shadow: 0 4px 16px rgba(200,144,26,.35); }
-.fab-plus { font-size: 22px; line-height: 1; margin-bottom: 1px; }
-
-/* =============================================
-   DECK DETAIL SCREEN
-   ============================================= */
-.study-launch {
-  margin: 16px 18px 0;
-  width: calc(100% - 36px);
-  background: var(--accent);
-  color: #fff;
-  border-radius: var(--r);
-  padding: 18px;
-  font-size: 16px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform .15s, opacity .15s;
-}
-.study-launch:active { transform: scale(.98); }
-.study-launch:disabled { opacity: .35; cursor: not-allowed; transform: none; }
-
-.card-list {
-  padding: 4px 14px 110px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.card-row {
-  background: var(--surf-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 13px 15px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  cursor: pointer;
-  transition: background .15s;
-}
-.card-row:hover { background: var(--surf-2); }
-
-.card-row-body { flex: 1; min-width: 0; }
-
-.card-front-txt {
-  font-family: var(--f-en);
-  font-size: 14px;
-  direction: ltr;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.card-front-txt .bl { color: var(--accent); }
-
-.card-back-txt {
-  font-size: 11px;
-  color: var(--txt-2);
-  margin-top: 3px;
-  direction: ltr;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.del-btn {
-  color: var(--txt-3);
-  padding: 4px;
-  border-radius: 6px;
-  transition: color .15s;
-  flex-shrink: 0;
-}
-.del-btn:hover { color: var(--danger); }
-
-/* =============================================
-   STUDY SCREEN
-   ============================================= */
-#screen-study { background: var(--bg); }
-
-.study-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: max(14px, env(safe-area-inset-top, 14px)) 16px 12px;
-  flex-shrink: 0;
-}
-
-.progress-track {
-  flex: 1;
-  height: 4px;
-  background: var(--surf-3);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: width .45s var(--ease);
-}
-
-.study-count {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--txt-2);
-  min-width: 36px;
-  text-align: center;
-}
-
-.shuffle-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 11px;
-  background: var(--surf-2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  font-size: 12px;
-  color: var(--txt-2);
-  transition: all .18s;
-}
-.shuffle-btn.on {
-  background: var(--accent-dim);
-  border-color: rgba(200,144,26,.5);
-  color: var(--accent-lt);
-}
-
-.study-stage {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 20px;
-  gap: 18px;
-}
-
-/* =============================================
-   FLIP CARD
-   ============================================= */
-.scene {
-  perspective: 1100px;
-  width: 100%;
-  max-width: 460px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.flipper {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform .58s cubic-bezier(.35,.1,.25,1.1);
-  width: 100%;
-  min-height: 240px;
-}
-
-.flipper.flipped { transform: rotateY(180deg); }
-
-.face {
-  background: var(--card-bg);
-  border-radius: 22px;
-  box-shadow: 0 18px 56px rgba(0,0,0,.52), 0 0 0 1px rgba(255,255,255,.04);
-  padding: 36px 28px 32px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  direction: ltr;
-}
-
-.face-back {
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-  min-height: unset;
-}
-
-.face-tag {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #c0ae92;
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.face-sentence {
-  font-family: var(--f-en);
-  font-size: 19px;
-  line-height: 1.65;
-  color: #2a2420;
-  font-weight: 500;
-}
-
-.face-sentence .gap {
-  display: inline-block;
-  min-width: 54px;
-  border-bottom: 2.5px solid var(--accent);
-  color: #b8a584;
-  font-style: italic;
-}
-
-.face-sentence .hl {
-  color: var(--accent);
-  font-weight: 700;
-}
-
-.word-badge {
-  margin-top: 18px;
-  background: rgba(200,144,26,.12);
-  border: 1px solid rgba(200,144,26,.28);
-  border-radius: 20px;
-  padding: 5px 16px;
-  font-family: var(--f-en);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.card-note-txt {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #8a7a64;
-  font-style: italic;
-  font-family: var(--f-ar);
-  direction: rtl;
-}
-
-/* tap hint */
-.tap-hint {
-  font-size: 12px;
-  color: var(--txt-3);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: opacity .3s;
-}
-
-/* nav buttons */
-.study-nav {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-  max-width: 460px;
-  padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
-}
-
-.nav-btn {
-  flex: 1;
-  height: 50px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  background: var(--surf-1);
-  color: var(--txt-1);
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background .15s, transform .12s;
-}
-.nav-btn:active { transform: scale(.97); }
-.nav-btn:hover  { background: var(--surf-2); }
-.nav-btn:disabled { opacity: .28; cursor: not-allowed; transform: none; }
-.nav-btn.gold   { background: var(--accent); border-color: transparent; color: #fff; }
-.nav-btn.gold:hover { background: var(--accent-lt); }
-
-/* Done screen */
-.done-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 28px;
-  text-align: center;
-  flex: 1;
-}
-
-.done-emoji { font-size: 70px; margin-bottom: 16px; }
-.done-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-.done-desc  { font-size: 14px; color: var(--txt-2); line-height: 1.7; margin-bottom: 32px; }
-
-.done-btns {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  max-width: 300px;
-}
-
-.btn-main {
-  background: var(--accent);
-  color: #fff;
-  border-radius: var(--r);
-  padding: 15px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: opacity .15s;
-}
-.btn-main:active { opacity: .85; }
-
-.btn-sub {
-  background: var(--surf-2);
-  color: var(--txt-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 15px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background .15s;
-}
-.btn-sub:hover { background: var(--surf-3); }
-
-/* =============================================
-   MODAL (bottom sheet)
-   ============================================= */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.72);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  z-index: 50;
-  display: flex;
-  align-items: flex-end;
-  transition: opacity .28s var(--ease);
-}
-.overlay.hidden { opacity: 0; pointer-events: none; }
-.overlay.hidden .sheet { transform: translateY(100%); }
-
-.sheet {
-  background: var(--surf-1);
-  border-radius: 22px 22px 0 0;
-  width: 100%;
-  padding: 6px 22px max(28px, env(safe-area-inset-bottom, 28px));
-  max-height: 93dvh;
-  overflow-y: auto;
-  transition: transform .3s var(--ease);
-  scrollbar-width: none;
-}
-.sheet::-webkit-scrollbar { display: none; }
-
-.sheet-handle {
-  width: 38px; height: 4px;
-  background: var(--surf-3);
-  border-radius: 2px;
-  margin: 8px auto 18px;
-}
-
-.sheet-title {
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 18px;
-}
-
-/* =============================================
-   FORM
-   ============================================= */
-.fgrp { margin-bottom: 14px; }
-
-.flbl {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--txt-2);
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  margin-bottom: 7px;
-}
-
-.finput, .ftarea {
-  width: 100%;
-  background: var(--surf-2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 13px 14px;
-  color: var(--txt-1);
-  font-size: 15px;
-  transition: border-color .18s;
-  resize: none;
-}
-
-.finput.ltr, .ftarea.ltr {
-  font-family: var(--f-en);
-  direction: ltr;
-  text-align: left;
-}
-
-.finput:focus, .ftarea:focus { border-color: var(--accent); }
-
-.fhint {
-  font-size: 11px;
-  color: var(--txt-3);
-  margin-top: 5px;
-}
-
-.fhint code {
-  font-family: monospace;
-  background: var(--surf-3);
-  padding: 1px 5px;
-  border-radius: 4px;
-  color: var(--accent);
-  font-size: 12px;
-}
-
-.fsubmit {
-  width: 100%;
-  background: var(--accent);
-  color: #fff;
-  border-radius: var(--r);
-  padding: 15px;
-  font-size: 16px;
-  font-weight: 700;
-  margin-top: 10px;
-  transition: opacity .15s, transform .12s;
-}
-.fsubmit:active { opacity: .88; transform: scale(.99); }
-
-/* Emoji grid */
-.emoji-row {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 4px;
-  margin-bottom: 14px;
-}
-
-.emj-btn {
-  aspect-ratio: 1;
-  background: var(--surf-2);
-  border: 2px solid transparent;
-  border-radius: 9px;
-  font-size: 19px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: all .14s;
-}
-.emj-btn.sel  { border-color: var(--accent); background: var(--accent-dim); }
-.emj-btn:active { transform: scale(.88); }
-
-/* =============================================
-   CONTEXT MENU
-   ============================================= */
-.ctx-menu {
-  position: fixed;
-  background: var(--surf-2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-  z-index: 200;
-  min-width: 180px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.55);
-  transition: opacity .15s;
-}
-.ctx-menu.hidden { opacity: 0; pointer-events: none; }
-
-.ctx-item {
-  padding: 13px 17px;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: background .13s;
-  color: var(--txt-1);
-}
-.ctx-item:hover { background: var(--surf-3); }
-.ctx-item.red   { color: var(--danger); }
-
-/* =============================================
-   TOAST
-   ============================================= */
-.toast {
-  position: fixed;
-  bottom: max(88px, calc(env(safe-area-inset-bottom, 0px) + 88px));
-  left: 50%;
-  transform: translateX(-50%) translateY(18px);
-  background: var(--surf-2);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 9px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--txt-1);
-  opacity: 0;
-  transition: opacity .25s, transform .25s;
-  z-index: 300;
-  white-space: nowrap;
-  pointer-events: none;
-}
-.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* =============================================
-   ANIMATIONS
-   ============================================= */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Stagger deck cards */
-.deck-card:nth-child(1) { animation-delay: .04s; }
-.deck-card:nth-child(2) { animation-delay: .08s; }
-.deck-card:nth-child(3) { animation-delay: .12s; }
-.deck-card:nth-child(4) { animation-delay: .16s; }
-.deck-card:nth-child(5) { animation-delay: .20s; }
-.deck-card:nth-child(6) { animation-delay: .24s; }
-
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-@media (min-width: 600px) {
-  .sheet { max-width: 480px; margin: auto; border-radius: 22px; }
-  .overlay { align-items: center; }
-  .study-stage { padding: 32px 48px; }
-}
+/* ═══ RESET / TOKENS ═══════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+button{font-family:inherit;border:none;outline:none;background:none;cursor:pointer}
+input,textarea{font-family:inherit;outline:none;border:none;background:none}
+:root{
+  --bg:#0b0b12; --s1:#13131e; --s2:#1c1c2a; --s3:#252535;
+  --card:#fefcf7;
+  --acc:#c8901a; --acc-lt:#e8a828; --acc-dim:rgba(200,144,26,.15);
+  --t1:#eceae4; --t2:#9490a2; --t3:#514e60;
+  --bdr:rgba(255,255,255,.07);
+  --red:#e05555; --red-dim:rgba(224,85,85,.13);
+  --grn:#4ec98a; --grn-dim:rgba(78,201,138,.13);
+  --ylw:#d4a820; --ylw-dim:rgba(212,168,32,.13);
+  --blu:#5ab4e8; --blu-dim:rgba(90,180,232,.13);
+  --r:16px; --rsm:10px;
+  --far:'Tajawal','Segoe UI',Arial,sans-serif;
+  --fen:'Playfair Display',Georgia,serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+
+/* ═══ SHELL / SCREENS ═══════════════════════════════ */
+#app{height:100dvh;position:relative;overflow:hidden}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:transform .3s var(--ease),opacity .3s var(--ease);will-change:transform,opacity}
+.screen.sr{transform:translateX(100%);pointer-events:none}
+.screen.sl{transform:translateX(-28%);opacity:.3;pointer-events:none}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.topbar{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top,14px)) 18px 12px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:var(--bg)}
+.topbar-title{flex:1;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:38px;height:38px;border-radius:50%;background:var(--s2);color:var(--t1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
+.ib:active{transform:scale(.88)} .ib:hover{background:var(--s3)}
+
+/* ═══ HOME ══════════════════════════════════════════ */
+.home-head{padding:22px 20px 14px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.brand-icon{width:42px;height:42px;background:var(--acc);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 4px 18px rgba(200,144,26,.38);flex-shrink:0}
+.brand-name{font-size:22px;font-weight:700;letter-spacing:-.4px;flex:1}
+.brand-name span{color:var(--acc)}
+.home-sub{font-size:13px;color:var(--t2);margin-bottom:16px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.stat-box{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rsm);padding:10px 6px 9px;text-align:center}
+.stat-val{font-size:21px;font-weight:700;color:var(--acc-lt);line-height:1;font-variant-numeric:tabular-nums}
+.stat-lbl{font-size:10px;color:var(--t2);margin-top:3px;font-weight:500}
+
+/* Goal bar */
+.goal-wrap{margin-top:12px}
+.goal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.goal-lbl{font-size:12px;font-weight:600;color:var(--t2)}
+.goal-cnt{font-size:12px;font-weight:700;color:var(--acc-lt)}
+.goal-track{height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.goal-bar{height:100%;background:linear-gradient(to left,var(--acc-lt),var(--acc));border-radius:3px;transition:width .6s var(--ease)}
+.goal-done .goal-bar{background:var(--grn)}
+
+/* Due strip */
+.due-strip{display:flex;align-items:center;gap:12px;margin:10px 14px 4px;padding:12px 14px;background:rgba(200,144,26,.1);border:1px solid rgba(200,144,26,.25);border-radius:var(--r);cursor:pointer;transition:background .15s}
+.due-strip.hidden{display:none} .due-strip:hover{background:rgba(200,144,26,.16)}
+.due-body{flex:1} .due-title{font-size:13px;font-weight:700;color:var(--acc-lt)} .due-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.due-btn{background:var(--acc);color:#fff;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.install-bar{display:flex;align-items:center;gap:12px;margin:4px 14px 8px;padding:10px 14px;background:var(--acc-dim);border:1px solid rgba(200,144,26,.28);border-radius:var(--r);cursor:pointer}
+.install-bar.gone{display:none}
+.ib-txt{flex:1} .ib-title{font-size:13px;font-weight:700;color:var(--acc-lt)} .ib-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.sec-head{padding:16px 20px 7px;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.3px}
+
+/* ═══ DECK LIST ═════════════════════════════════════ */
+.deck-list{padding:0 12px 110px;display:flex;flex-direction:column;gap:9px}
+.deck-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:transform .14s,background .14s;position:relative;overflow:hidden;animation:fadeUp .3s var(--ease) both}
+.deck-card::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--acc);opacity:0;transition:opacity .2s}
+.deck-card:active{transform:scale(.975)} .deck-card:hover{background:var(--s2)} .deck-card:hover::after{opacity:1}
+.deck-icon{width:48px;height:48px;background:var(--acc-dim);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+.deck-info{flex:1;min-width:0}
+.deck-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-meta{font-size:12px;color:var(--t2);margin-top:3px}
+.deck-due{font-size:11px;color:var(--acc);font-weight:600;margin-top:2px}
+.deck-mbar{height:3px;background:var(--s3);border-radius:2px;margin-top:7px;overflow:hidden}
+.deck-mfill{height:100%;background:var(--grn);border-radius:2px;transition:width .5s}
+.deck-arr{color:var(--t3);flex-shrink:0}
+.fab{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);background:var(--acc);color:#fff;border-radius:30px;height:52px;padding:0 24px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px;box-shadow:0 8px 28px rgba(200,144,26,.42);transition:transform .14s,box-shadow .14s;white-space:nowrap;z-index:10}
+.fab:active{transform:translateX(-50%) scale(.94)} .fab-plus{font-size:22px;line-height:1;margin-bottom:1px}
+.empty{text-align:center;padding:48px 28px}
+.e-ic{font-size:56px;margin-bottom:13px;display:block} .e-ti{font-size:17px;font-weight:700;margin-bottom:6px} .e-de{font-size:13px;color:var(--t2);line-height:1.7}
+
+/* ═══ DECK DETAIL ═══════════════════════════════════ */
+.study-launch{margin:14px 16px 0;width:calc(100% - 32px);background:var(--acc);color:#fff;border-radius:var(--r);padding:17px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .14s,opacity .15s}
+.study-launch:active{transform:scale(.98)} .study-launch:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.card-list{padding:4px 12px 110px;display:flex;flex-direction:column;gap:8px}
+.card-row{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:background .14s}
+.card-row:hover{background:var(--s2)}
+.card-row-body{flex:1;min-width:0}
+.cfp{font-family:var(--fen);font-size:14px;direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cfp .bl{color:var(--acc)}
+.cbp{font-size:11px;color:var(--t2);margin-top:3px;direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srs-info{font-size:10px;margin-top:3px;direction:ltr;text-align:left}
+.srs-due-now{color:var(--acc);font-weight:600} .srs-due-soon{color:var(--t2)} .srs-mastered{color:var(--grn)}
+.m-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.m0{background:#404055} .m1,.m2{background:var(--acc)} .m3{background:#c8c020} .m4{background:#8ad840} .m5{background:var(--grn)}
+.del-btn{color:var(--t3);padding:3px;border-radius:6px;transition:color .14s;flex-shrink:0} .del-btn:hover{color:var(--red)}
+
+/* ═══ STUDY BAR ═════════════════════════════════════ */
+#screen-study{background:var(--bg)}
+.study-bar{display:flex;align-items:center;gap:8px;padding:max(13px,env(safe-area-inset-top,13px)) 14px 10px;flex-shrink:0}
+.prog-track{flex:1;height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--acc);border-radius:2px;transition:width .45s var(--ease)}
+.study-cnt{font-size:13px;font-weight:700;color:var(--t2);min-width:32px;text-align:center}
+.shuf-btn{display:flex;align-items:center;gap:4px;padding:5px 9px;background:var(--s2);border:1px solid var(--bdr);border-radius:20px;font-size:11px;color:var(--t2);transition:all .16s}
+.shuf-btn.on{background:var(--acc-dim);border-color:rgba(200,144,26,.5);color:var(--acc-lt)}
+.mode-chip{display:flex;align-items:center;gap:4px;padding:5px 9px;background:var(--s2);border:1px solid var(--bdr);border-radius:20px;font-size:11px;color:var(--t2);transition:all .16s;cursor:pointer}
+.mode-chip.on{background:var(--blu-dim);border-color:rgba(90,180,232,.4);color:var(--blu)}
+
+/* ═══ STUDY STAGE ════════════════════════════════════ */
+.study-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 18px;gap:13px;overflow:hidden}
+
+/* Flip card */
+.scene{perspective:1100px;width:100%;max-width:460px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .28s var(--ease),opacity .28s var(--ease)}
+.scene.exit-r{transform:translateX(130%) rotate(9deg)!important;opacity:0!important}
+.scene.exit-l{transform:translateX(-130%) rotate(-9deg)!important;opacity:0!important}
+.flipper{position:relative;transform-style:preserve-3d;transition:transform .56s cubic-bezier(.35,.1,.25,1.12);width:100%;min-height:210px}
+.flipper.flipped{transform:rotateY(180deg)}
+.face{background:var(--card);border-radius:22px;box-shadow:0 18px 56px rgba(0,0,0,.52);padding:28px 24px 24px;backface-visibility:hidden;-webkit-backface-visibility:hidden;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;direction:ltr;position:relative}
+.face-back{position:absolute;inset:0;transform:rotateY(180deg);min-height:unset;border-radius:22px}
+.face-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#c0ae92;margin-bottom:13px;display:flex;align-items:center;gap:5px}
+.face-sent{font-family:var(--fen);font-size:18px;line-height:1.7;color:#2a2420;font-weight:500}
+.face-sent .gap{display:inline-block;min-width:52px;border-bottom:2.5px solid var(--acc);color:#b8a584;font-style:italic}
+.face-sent .hl{color:var(--acc);font-weight:700}
+.word-badge{margin-top:13px;background:rgba(200,144,26,.12);border:1px solid rgba(200,144,26,.28);border-radius:20px;padding:4px 15px;font-family:var(--fen);font-size:14px;font-weight:700;color:var(--acc)}
+.card-note{margin-top:9px;font-size:12px;color:#8a7a64;font-style:italic;font-family:var(--far);direction:rtl}
+
+/* Translation on back face */
+.card-trans{margin-top:10px;padding:7px 13px;background:rgba(0,0,0,.04);border-radius:var(--rsm);font-size:13px;color:#7a7065;direction:rtl;font-family:var(--far);border-right:2px solid rgba(200,144,26,.3);text-align:right}
+
+/* Synonyms on back face */
+.syn-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;justify-content:center}
+.syn-chip{font-family:var(--fen);font-size:12px;padding:3px 10px;background:rgba(78,201,138,.1);border:1px solid rgba(78,201,138,.22);border-radius:12px;color:#5ab88a}
+
+/* TTS button */
+.tts-btn{position:absolute;bottom:9px;right:11px;width:29px;height:29px;border-radius:50%;background:rgba(200,144,26,.1);border:1px solid rgba(200,144,26,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;color:var(--acc)}
+.tts-btn:hover{background:rgba(200,144,26,.2)} .tts-btn:active{transform:scale(.9)}
+.tts-btn.speaking{background:rgba(200,144,26,.22);animation:tts-pulse .8s infinite}
+@keyframes tts-pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,144,26,.4)}50%{box-shadow:0 0 0 5px rgba(200,144,26,0)}}
+
+/* Typing result overlay */
+.type-res-ov{position:absolute;top:0;left:0;right:0;border-radius:22px 22px 0 0;padding:9px 14px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700}
+.type-res-ov.correct{background:rgba(78,201,138,.18);color:var(--grn)}
+.type-res-ov.close{background:rgba(212,168,32,.18);color:var(--ylw)}
+.type-res-ov.wrong{background:rgba(224,85,85,.18);color:var(--red)}
+
+/* Tap hint */
+.tap-hint{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:5px;transition:opacity .28s}
+
+/* ═══ TYPING AREA ════════════════════════════════════ */
+.type-area{width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px}
+.type-inp-wrap{display:flex;gap:8px;align-items:center}
+.type-inp{flex:1;background:var(--s1);border:2px solid var(--bdr);border-radius:var(--r);padding:14px 16px;color:var(--t1);font-family:var(--fen);font-size:16px;direction:ltr;text-align:left;transition:border-color .18s}
+.type-inp::placeholder{color:var(--t3);font-family:var(--far);font-style:normal}
+.type-inp:focus{border-color:var(--acc)}
+.type-inp.inp-correct{border-color:var(--grn);background:var(--grn-dim)}
+.type-inp.inp-close{border-color:var(--ylw);background:var(--ylw-dim)}
+.type-inp.inp-wrong{border-color:var(--red);background:var(--red-dim)}
+.type-chk{height:50px;padding:0 20px;background:var(--acc);color:#fff;border-radius:var(--r);font-size:15px;font-weight:700;white-space:nowrap;transition:opacity .14s;flex-shrink:0}
+.type-chk:active{opacity:.85}
+
+/* ═══ MCQ ════════════════════════════════════════════ */
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:460px}
+.mcq-opt{background:var(--s1);border:2px solid var(--bdr);border-radius:var(--r);padding:16px 10px;font-family:var(--fen);font-size:16px;font-weight:500;color:var(--t1);cursor:pointer;transition:all .15s;min-height:62px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.4}
+.mcq-opt:hover:not(:disabled){background:var(--s2);border-color:var(--acc)}
+.mcq-opt:active:not(:disabled){transform:scale(.97)}
+.mcq-opt.correct{background:var(--grn-dim)!important;border-color:var(--grn)!important;color:var(--grn)!important;font-weight:700}
+.mcq-opt.wrong{background:var(--red-dim)!important;border-color:var(--red)!important;color:var(--red)!important}
+.mcq-opt:disabled{cursor:not-allowed;opacity:.7}
+.mcq-opt.correct:disabled{opacity:1} .mcq-opt.wrong:disabled{opacity:1}
+
+/* ═══ NAV BUTTONS ════════════════════════════════════ */
+.study-nav{display:flex;gap:9px;width:100%;max-width:460px;padding-bottom:max(16px,env(safe-area-inset-bottom,16px))}
+.nav-btn{flex:1;height:50px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--s1);color:var(--t1);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .14s,transform .11s}
+.nav-btn:active{transform:scale(.96)} .nav-btn:hover{background:var(--s2)} .nav-btn:disabled{opacity:.25;cursor:not-allowed;transform:none}
+.nav-btn.gold{background:var(--acc);border-color:transparent;color:#fff} .nav-btn.gold:hover{background:var(--acc-lt)}
+.nav-btn.wrong{background:var(--red-dim);border-color:rgba(224,85,85,.3);color:var(--red)}
+.nav-btn.hard{background:var(--ylw-dim);border-color:rgba(212,168,32,.3);color:var(--ylw)}
+.nav-btn.easy{background:var(--grn-dim);border-color:rgba(78,201,138,.3);color:var(--grn)}
+.nav-btn.dim{background:var(--s2)}
+
+/* ═══ DONE SCREEN ════════════════════════════════════ */
+.done-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 22px;text-align:center;flex:1}
+.done-emoji{font-size:64px;margin-bottom:12px} .done-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.done-sub{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:18px}
+.done-score{display:flex;gap:10px;margin-bottom:20px;width:100%;max-width:280px}
+.score-box{flex:1;border-radius:var(--rsm);padding:12px 8px;text-align:center}
+.score-box.g{background:var(--grn-dim);border:1px solid rgba(78,201,138,.3)} .score-box.r{background:var(--red-dim);border:1px solid rgba(224,85,85,.3)} .score-box.a{background:var(--s2);border:1px solid var(--bdr)}
+.score-n{font-size:24px;font-weight:700;line-height:1} .score-n.g{color:var(--grn)} .score-n.r{color:var(--red)} .score-n.a{color:var(--t2)}
+.score-l{font-size:11px;margin-top:4px;color:var(--t2)}
+.done-btns{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}
+.btn-main{background:var(--acc);color:#fff;border-radius:var(--r);padding:14px;font-size:15px;font-weight:700;transition:opacity .14s} .btn-main:active{opacity:.84}
+.btn-sub{background:var(--s2);color:var(--t1);border:1px solid var(--bdr);border-radius:var(--r);padding:13px;font-size:14px;font-weight:600;transition:background .14s} .btn-sub:hover{background:var(--s3)}
+.btn-weak{background:var(--red-dim);color:var(--red);border:1px solid rgba(224,85,85,.3);border-radius:var(--r);padding:13px;font-size:14px;font-weight:700}
+
+/* ═══ MODALS ═════════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:50;display:flex;align-items:flex-end;transition:opacity .26s var(--ease)}
+.overlay.hidden{opacity:0;pointer-events:none} .overlay.hidden .sheet{transform:translateY(100%)}
+.sheet{background:var(--s1);border-radius:22px 22px 0 0;width:100%;padding:6px 20px max(26px,env(safe-area-inset-bottom,26px));max-height:93dvh;overflow-y:auto;transition:transform .28s var(--ease);scrollbar-width:none}
+.sheet::-webkit-scrollbar{display:none}
+.s-handle{width:36px;height:4px;background:var(--s3);border-radius:2px;margin:8px auto 17px}
+.s-title{font-size:17px;font-weight:700;margin-bottom:17px}
+@media(min-width:600px){.sheet{max-width:480px;margin:auto;border-radius:22px}.overlay{align-items:center}.study-stage{padding:24px 44px}}
+
+/* Study Options */
+.sel-row{display:flex;gap:8px;margin-bottom:6px}
+.sel-opt{flex:1;padding:12px 6px;background:var(--s2);border:2px solid var(--bdr);border-radius:var(--r);font-size:12px;font-weight:600;color:var(--t2);text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.sel-opt .si{font-size:20px} .sel-opt.sel{border-color:var(--acc);background:var(--acc-dim);color:var(--acc-lt)}
+.sel-opt.empty-opt{opacity:.4;cursor:not-allowed} .sel-count{font-size:10px;color:var(--t3);font-weight:400}
+
+/* Form */
+.fg{margin-bottom:13px} .fl{display:block;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px}
+.fi,.fta{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:13px 14px;color:var(--t1);font-size:15px;transition:border-color .16s;resize:none}
+.fi.ltr,.fta.ltr{font-family:var(--fen);direction:ltr;text-align:left}
+.fi:focus,.fta:focus{border-color:var(--acc)}
+.fh{font-size:11px;color:var(--t3);margin-top:5px} .fh code{font-family:monospace;background:var(--s3);padding:1px 5px;border-radius:4px;color:var(--acc);font-size:12px}
+.fsub{width:100%;background:var(--acc);color:#fff;border-radius:var(--r);padding:15px;font-size:16px;font-weight:700;margin-top:10px;transition:opacity .14s} .fsub:active{opacity:.87}
+.emj-row{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:13px}
+.emj{aspect-ratio:1;background:var(--s2);border:2px solid transparent;border-radius:9px;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s}
+.emj.sel{border-color:var(--acc);background:var(--acc-dim)} .emj:active{transform:scale(.86)}
+
+/* ═══ SETTINGS MODAL ═════════════════════════════════ */
+.srow{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bdr)}
+.srow:last-of-type{border-bottom:none}
+.srow-info{flex:1} .srow-lbl{font-size:15px;font-weight:600} .srow-sub{font-size:12px;color:var(--t2);margin-top:2px}
+.stoggle{width:44px;height:24px;background:var(--s3);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
+.stoggle.on{background:var(--acc)}
+.stoggle-knob{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .2s;pointer-events:none}
+.stoggle.on .stoggle-knob{left:23px}
+.snum{width:68px;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:9px 10px;color:var(--t1);font-size:17px;font-weight:700;text-align:center;direction:ltr;-moz-appearance:textfield}
+.snum:focus{border-color:var(--acc)} .snum::-webkit-outer-spin-button,.snum::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stime{width:100px;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:9px 12px;color:var(--t1);font-size:15px;direction:ltr;transition:border-color .16s}
+.stime:focus{border-color:var(--acc)}
+.notif-perm-btn{width:100%;background:var(--s2);border:1.5px solid rgba(78,201,138,.3);border-radius:var(--rsm);padding:12px;color:var(--grn);font-size:14px;font-weight:600;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:background .15s}
+.notif-perm-btn:hover{background:var(--grn-dim)}
+.notif-perm-btn.granted{color:var(--t2);border-color:var(--bdr);cursor:default}
+.notif-perm-btn.denied{color:var(--red);border-color:rgba(224,85,85,.3);cursor:default}
+
+/* Ctx / Confirm / Toast */
+.ctx{position:fixed;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;z-index:200;min-width:176px;box-shadow:0 16px 48px rgba(0,0,0,.55);transition:opacity .14s}
+.ctx.hidden{opacity:0;pointer-events:none}
+.ctx-item{padding:13px 16px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .12s;color:var(--t1)}
+.ctx-item:hover{background:var(--s3)} .ctx-item.red{color:var(--red)}
+.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .22s}
+.conf-ov.hidden{opacity:0;pointer-events:none}
+.conf-box{background:var(--s1);border:1px solid var(--bdr);border-radius:20px;padding:26px 22px 20px;max-width:320px;width:100%;text-align:center}
+.conf-t{font-size:17px;font-weight:700;margin-bottom:8px} .conf-d{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px}
+.conf-btns{display:flex;gap:10px}
+.conf-no{flex:1;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rsm);padding:13px;font-size:14px;font-weight:600;color:var(--t1)} .conf-no:hover{background:var(--s3)}
+.conf-yes{flex:1;background:var(--red);border-radius:var(--rsm);padding:13px;font-size:14px;font-weight:700;color:#fff} .conf-yes:active{opacity:.85}
+.toast{position:fixed;bottom:max(84px,calc(env(safe-area-inset-bottom,0px) + 84px));left:50%;transform:translateX(-50%) translateY(16px);background:var(--s2);border:1px solid var(--bdr);border-radius:22px;padding:9px 20px;font-size:13px;font-weight:500;color:var(--t1);opacity:0;transition:opacity .24s,transform .24s;z-index:400;white-space:nowrap;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.deck-card:nth-child(1){animation-delay:.04s}.deck-card:nth-child(2){animation-delay:.08s}
+.deck-card:nth-child(3){animation-delay:.12s}.deck-card:nth-child(4){animation-delay:.16s}
+
+/* ═══ STATS SCREEN ═══════════════════════════════════ */
+.stats-wrap{padding:16px 16px 100px;display:flex;flex-direction:column;gap:16px}
+
+/* Summary chips */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sum-box{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.sum-icon{font-size:24px;flex-shrink:0}
+.sum-val{font-size:22px;font-weight:700;color:var(--acc-lt);line-height:1;font-variant-numeric:tabular-nums}
+.sum-lbl{font-size:11px;color:var(--t2);margin-top:3px}
+
+/* Section card */
+.stat-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px}
+.stat-card-title{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:14px}
+
+/* Week bar chart */
+.week-chart{display:flex;align-items:flex-end;gap:5px;height:90px;padding-bottom:20px;position:relative}
+.wbar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;height:100%}
+.wbar-count{font-size:9px;color:var(--t3);height:13px;line-height:13px;text-align:center;font-variant-numeric:tabular-nums}
+.wbar-outer{flex:1;width:100%;background:var(--s3);border-radius:5px;overflow:hidden;display:flex;align-items:flex-end;margin-bottom:4px}
+.wbar-inner{width:100%;border-radius:5px;min-height:3px;transition:height .6s var(--ease)}
+.wbar-inner.dim{background:rgba(200,144,26,.38)}
+.wbar-inner.lit{background:var(--acc)}
+.wbar-inner.none{background:var(--s3);min-height:3px}
+.wbar-day{font-size:10px;color:var(--t3);font-family:var(--far);position:absolute;bottom:0}
+.wbar-day.hi{color:var(--acc-lt);font-weight:700}
+.week-days{display:flex;gap:5px;margin-top:2px}
+.week-days span{flex:1;font-size:10px;color:var(--t3);text-align:center;font-family:var(--far)}
+.week-days span.hi{color:var(--acc-lt);font-weight:700}
+
+/* Accuracy ring */
+.acc-row{display:flex;align-items:center;gap:20px}
+.acc-ring-wrap{position:relative;flex-shrink:0}
+.acc-ring-wrap svg{display:block}
+.acc-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--t1)}
+.acc-detail{flex:1}
+.acc-stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:13px}
+.acc-stat-row:last-child{border-bottom:none}
+.acc-stat-lbl{color:var(--t2)}
+.acc-stat-val{font-weight:700;font-variant-numeric:tabular-nums}
+.acc-stat-val.g{color:var(--grn)} .acc-stat-val.r{color:var(--red)} .acc-stat-val.a{color:var(--t2)}
+
+/* Mastery distribution bars */
+.mbar-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.mbar-lbl{font-size:12px;color:var(--t2);width:72px;flex-shrink:0;text-align:right}
+.mbar-track{flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.mbar-fill{height:100%;border-radius:4px;transition:width .7s var(--ease)}
+.mbar-num{font-size:12px;font-weight:700;color:var(--t2);width:26px;text-align:left;font-variant-numeric:tabular-nums}
+
+/* Per-deck rows */
+.dstat-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr)}
+.dstat-row:last-child{border-bottom:none}
+.dstat-icon{font-size:20px;flex-shrink:0}
+.dstat-info{flex:1;min-width:0}
+.dstat-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dstat-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.dstat-acc{font-size:16px;font-weight:700;flex-shrink:0}
+.dstat-acc.hi{color:var(--grn)} .dstat-acc.mid{color:var(--ylw)} .dstat-acc.lo{color:var(--red)} .dstat-acc.na{color:var(--t3)}
+
+/* Export/Import buttons */
+.io-btn{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:13px 16px;color:var(--t1);font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:8px;transition:background .14s}
+.io-btn:hover{background:var(--s3)}
+.io-btn:active{opacity:.85}
+
+/* Stats empty */
+.stats-empty{text-align:center;padding:40px 24px;color:var(--t2);font-size:14px;line-height:1.7}
+
+/* ═══ LEVEL BADGES ══════════════════════════════════ */
+.lvl-badge{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;flex-shrink:0;letter-spacing:.4px}
+.lvl-a2{background:rgba(78,201,138,.15);color:var(--grn);border:1px solid rgba(78,201,138,.22)}
+.lvl-b1{background:rgba(200,144,26,.15);color:var(--acc);border:1px solid rgba(200,144,26,.22)}
+.lvl-b2{background:rgba(90,180,232,.15);color:var(--blu);border:1px solid rgba(90,180,232,.22)}
+.lvl-c1{background:rgba(224,85,85,.15);color:var(--red);border:1px solid rgba(224,85,85,.22)}
+
+/* Level selector in card form */
+.lvl-sel-row{display:flex;gap:8px;flex-wrap:wrap}
+.lvl-sel-btn{padding:7px 16px;border-radius:var(--rsm);background:var(--s2);border:1.5px solid var(--bdr);color:var(--t2);font-size:13px;font-weight:700;transition:all .15s;cursor:pointer}
+.lvl-sel-btn.sel{border-color:var(--acc);background:var(--acc-dim);color:var(--acc-lt)}
+.lvl-sel-btn:active{transform:scale(.94)}
+
+/* ═══ REVERSE MODE ══════════════════════════════════ */
+.face-word-box{display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0}
+.face-word-big{font-family:var(--fen);font-size:34px;font-weight:700;color:#2a2420;letter-spacing:-.5px;line-height:1.2}
+.face-word-hint{font-size:12px;color:#b8a88a;font-family:var(--far)}
+.face-word-count{font-size:11px;color:#c0a870;background:rgba(200,144,26,.1);padding:3px 10px;border-radius:12px}
+
+/* ═══ LEVEL FILTER IN STUDY OPTIONS ════════════════ */
+.lvl-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.lvl-filter-btn{padding:7px 12px;border-radius:20px;background:var(--s2);border:1.5px solid var(--bdr);color:var(--t2);font-size:12px;font-weight:700;transition:all .15s;cursor:pointer}
+.lvl-filter-btn.sel{border-color:var(--acc);background:var(--acc-dim);color:var(--acc-lt)}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ============ HOME SCREEN ============ -->
-  <div id="screen-home" class="screen">
-    <div class="scroll">
-      <div class="home-head">
-        <div class="brand">
-          <div class="brand-icon">🃏</div>
-          <div class="brand-name">Flip<span>Learn</span></div>
-        </div>
-        <div class="home-sub">بطاقاتك الذكية لحفظ المفردات الإنجليزية</div>
-        <div class="stats-row">
-          <div class="stat-box">
-            <div class="stat-val" id="s-decks">0</div>
-            <div class="stat-lbl">مجموعة</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-val" id="s-cards">0</div>
-            <div class="stat-lbl">بطاقة</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-val" id="s-today">0</div>
-            <div class="stat-lbl">مراجعة اليوم</div>
-          </div>
-        </div>
+<!-- ══ HOME ══ -->
+<div id="screen-home" class="screen">
+  <div class="scroll">
+    <div class="home-head">
+      <div class="brand">
+        <div class="brand-icon">🃏</div>
+        <div class="brand-name">Flip<span>Learn</span></div>
+        <button class="ib" id="btn-stats" title="الإحصاءات">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </button>
+        <button class="ib" id="btn-settings" title="الإعدادات">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
       </div>
-
-      <div id="install-bar" class="install-bar gone">
-        <span style="font-size:22px">📲</span>
-        <div class="install-bar-text">
-          <div class="install-bar-title">ثبّت التطبيق على جهازك</div>
-          <div class="install-bar-sub">يعمل بدون إنترنت بعد التثبيت</div>
-        </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      <div class="home-sub">بطاقاتك الذكية لحفظ المفردات الإنجليزية</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-val" id="s-decks">0</div><div class="stat-lbl">مجموعة</div></div>
+        <div class="stat-box"><div class="stat-val" id="s-cards">0</div><div class="stat-lbl">بطاقة</div></div>
+        <div class="stat-box"><div class="stat-val" id="s-today">0</div><div class="stat-lbl">اليوم</div></div>
+        <div class="stat-box"><div class="stat-val" id="s-streak">0</div><div class="stat-lbl">🔥 يوم</div></div>
       </div>
+      <div id="goal-wrap" class="goal-wrap">
+        <div class="goal-row"><span class="goal-lbl">🎯 الهدف اليومي</span><span class="goal-cnt" id="goal-cnt">0/10</span></div>
+        <div class="goal-track"><div class="goal-bar" id="goal-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div id="due-strip" class="due-strip hidden">
+      <div class="due-body"><div class="due-title">📅 لديك <span id="due-count">0</span> بطاقة مستحقة للمراجعة</div><div class="due-sub">راجعها الآن لتحافظ على تقدمك</div></div>
+      <div class="due-btn">راجع الآن</div>
+    </div>
+    <div id="install-bar" class="install-bar gone">
+      <span style="font-size:22px">📲</span>
+      <div class="ib-txt"><div class="ib-title">ثبّت التطبيق</div><div class="ib-sub">يعمل بدون إنترنت</div></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="sec-head">مجموعاتك</div>
+    <div id="deck-list" class="deck-list"></div>
+  </div>
+  <button class="fab" id="btn-new-deck"><span class="fab-plus">+</span> مجموعة جديدة</button>
+</div>
 
-      <div class="sec-head">مجموعاتك</div>
-      <div id="deck-list" class="deck-list"></div>
+<!-- ══ DECK DETAIL ══ -->
+<div id="screen-deck" class="screen sr">
+  <div class="topbar">
+    <button class="ib" id="btn-back"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="topbar-title" id="deck-title">المجموعة</div>
+    <button class="ib" id="btn-deck-menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg></button>
+  </div>
+  <div class="scroll">
+    <button id="btn-study" class="study-launch" disabled>ابدأ المراجعة <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+    <div class="sec-head">البطاقات</div>
+    <div id="card-list" class="card-list"></div>
+  </div>
+  <button class="fab" id="btn-new-card"><span class="fab-plus">+</span> بطاقة جديدة</button>
+</div>
+
+<!-- ══ STUDY ══ -->
+<div id="screen-study" class="screen sr">
+  <div class="study-bar">
+    <button class="ib" id="btn-exit"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="study-cnt" id="study-cnt">0/0</div>
+    <button class="mode-chip" id="btn-mode-toggle"><span id="mode-label">قلب</span></button>
+    <button class="shuf-btn" id="btn-shuffle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> خلط</button>
+  </div>
+  <div class="study-stage" id="study-stage"></div>
+</div>
+
+<!-- ══ MODAL: STUDY OPTIONS ══ -->
+<div class="overlay hidden" id="modal-study-opts">
+  <div class="sheet">
+    <div class="s-handle"></div>
+    <div class="s-title">إعدادات جلسة المراجعة</div>
+    <div class="fg">
+      <label class="fl">وضع الدراسة</label>
+      <div class="sel-row">
+        <button class="sel-opt sel" data-mode="flip" id="opt-flip"><span class="si">🔄</span>قلب</button>
+        <button class="sel-opt" data-mode="type" id="opt-type"><span class="si">✍️</span>كتابة</button>
+        <button class="sel-opt" data-mode="mcq" id="opt-mcq"><span class="si">🎯</span>اختيار</button>
+        <button class="sel-opt" data-mode="reverse" id="opt-reverse"><span class="si">🔀</span>عكسي</button>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">البطاقات</label>
+      <div class="sel-row">
+        <button class="sel-opt sel" data-set="all" id="opt-all"><span class="si">📚</span>الكل<span class="sel-count" id="opt-cnt-all">0</span></button>
+        <button class="sel-opt" data-set="due" id="opt-due"><span class="si">📅</span>المستحقة<span class="sel-count" id="opt-cnt-due">0</span></button>
+        <button class="sel-opt" data-set="weak" id="opt-weak"><span class="si">⚡</span>الصعبة<span class="sel-count" id="opt-cnt-weak">0</span></button>
+      </div>
+    </div>
+    <div class="fg" id="opt-lvl-wrap" style="display:none">
+      <label class="fl">فلتر المستوى</label>
+      <div class="lvl-filter-row" id="opt-lvl-row">
+        <button class="lvl-filter-btn sel" data-lvl="">الكل</button>
+      </div>
+    </div>
+    <button class="fsub" id="btn-start-study">ابدأ المراجعة ←</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: DECK ══ -->
+<div class="overlay hidden" id="modal-deck">
+  <div class="sheet">
+    <div class="s-handle"></div>
+    <div class="s-title" id="mdeck-t">مجموعة جديدة</div>
+    <div class="emj-row" id="emj-grid"></div>
+    <div class="fg"><label class="fl">اسم المجموعة</label><input class="fi" id="in-dname" type="text" placeholder="مثال: كلمات يومية، عمل، سفر..."></div>
+    <div class="fg"><label class="fl">وصف (اختياري)</label><input class="fi" id="in-ddesc" type="text" placeholder="موضوع المجموعة"></div>
+    <button class="fsub" id="btn-save-deck">حفظ المجموعة</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: CARD ══ -->
+<div class="overlay hidden" id="modal-card">
+  <div class="sheet">
+    <div class="s-handle"></div>
+    <div class="s-title" id="mcard-t">بطاقة جديدة</div>
+    <div class="fg">
+      <label class="fl">الوجه الأمامي — الجملة مع الفراغ</label>
+      <textarea class="fta ltr" id="in-front" rows="3" placeholder="I need to ___ my keys every morning."></textarea>
+      <div class="fh">استخدم <code>___</code> مكان الكلمة الجديدة</div>
+    </div>
+    <div class="fg">
+      <label class="fl">الوجه الخلفي — الجملة الكاملة</label>
+      <textarea class="fta ltr" id="in-back" rows="3" placeholder="I need to find my keys every morning."></textarea>
+    </div>
+    <div class="fg">
+      <label class="fl">الكلمة الجديدة</label>
+      <input class="fi ltr" id="in-word" type="text" placeholder="find">
+      <div class="fh">مطلوبة لوضع الكتابة والاختيار المتعدد</div>
+    </div>
+    <div class="fg">
+      <label class="fl">مستوى الصعوبة (اختياري)</label>
+      <div class="lvl-sel-row" id="lvl-sel-row">
+        <button class="lvl-sel-btn sel" data-lvl="">—</button>
+        <button class="lvl-sel-btn lvl-a2" data-lvl="A2">A2</button>
+        <button class="lvl-sel-btn lvl-b1" data-lvl="B1">B1</button>
+        <button class="lvl-sel-btn lvl-b2" data-lvl="B2">B2</button>
+        <button class="lvl-sel-btn lvl-c1" data-lvl="C1">C1</button>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">الترجمة العربية (اختياري)</label>
+      <input class="fi" id="in-trans" type="text" placeholder="مثال: أحتاج إلى إيجاد مفاتيحي كل صباح">
+    </div>
+    <div class="fg">
+      <label class="fl">مرادفات (اختياري)</label>
+      <input class="fi ltr" id="in-syn" type="text" placeholder="locate, retrieve, discover">
+      <div class="fh">افصل بين المرادفات بفاصلة</div>
+    </div>
+    <div class="fg">
+      <label class="fl">ملاحظة (اختياري)</label>
+      <input class="fi" id="in-note" type="text" placeholder="مثال: تُستخدم للتعبير عن البحث عن شيء">
+    </div>
+    <button class="fsub" id="btn-save-card">حفظ البطاقة</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: SETTINGS ══ -->
+<div class="overlay hidden" id="modal-settings">
+  <div class="sheet">
+    <div class="s-handle"></div>
+    <div class="s-title">⚙️ الإعدادات</div>
+
+    <div class="srow">
+      <div class="srow-info">
+        <div class="srow-lbl">الهدف اليومي</div>
+        <div class="srow-sub">عدد البطاقات التي تريد مراجعتها يومياً</div>
+      </div>
+      <input class="snum" id="s-goal" type="number" min="1" max="200" value="10">
     </div>
 
-    <button class="fab" id="btn-new-deck">
-      <span class="fab-plus">+</span>
-      مجموعة جديدة
+    <div class="srow">
+      <div class="srow-info">
+        <div class="srow-lbl">تذكير يومي</div>
+        <div class="srow-sub">إشعار إذا لم تراجع كلماتك</div>
+      </div>
+      <button class="stoggle" id="s-notif-toggle"><div class="stoggle-knob"></div></button>
+    </div>
+
+    <div class="srow" id="s-time-row" style="display:none">
+      <div class="srow-info">
+        <div class="srow-lbl">وقت التذكير</div>
+        <div class="srow-sub">يُرسل الإشعار في هذا الوقت</div>
+      </div>
+      <input class="stime" id="s-time" type="time" value="20:00">
+    </div>
+
+    <button class="notif-perm-btn" id="s-notif-perm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span id="s-notif-perm-lbl">اطلب إذن الإشعارات</span>
     </button>
-  </div>
 
-  <!-- ============ DECK DETAIL SCREEN ============ -->
-  <div id="screen-deck" class="screen slide-right">
-    <div class="topbar">
-      <button class="icon-btn" id="btn-back">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="topbar-title" id="deck-title">المجموعة</div>
-      <button class="icon-btn" id="btn-deck-menu">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>
-      </button>
-    </div>
-    <div class="scroll">
-      <button id="btn-study" class="study-launch" disabled>
-        ابدأ المراجعة
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </button>
-      <div class="sec-head">البطاقات</div>
-      <div id="card-list" class="card-list"></div>
-    </div>
-    <button class="fab" id="btn-new-card">
-      <span class="fab-plus">+</span>
-      بطاقة جديدة
+    <div style="margin-top:20px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px">البيانات والنسخ الاحتياطي</div>
+
+    <button class="io-btn" id="btn-export-all">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      تصدير نسخة احتياطية كاملة (JSON)
     </button>
+    <button class="io-btn" id="btn-import-all">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10" transform="rotate(180 12 12)"/><line x1="12" y1="15" x2="12" y2="3" transform="rotate(180 12 12)"/></svg>
+      استيراد نسخة احتياطية (JSON)
+    </button>
+
+    <button class="fsub" id="btn-save-settings" style="margin-top:16px">حفظ الإعدادات</button>
   </div>
+</div>
 
-  <!-- ============ STUDY SCREEN ============ -->
-  <div id="screen-study" class="screen slide-right">
-    <div class="study-bar">
-      <button class="icon-btn" id="btn-exit">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <div class="progress-track">
-        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
-      </div>
-      <div class="study-count" id="study-cnt">0/0</div>
-      <button class="shuffle-btn" id="btn-shuffle">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-        خلط
-      </button>
-    </div>
-    <div class="study-stage" id="study-stage"></div>
+<!-- Context / Confirm / Toast -->
+<div class="ctx hidden" id="ctx">
+  <div class="ctx-item" id="ctx-edit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل المجموعة</div>
+  <div class="ctx-item" id="ctx-export-csv"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> تصدير البطاقات (CSV)</div>
+  <div class="ctx-item" id="ctx-import-csv"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10" transform="rotate(180 12 12)"/><line x1="12" y1="15" x2="12" y2="3" transform="rotate(180 12 12)"/></svg> استيراد من CSV</div>
+  <div class="ctx-item red" id="ctx-del"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg> حذف المجموعة</div>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="file-import-json" accept=".json" style="display:none">
+<input type="file" id="file-import-csv"  accept=".csv,.txt" style="display:none">
+<div class="conf-ov hidden" id="conf-ov">
+  <div class="conf-box">
+    <div class="conf-t" id="conf-t">تأكيد</div>
+    <div class="conf-d" id="conf-d">هل أنت متأكد؟</div>
+    <div class="conf-btns"><button class="conf-no" id="conf-no">إلغاء</button><button class="conf-yes" id="conf-yes">حذف</button></div>
   </div>
-
-  <!-- ============ MODAL: NEW/EDIT DECK ============ -->
-  <div class="overlay hidden" id="modal-deck">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title" id="mdeck-title">مجموعة جديدة</div>
-      <div class="emoji-row" id="emoji-grid"></div>
-      <div class="fgrp">
-        <label class="flbl">اسم المجموعة</label>
-        <input class="finput" id="in-dname" type="text" placeholder="مثال: كلمات يومية، عمل، سفر...">
-      </div>
-      <div class="fgrp">
-        <label class="flbl">وصف (اختياري)</label>
-        <input class="finput" id="in-ddesc" type="text" placeholder="موضوع المجموعة">
-      </div>
-      <button class="fsubmit" id="btn-save-deck">حفظ المجموعة</button>
-    </div>
+</div>
+<!-- ══ STATS SCREEN ══ -->
+<div id="screen-stats" class="screen sr">
+  <div class="topbar">
+    <button class="ib" id="btn-stats-back"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="topbar-title">📊 إحصاءاتك</div>
   </div>
-
-  <!-- ============ MODAL: NEW/EDIT CARD ============ -->
-  <div class="overlay hidden" id="modal-card">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title" id="mcard-title">بطاقة جديدة</div>
-
-      <div class="fgrp">
-        <label class="flbl">الوجه الأمامي — الجملة مع الفراغ</label>
-        <textarea class="ftarea ltr" id="in-front" rows="3"
-          placeholder="I need to ___ my keys every morning."></textarea>
-        <div class="fhint">ضع <code>___</code> مكان الكلمة الجديدة</div>
-      </div>
-
-      <div class="fgrp">
-        <label class="flbl">الوجه الخلفي — الجملة الكاملة</label>
-        <textarea class="ftarea ltr" id="in-back" rows="3"
-          placeholder="I need to find my keys every morning."></textarea>
-      </div>
-
-      <div class="fgrp">
-        <label class="flbl">الكلمة الجديدة</label>
-        <input class="finput ltr" id="in-word" type="text" placeholder="find">
-        <div class="fhint">ستظهر مميزة بالذهبي على الوجه الخلفي</div>
-      </div>
-
-      <div class="fgrp">
-        <label class="flbl">ملاحظة بالعربي (اختياري)</label>
-        <input class="finput" id="in-note" type="text" placeholder="مثال: تُستخدم للتعبير عن البحث">
-      </div>
-
-      <button class="fsubmit" id="btn-save-card">حفظ البطاقة</button>
-    </div>
+  <div class="scroll">
+    <div class="stats-wrap" id="stats-wrap"></div>
   </div>
+</div>
 
-  <!-- Context Menu -->
-  <div class="ctx-menu hidden" id="ctx">
-    <div class="ctx-item" id="ctx-edit">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      تعديل المجموعة
-    </div>
-    <div class="ctx-item red" id="ctx-del">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-      حذف المجموعة
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast"></div>
-
-</div><!-- #app -->
+<div class="toast" id="toast"></div>
+</div>
 
 <script>
-/* ============================================================
-   FLIPLEARN · Main Application Script
-   ============================================================ */
+/* ════════════════════════════════════════════════════════
+   FLIPLEARN v4  —  SRS · Typing · MCQ · TTS · Daily Goal
+   ════════════════════════════════════════════════════════ */
 
-// ─── Helpers ────────────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ── Helpers ──────────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const daysUntil = ms => Math.ceil((ms - Date.now()) / 86400000);
+const EMOJIS = ['📚','🧠','💬','✈️','🍕','🏢','🎯','💼','🌍','🎓','🔥','⭐','🎮','🏋️','🎵','💡','🌱','🚀','🍎','🌟'];
 
-// ─── State ──────────────────────────────────────────────────
+// MCQ distractor fallback bank
+const WORD_BANK = ['resolve','reluctant','rearrange','achieve','obtain','refuse','expand',
+  'gather','ignore','reduce','maintain','identify','adjust','decline','enhance','clarify',
+  'suggest','implement','establish','postpone','determine','evaluate','demonstrate',
+  'acknowledge','negotiate','anticipate','contribute','distinguish','pursue','hesitate',
+  'embrace','overcome','perceive','collaborate','allocate','eliminate','generate','sustain'];
+
+// ── State ─────────────────────────────────────────────────
 const S = {
-  decks:         [],
-  activeDeckId:  null,
-  studyCards:    [],
-  studyIdx:      0,
-  isFlipped:     false,
-  shuffle:       false,
-  studyDone:     false,
-  editDeckId:    null,
-  editCardId:    null,
-  selEmoji:      '📚',
-  studiedToday:  0,
-  lastDate:      '',
+  decks:[], activeDeckId:null,
+  studyCards:[], studyIdx:0, isFlipped:false, studyDone:false,
+  studyMode:'flip',        // 'flip' | 'type' | 'mcq' | 'reverse'
+  typingChecked:false, typingResult:null,
+  mcqAnswered:false, mcqOptions:[], mcqWrongIdx:-1,
+  studySet:'all', optLvl:'',   // level filter in study options
+  sessionCorrect:0, sessionWrong:0, sessionSkipped:0, sessionWrongIds:[],
+  shuffle:false,
+  editDeckId:null, editCardId:null, selEmoji:'📚',
+  optMode:'flip', optSet:'all',
+  studiedToday:0, streak:0, lastStudyDate:'', lastDate:'',
+  dailyGoal:10, reminderTime:'20:00', notifyEnabled:false,
+  studyHistory:[], // [{date,studied,correct,wrong}] last 60 days
 };
 
-const EMOJIS = ['📚','🧠','💬','✈️','🍕','🏢','🎯','💼','🌍','🎓',
-                '🔥','⭐','🎮','🏋️','🎵','💡','🌱','🚀','🍎','🌟'];
-
-// ─── Storage ────────────────────────────────────────────────
-function persist() {
-  localStorage.setItem('fl_v1', JSON.stringify({
-    decks: S.decks,
-    studiedToday: S.studiedToday,
-    lastDate: S.lastDate,
+// ── Storage ───────────────────────────────────────────────
+function persist(){
+  localStorage.setItem('fl_v4',JSON.stringify({
+    decks:S.decks, studiedToday:S.studiedToday,
+    streak:S.streak, lastStudyDate:S.lastStudyDate, lastDate:S.lastDate,
+    dailyGoal:S.dailyGoal, reminderTime:S.reminderTime, notifyEnabled:S.notifyEnabled,
+    studyHistory:S.studyHistory,
   }));
 }
 
-function hydrate() {
-  try {
-    const raw = localStorage.getItem('fl_v1');
-    if (!raw) return;
-    const d = JSON.parse(raw);
-    S.decks = d.decks || [];
-    const today = new Date().toDateString();
-    S.studiedToday = (d.lastDate === today) ? (d.studiedToday || 0) : 0;
-    S.lastDate = today;
-  } catch(e) { console.warn('hydrate error', e); }
+function hydrate(){
+  try{
+    const raw=localStorage.getItem('fl_v4')||localStorage.getItem('fl_v3')||
+              localStorage.getItem('fl_v2')||localStorage.getItem('fl_v1');
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    S.decks=d.decks||[];
+    S.streak=d.streak||0;
+    S.lastStudyDate=d.lastStudyDate||'';
+    S.dailyGoal=d.dailyGoal??10;
+    S.reminderTime=d.reminderTime||'20:00';
+    S.notifyEnabled=d.notifyEnabled||false;
+    S.studyHistory=d.studyHistory||[];
+    const today=new Date().toDateString();
+    S.studiedToday=(d.lastDate===today)?(d.studiedToday||0):0;
+    S.lastDate=today;
+    S.decks.forEach(dk=>dk.cards.forEach(c=>{
+      c.mastery=c.mastery??0; c.correct=c.correct??0; c.wrong=c.wrong??0;
+      c.srsInterval=c.srsInterval??1; c.srsDue=c.srsDue??null;
+      c.srsEase=c.srsEase??2.5; c.srsReps=c.srsReps??0;
+      c.lastReview=c.lastReview??null;
+      c.translation=c.translation??''; c.synonyms=c.synonyms??'';
+      c.level=c.level??'';
+    }));
+  }catch(e){console.warn('hydrate:',e)}
 }
 
-// ─── Getters ────────────────────────────────────────────────
-const getDeck = id => S.decks.find(d => d.id === id);
-const activeDeck = () => getDeck(S.activeDeckId);
-const totalCards = () => S.decks.reduce((n, d) => n + d.cards.length, 0);
+function addSampleIfNew(){
+  if(S.decks.length>0) return;
+  const mk=(f,b,w,n,t,s,lv)=>({id:uid(),front:f,back:b,word:w,note:n,translation:t,synonyms:s,level:lv||'',mastery:0,correct:0,wrong:0,srsInterval:1,srsDue:null,srsEase:2.5,srsReps:0,lastReview:null,ts:Date.now()});
+  S.decks.push({
+    id:uid(),name:'أمثلة — جرّب التطبيق',emoji:'🌟',desc:'بطاقات تجريبية',ts:Date.now(),
+    cards:[
+      mk('She managed to ___ the problem before the meeting.','She managed to resolve the problem before the meeting.','resolve','حل مشكلة ما','تمكّنت من حل المشكلة قبل الاجتماع.','solve, fix, settle','B2'),
+      mk('He was ___ to accept the new offer.','He was reluctant to accept the new offer.','reluctant','متردد — غير متحمس','كان مترددًا في قبول العرض الجديد.','hesitant, unwilling','C1'),
+      mk('The new policy will ___ next month.','The new policy will take effect next month.','take effect','يدخل حيز التنفيذ','السياسة الجديدة ستدخل حيز التنفيذ الشهر القادم.','come into force','B2'),
+      mk('I need to ___ my schedule for tomorrow.','I need to rearrange my schedule for tomorrow.','rearrange','إعادة ترتيب','أحتاج إلى إعادة ترتيب جدولي ليوم غد.','reorganize, restructure','B1'),
+    ]
+  });
+  persist();
+}
 
-// ─── Screens ────────────────────────────────────────────────
-function show(name) {
-  ['home','deck','study'].forEach(s => {
-    const el = $(`screen-${s}`);
-    el.classList.remove('slide-right','slide-left');
-    if (s !== name) el.classList.add('slide-right');
+// ── Getters ───────────────────────────────────────────────
+const getDeck=id=>S.decks.find(d=>d.id===id);
+const activeDeck=()=>getDeck(S.activeDeckId);
+const totalCards=()=>S.decks.reduce((n,d)=>n+d.cards.length,0);
+const masteryClass=m=>['m0','m1','m2','m3','m4','m5'][Math.min(5,m||0)];
+const weakCards=dk=>dk.cards.filter(c=>(c.mastery||0)<3);
+const masteredCount=dk=>dk.cards.filter(c=>(c.mastery||0)>=4).length;
+const masteryPct=dk=>dk.cards.length?Math.round(masteredCount(dk)/dk.cards.length*100):0;
+const dueCards=dk=>dk.cards.filter(c=>!c.srsDue||c.srsDue<=Date.now());
+const allDueCount=()=>S.decks.reduce((n,dk)=>n+dueCards(dk).length,0);
+
+// ── SRS (SM-2) ────────────────────────────────────────────
+function updateSRS(card,quality){
+  const now=Date.now(),ease=card.srsEase??2.5,reps=card.srsReps??0,intv=card.srsInterval??1;
+  if(quality===0){
+    card.srsReps=0;card.srsInterval=1;
+    card.srsEase=Math.max(1.3,ease-0.2);
+    card.mastery=Math.max(0,(card.mastery||0)-1);
+  } else {
+    let ni=reps===0?1:reps===1?6:Math.round(intv*ease);
+    if(quality===3) ni=Math.max(1,Math.round(ni*0.6));
+    const ne=ease+(0.1-(5-quality)*(0.08+(5-quality)*0.02));
+    card.srsEase=Math.max(1.3,Math.round(ne*100)/100);
+    card.srsReps=reps+1; card.srsInterval=Math.max(1,ni);
+    card.mastery=Math.min(5,(card.mastery||0)+(quality===5?1:0));
+  }
+  card.srsDue=now+card.srsInterval*86400000;
+  card.lastReview=now;
+  card.correct=(card.correct||0)+(quality>0?1:0);
+  card.wrong=(card.wrong||0)+(quality===0?1:0);
+}
+
+function srsLabel(card){
+  if(!card.srsDue||card.srsReps===0) return '<span class="srs-info srs-due-now">جديدة</span>';
+  const d=daysUntil(card.srsDue);
+  if(d<=0) return '<span class="srs-info srs-due-now">📅 مستحقة</span>';
+  if(d===1) return '<span class="srs-info srs-due-soon">غداً</span>';
+  if((card.mastery||0)>=5) return '<span class="srs-info srs-mastered">✓ مُتقنة</span>';
+  return `<span class="srs-info srs-due-soon">خلال ${d} ${d<11?'أيام':'يوماً'}</span>`;
+}
+
+// ── TTS ───────────────────────────────────────────────────
+let _voices=[];
+function loadVoices(){_voices=speechSynthesis.getVoices();if(!_voices.length)setTimeout(loadVoices,200)}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}
+
+function speak(text,btnId){
+  if(!('speechSynthesis' in window)){toast('المتصفح لا يدعم ميزة الصوت');return}
+  speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text.replace(/___/g,' ... ').replace(/\s+/g,' ').trim());
+  utt.lang='en-US'; utt.rate=0.82; utt.pitch=1;
+  const pref=_voices.find(v=>v.lang==='en-US'&&v.localService)||_voices.find(v=>v.lang.startsWith('en-'));
+  if(pref) utt.voice=pref;
+  const btn=btnId?$(btnId):null;
+  if(btn) btn.classList.add('speaking');
+  utt.onend=utt.onerror=()=>{if(btn)btn.classList.remove('speaking')};
+  speechSynthesis.speak(utt);
+}
+
+// ── Levenshtein ───────────────────────────────────────────
+function lev(a,b){
+  if(a===b)return 0;
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i||j));
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
+    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+function evalTyping(inp,target){
+  const a=inp.trim().toLowerCase(),b=target.trim().toLowerCase();
+  if(a===b)return 'correct';
+  const d=lev(a,b),thr=b.length<=4?1:b.length<=8?2:3;
+  return d<=thr?'close':'wrong';
+}
+
+// ── MCQ ───────────────────────────────────────────────────
+function buildMCQOptions(card){
+  const deck=activeDeck();
+  const target=card.word||'';
+  let pool=deck.cards.filter(c=>c.word&&c.id!==card.id).map(c=>c.word)
+    .filter((w,i,a)=>a.indexOf(w)===i);
+  shuffleArr(pool);
+  const distractors=pool.slice(0,3);
+  let bi=0;
+  while(distractors.length<3){
+    const w=WORD_BANK[bi++%WORD_BANK.length];
+    if(w.toLowerCase()!==target.toLowerCase()&&!distractors.includes(w))distractors.push(w);
+  }
+  const opts=[target,...distractors];
+  shuffleArr(opts);
+  return opts;
+}
+
+// ── Navigation ────────────────────────────────────────────
+function show(name){
+  ['home','deck','study'].forEach(s=>{
+    const el=$(`screen-${s}`);el.classList.remove('sr','sl');
+    if(s!==name)el.classList.add('sr');
   });
 }
-
-function navHome() {
-  show('home');
-  renderHome();
+function navHome(){
+  speechSynthesis.cancel&&speechSynthesis.cancel();
+  show('home');renderHome();
 }
-
-function navDeck(id) {
-  S.activeDeckId = id;
-  $('screen-home').classList.add('slide-left');
-  $('screen-deck').classList.remove('slide-right');
+function navDeck(id){
+  S.activeDeckId=id;
+  $('screen-home').classList.add('sl');
+  $('screen-deck').classList.remove('sr');
   renderDeck();
 }
-
-function navStudy() {
-  const deck = activeDeck();
-  if (!deck || !deck.cards.length) return;
-  S.studyCards = [...deck.cards];
-  if (S.shuffle) shuffleArr(S.studyCards);
-  S.studyIdx   = 0;
-  S.isFlipped  = false;
-  S.studyDone  = false;
-  $('screen-deck').classList.add('slide-left');
-  $('screen-study').classList.remove('slide-right');
-  renderStudy();
+function openStudyOptions(){
+  const deck=activeDeck();
+  if(!deck||!deck.cards.length)return;
+  const allN=deck.cards.length,dueN=dueCards(deck).length,weakN=weakCards(deck).length;
+  $('opt-cnt-all').textContent=allN;
+  $('opt-cnt-due').textContent=dueN?`${dueN} بطاقة`:'لا يوجد';
+  $('opt-cnt-weak').textContent=weakN?`${weakN} بطاقة`:'لا يوجد';
+  $('opt-due').classList.toggle('empty-opt',dueN===0);
+  $('opt-weak').classList.toggle('empty-opt',weakN===0);
+  S.optMode='flip';S.optSet='all';S.optLvl='';
+  ['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(id=>$(id).classList.remove('sel'));
+  ['opt-all','opt-due','opt-weak'].forEach(id=>$(id).classList.remove('sel'));
+  $('opt-flip').classList.add('sel');$('opt-all').classList.add('sel');
+  // Level filter: show only if deck has tagged cards
+  const lvls=[...new Set(deck.cards.map(c=>c.level||'').filter(Boolean))].sort();
+  const wrap=$('opt-lvl-wrap');
+  if(lvls.length>0){
+    wrap.style.display='block';
+    const row=$('opt-lvl-row');
+    row.innerHTML=`<button class="lvl-filter-btn sel" data-lvl="">الكل</button>`
+      +lvls.map(lv=>`<button class="lvl-filter-btn lvl-${lv.toLowerCase()}" data-lvl="${lv}">${lv}</button>`).join('');
+    row.querySelectorAll('.lvl-filter-btn').forEach(btn=>{
+      btn.onclick=()=>{row.querySelectorAll('.lvl-filter-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');S.optLvl=btn.dataset.lvl};
+    });
+  } else wrap.style.display='none';
+  openModal('modal-study-opts');
 }
-
-// ─── Shuffle ────────────────────────────────────────────────
-function shuffleArr(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+function startStudy(){
+  const deck=activeDeck();if(!deck)return;
+  let pool=S.optSet==='due'?dueCards(deck):S.optSet==='weak'?weakCards(deck):[...deck.cards];
+  if(S.optLvl) pool=pool.filter(c=>c.level===S.optLvl);
+  if(S.optMode==='reverse') pool=pool.filter(c=>c.word);
+  if(!pool.length){toast('لا توجد بطاقات في هذه الفئة');return}
+  closeModal('modal-study-opts');
+  S.studyMode=S.optMode;
+  S.studyCards=pool;
+  if(S.shuffle)shuffleArr(S.studyCards);
+  resetStudySession();
+  S.studySet=S.optSet;
+  $('screen-deck').classList.add('sl');
+  $('screen-study').classList.remove('sr');
+  updateModeChip();renderStudy();
+}
+function startDueSession(){
+  for(const deck of S.decks){
+    const due=dueCards(deck);
+    if(due.length>0){
+      S.activeDeckId=deck.id;S.optMode='flip';S.optSet='due';S.studyMode='flip';S.optLvl='';
+      S.studyCards=[...due];if(S.shuffle)shuffleArr(S.studyCards);
+      resetStudySession();S.studySet='due';
+      show('study');updateModeChip();renderStudy();return;
+    }
   }
 }
+function resetStudySession(){
+  S.studyIdx=0;S.isFlipped=false;S.studyDone=false;
+  S.typingChecked=false;S.typingResult=null;
+  S.mcqAnswered=false;S.mcqOptions=[];S.mcqWrongIdx=-1;
+  S.sessionCorrect=0;S.sessionWrong=0;S.sessionSkipped=0;S.sessionWrongIds=[];
+}
+function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+function updateModeChip(){
+  const chip=$('btn-mode-toggle');const lbl=$('mode-label');
+  const map={flip:'🔄 قلب',type:'✍️ كتابة',mcq:'🎯 اختيار',reverse:'🔀 عكسي'};
+  lbl.textContent=map[S.studyMode]||'🔄 قلب';
+  chip.classList.toggle('on',S.studyMode!=='flip');
+}
 
-// ─── Render: Home ───────────────────────────────────────────
-function renderHome() {
-  $('s-decks').textContent = S.decks.length;
-  $('s-cards').textContent = totalCards();
-  $('s-today').textContent = S.studiedToday;
+// ── Render: Home ──────────────────────────────────────────
+function renderHome(){
+  $('s-decks').textContent=S.decks.length;
+  $('s-cards').textContent=totalCards();
+  $('s-today').textContent=S.studiedToday;
+  $('s-streak').textContent=S.streak;
 
-  const list = $('deck-list');
-  list.innerHTML = '';
+  // Goal bar
+  const g=Math.min(S.dailyGoal,S.studiedToday);
+  const pct=S.dailyGoal>0?Math.min(100,Math.round(g/S.dailyGoal*100)):0;
+  $('goal-cnt').textContent=`${S.studiedToday}/${S.dailyGoal}`;
+  $('goal-bar').style.width=pct+'%';
+  $('goal-wrap').classList.toggle('goal-done',S.studiedToday>=S.dailyGoal);
 
-  if (!S.decks.length) {
-    list.innerHTML = `
-      <div class="empty">
-        <span class="empty-ic">🃏</span>
-        <div class="empty-ti">لا توجد مجموعات بعد</div>
-        <div class="empty-de">أنشئ مجموعتك الأولى<br>وابدأ رحلة تعلم الإنجليزية</div>
-      </div>`;
+  // Due strip
+  const due=allDueCount();
+  const strip=$('due-strip');
+  if(due>0){strip.classList.remove('hidden');$('due-count').textContent=due}
+  else strip.classList.add('hidden');
+
+  const list=$('deck-list');list.innerHTML='';
+  if(!S.decks.length){
+    list.innerHTML=`<div class="empty"><span class="e-ic">🃏</span><div class="e-ti">لا توجد مجموعات بعد</div><div class="e-de">أنشئ مجموعتك الأولى وابدأ رحلة تعلم الإنجليزية</div></div>`;
     return;
   }
-
-  S.decks.forEach(deck => {
-    const div = document.createElement('div');
-    div.className = 'deck-card';
-    div.innerHTML = `
-      <div class="deck-icon">${deck.emoji || '📚'}</div>
+  S.decks.forEach(deck=>{
+    const pct=masteryPct(deck),dueN=dueCards(deck).length;
+    const div=document.createElement('div');div.className='deck-card';
+    div.innerHTML=`
+      <div class="deck-icon">${deck.emoji||'📚'}</div>
       <div class="deck-info">
-        <div class="deck-name">${escHtml(deck.name)}</div>
-        <div class="deck-meta">${deck.cards.length} بطاقة${deck.desc ? ' · ' + escHtml(deck.desc) : ''}</div>
+        <div class="deck-name">${esc(deck.name)}</div>
+        <div class="deck-meta">${deck.cards.length} بطاقة · ${masteredCount(deck)} مُتقنة${deck.desc?' · '+esc(deck.desc):''}</div>
+        ${dueN>0?`<div class="deck-due">📅 ${dueN} مستحقة للمراجعة</div>`:''}
+        ${deck.cards.length?`<div class="deck-mbar"><div class="deck-mfill" style="width:${pct}%"></div></div>`:''}
       </div>
-      <div class="deck-arr">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>`;
-    div.addEventListener('click', () => navDeck(deck.id));
+      <div class="deck-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>`;
+    div.addEventListener('click',()=>navDeck(deck.id));
     list.appendChild(div);
   });
 }
 
-// ─── Render: Deck ───────────────────────────────────────────
-function renderDeck() {
-  const deck = activeDeck();
-  if (!deck) return;
-
-  $('deck-title').textContent = deck.name;
-  $('btn-study').disabled = deck.cards.length === 0;
-
-  const list = $('card-list');
-  list.innerHTML = '';
-
-  if (!deck.cards.length) {
-    list.innerHTML = `
-      <div class="empty">
-        <span class="empty-ic">✏️</span>
-        <div class="empty-ti">لا توجد بطاقات</div>
-        <div class="empty-de">أضف بطاقتك الأولى<br>بالضغط على زر + بالأسفل</div>
-      </div>`;
+// ── Render: Deck ──────────────────────────────────────────
+function renderDeck(){
+  const deck=activeDeck();if(!deck)return;
+  $('deck-title').textContent=deck.name;
+  $('btn-study').disabled=!deck.cards.length;
+  const list=$('card-list');list.innerHTML='';
+  if(!deck.cards.length){
+    list.innerHTML=`<div class="empty"><span class="e-ic">✏️</span><div class="e-ti">لا توجد بطاقات</div><div class="e-de">أضف بطاقتك الأولى بالضغط على + بالأسفل</div></div>`;
     return;
   }
-
-  deck.cards.forEach(card => {
-    const row = document.createElement('div');
-    row.className = 'card-row';
-    const frontPreview = escHtml(card.front).replace(/___/g, '<span class="bl">___</span>');
-    row.innerHTML = `
+  deck.cards.forEach(card=>{
+    const row=document.createElement('div');row.className='card-row';
+    const fp=esc(card.front).replace(/___/g,'<span class="bl">___</span>');
+    row.innerHTML=`
+      <div class="${masteryClass(card.mastery)} m-dot"></div>
       <div class="card-row-body">
-        <div class="card-front-txt">${frontPreview}</div>
-        <div class="card-back-txt">${escHtml(card.back)}</div>
+        <div class="cfp">${fp} ${card.level?lvlBadge(card.level):''}</div>
+        <div class="cbp">${esc(card.back)}</div>
+        ${srsLabel(card)}
       </div>
-      <button class="del-btn" data-id="${card.id}" title="حذف">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-          <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-        </svg>
-      </button>`;
-    row.querySelector('.card-row-body').addEventListener('click', () => openEditCard(card));
-    row.querySelector('.del-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      deleteCard(card.id);
-    });
+      <button class="del-btn" title="حذف"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>`;
+    row.querySelector('.card-row-body').addEventListener('click',()=>openEditCard(card));
+    row.querySelector('.del-btn').addEventListener('click',e=>{e.stopPropagation();confirmDeleteCard(card.id)});
     list.appendChild(row);
   });
 }
 
-// ─── Render: Study ──────────────────────────────────────────
-function renderStudy() {
-  if (S.studyDone) { renderDone(); return; }
+// ── Render: Study (router) ────────────────────────────────
+let _tX=0,_tY=0,_tMv=false;
 
-  const card  = S.studyCards[S.studyIdx];
-  const total = S.studyCards.length;
-  const idx   = S.studyIdx;
-
-  $('prog-fill').style.width = (idx / total * 100) + '%';
-  $('study-cnt').textContent = `${idx + 1}/${total}`;
-  $('btn-shuffle').classList.toggle('on', S.shuffle);
-
-  // Build front HTML
-  const frontHtml = escHtml(card.front).replace(/___/g, '<span class="gap">___</span>');
-
-  // Build back HTML — highlight the keyword
-  let backHtml = escHtml(card.back);
-  if (card.word) {
-    const re = new RegExp(`\\b${escRe(escHtml(card.word))}\\b`, 'gi');
-    backHtml = backHtml.replace(re, m => `<span class="hl">${m}</span>`);
-  }
-
-  const stage = $('study-stage');
-  stage.innerHTML = `
-    <div class="scene" id="scene">
-      <div class="flipper${S.isFlipped ? ' flipped' : ''}" id="flipper">
-
-        <!-- FRONT -->
-        <div class="face">
-          <div class="face-tag">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            الوجه الأمامي
-          </div>
-          <div class="face-sentence">${frontHtml}</div>
-        </div>
-
-        <!-- BACK -->
-        <div class="face face-back">
-          <div class="face-tag" style="color:#c0ae92">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c8901a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            الوجه الخلفي
-          </div>
-          <div class="face-sentence">${backHtml}</div>
-          ${card.word ? `<div class="word-badge">${escHtml(card.word)}</div>` : ''}
-          ${card.note ? `<div class="card-note-txt">📝 ${escHtml(card.note)}</div>` : ''}
-        </div>
-
-      </div>
-    </div>
-
-    <div class="tap-hint" id="tap-hint" style="opacity:${S.isFlipped ? 0 : 1}">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 10.5V5a2 2 0 0 1 4 0v5.5M11 5a2 2 0 0 1 4 0v3M15 8a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7H8a7 7 0 0 1-5-3L1 15"/></svg>
-      اضغط على البطاقة للكشف
-    </div>
-
-    <div class="study-nav">
-      <button class="nav-btn" id="btn-prev" ${idx === 0 ? 'disabled' : ''}>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-        السابق
-      </button>
-      <button class="nav-btn gold" id="btn-next">
-        ${idx === total - 1 ? 'إنهاء ✓' : 'التالي'}
-        ${idx < total - 1 ? '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>' : ''}
-      </button>
-    </div>`;
-
-  // Flip on tap
-  $('scene').addEventListener('click', () => {
-    S.isFlipped = !S.isFlipped;
-    $('flipper').classList.toggle('flipped', S.isFlipped);
-    const hint = $('tap-hint');
-    if (hint) hint.style.opacity = S.isFlipped ? 0 : 1;
-  });
-
-  $('btn-next').addEventListener('click', () => {
-    if (S.studyIdx === S.studyCards.length - 1) {
-      // Done
-      S.studiedToday += S.studyCards.length;
-      S.lastDate = new Date().toDateString();
-      persist();
-      S.studyDone = true;
-      renderStudy();
-    } else {
-      S.studyIdx++;
-      S.isFlipped = false;
-      renderStudy();
-    }
-  });
-
-  $('btn-prev').addEventListener('click', () => {
-    if (S.studyIdx > 0) {
-      S.studyIdx--;
-      S.isFlipped = false;
-      renderStudy();
-    }
-  });
+function renderStudy(){
+  if(S.studyDone){renderDone();return}
+  const card=S.studyCards[S.studyIdx],total=S.studyCards.length;
+  $('prog-fill').style.width=(S.studyIdx/total*100)+'%';
+  $('study-cnt').textContent=`${S.studyIdx+1}/${total}`;
+  $('btn-shuffle').classList.toggle('on',S.shuffle);
+  if(S.studyMode==='type') renderTypingMode(card);
+  else if(S.studyMode==='mcq') renderMCQMode(card);
+  else if(S.studyMode==='reverse') renderReverseMode(card);
+  else renderFlipMode(card);
 }
 
-function renderDone() {
-  const total = S.studyCards.length;
-  $('prog-fill').style.width = '100%';
-  $('study-cnt').textContent = `${total}/${total}`;
+function lvlBadge(lv){
+  if(!lv)return'';
+  const cls={A2:'lvl-a2',B1:'lvl-b1',B2:'lvl-b2',C1:'lvl-c1'}[lv]||'';
+  return`<span class="lvl-badge ${cls}">${lv}</span>`;
+}
 
-  $('study-stage').innerHTML = `
+// Back face shared HTML
+function backExtras(card){
+  return `
+    ${card.word?`<div class="word-badge">${esc(card.word)} ${card.level?lvlBadge(card.level):''}</div>`:''}
+    ${card.synonyms?`<div class="syn-row">${card.synonyms.split(',').map(s=>`<span class="syn-chip">${esc(s.trim())}</span>`).join('')}</div>`:''}
+    ${card.translation?`<div class="card-trans">${esc(card.translation)}</div>`:''}
+    ${card.note?`<div class="card-note">📝 ${esc(card.note)}</div>`:''}`;
+}
+
+// TTS button HTML
+function ttsBtnHtml(id){
+  return `<button class="tts-btn" id="${id}" title="استمع"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>`;
+}
+
+// ── Flip Mode ─────────────────────────────────────────────
+function renderFlipMode(card){
+  const fh=esc(card.front).replace(/___/g,'<span class="gap">___</span>');
+  let bh=esc(card.back);
+  if(card.word){const re=new RegExp(`\\b${escRe(esc(card.word))}\\b`,'gi');bh=bh.replace(re,m=>`<span class="hl">${m}</span>`)}
+  const stage=$('study-stage');
+  stage.innerHTML=`
+    <div class="scene" id="scene">
+      <div class="flipper${S.isFlipped?' flipped':''}" id="flipper">
+        <div class="face">
+          <div class="face-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> الوجه الأمامي</div>
+          <div class="face-sent">${fh}</div>
+          ${ttsBtnHtml('tts-f')}
+        </div>
+        <div class="face face-back">
+          <div class="face-tag" style="color:#c0ae92"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c8901a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> الوجه الخلفي</div>
+          <div class="face-sent">${bh}</div>
+          ${backExtras(card)}
+          ${ttsBtnHtml('tts-b')}
+        </div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tap-hint" style="opacity:${S.isFlipped?0:1}">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 10.5V5a2 2 0 0 1 4 0v5.5M11 5a2 2 0 0 1 4 0v3M15 8a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7H8a7 7 0 0 1-5-3L1 15"/></svg>
+      اضغط على البطاقة للكشف
+    </div>
+    <div class="study-nav" id="study-nav"></div>`;
+
+  updateFlipNav();
+  $('tts-f').addEventListener('click',e=>{e.stopPropagation();speak(card.front,'tts-f')});
+  $('tts-b').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-b')});
+  const scene=$('scene');
+  scene.addEventListener('click',handleFlipClick);
+  scene.addEventListener('touchstart',e=>{_tX=e.touches[0].clientX;_tY=e.touches[0].clientY;_tMv=false},{passive:true});
+  scene.addEventListener('touchmove',e=>{if(Math.abs(e.touches[0].clientX-_tX)>8)_tMv=true},{passive:true});
+  scene.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-_tX,dy=e.changedTouches[0].clientY-_tY;
+    if(Math.abs(dx)>52&&Math.abs(dx)>Math.abs(dy)*1.4){
+      if(S.isFlipped)rateCard(dx>0?5:0);else flipCard();
+      e.preventDefault();
+    }
+  },{passive:false});
+}
+function handleFlipClick(){if(!_tMv)flipCard()}
+function flipCard(){
+  S.isFlipped=!S.isFlipped;
+  $('flipper')?.classList.toggle('flipped',S.isFlipped);
+  const hint=$('tap-hint');if(hint)hint.style.opacity=S.isFlipped?0:1;
+  updateFlipNav();
+  if(S.isFlipped){const c=S.studyCards[S.studyIdx];if(c)speak(c.back,'tts-b')}
+}
+function updateFlipNav(){
+  const nav=$('study-nav');if(!nav)return;
+  const isLast=S.studyIdx===S.studyCards.length-1;
+  if(S.isFlipped){
+    nav.innerHTML=`
+      <button class="nav-btn wrong" id="nb-forgot">✗ نسيت</button>
+      <button class="nav-btn hard"  id="nb-hard">😐 صعبة</button>
+      <button class="nav-btn easy"  id="nb-easy">✓ سهلة</button>`;
+    $('nb-forgot').onclick=()=>rateCard(0);
+    $('nb-hard').onclick=()=>rateCard(3);
+    $('nb-easy').onclick=()=>rateCard(5);
+  } else {
+    nav.innerHTML=`
+      <button class="nav-btn" id="nb-prev" ${S.studyIdx===0?'disabled':''}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg> السابق
+      </button>
+      <button class="nav-btn dim" id="nb-skip">${isLast?'إنهاء':'تخطي ›'}</button>`;
+    $('nb-prev').onclick=()=>{if(S.studyIdx>0){S.studyIdx--;S.isFlipped=false;renderStudy()}};
+    $('nb-skip').onclick=()=>{S.sessionSkipped++;advanceCard()};
+  }
+}
+
+// ── Typing Mode ───────────────────────────────────────────
+function renderTypingMode(card){
+  const fh=esc(card.front).replace(/___/g,'<span class="gap">___</span>');
+  if(S.typingChecked){
+    let bh=esc(card.back);
+    if(card.word){const re=new RegExp(`\\b${escRe(esc(card.word))}\\b`,'gi');bh=bh.replace(re,m=>`<span class="hl">${m}</span>`)}
+    const res=S.typingResult;
+    const oc=res==='correct'?'correct':res==='close'?'close':'wrong';
+    const ot=res==='correct'?'✓ ممتاز!':res==='close'?`تقريباً — الكلمة: ${esc(card.word||'')}` :`✗ الكلمة: ${esc(card.word||'')}`;
+    const isLast=S.studyIdx===S.studyCards.length-1;
+    $('study-stage').innerHTML=`
+      <div class="scene" style="cursor:default">
+        <div class="flipper flipped">
+          <div class="face"><div class="face-sent">${fh}</div></div>
+          <div class="face face-back">
+            <div class="type-res-ov ${oc}">${ot}</div>
+            <div style="margin-top:28px"></div>
+            <div class="face-sent">${bh}</div>
+            ${backExtras(card)}
+            ${ttsBtnHtml('tts-tr')}
+          </div>
+        </div>
+      </div>
+      <div class="study-nav"><button class="nav-btn gold" id="nb-nt">${isLast?'إنهاء ✓':'التالية ›'}</button></div>`;
+    $('tts-tr').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-tr')});
+    $('nb-nt').addEventListener('click',advanceCard);
+    speak(card.back,'tts-tr');
+    return;
+  }
+  $('study-stage').innerHTML=`
+    <div class="scene" style="cursor:default">
+      <div class="flipper" id="flipper">
+        <div class="face">
+          <div class="face-tag">✍️ أكمل الجملة</div>
+          <div class="face-sent">${fh}</div>
+          ${ttsBtnHtml('tts-t')}
+        </div>
+        <div class="face face-back"></div>
+      </div>
+    </div>
+    <div class="type-area">
+      <div class="type-inp-wrap">
+        <input class="type-inp" id="type-inp" type="text" placeholder="اكتب الكلمة هنا..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dir="ltr" inputmode="text">
+        <button class="type-chk" id="type-chk">تحقق</button>
+      </div>
+    </div>
+    <div class="study-nav"><button class="nav-btn dim" id="nb-skip-t">تخطي ›</button></div>`;
+  $('tts-t').addEventListener('click',e=>{e.stopPropagation();speak(card.front,'tts-t')});
+  $('nb-skip-t').addEventListener('click',()=>{S.sessionSkipped++;advanceCard()});
+  const inp=$('type-inp'),chk=$('type-chk');
+  chk.addEventListener('click',()=>submitTyping(card,inp.value));
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')submitTyping(card,inp.value)});
+  setTimeout(()=>inp.focus(),350);
+}
+function submitTyping(card,val){
+  if(!val.trim()){toast('اكتب الكلمة أولاً');return}
+  const result=card.word?evalTyping(val,card.word):'correct';
+  S.typingChecked=true;S.typingResult=result;
+  const q={correct:5,close:3,wrong:0}[result];
+  doRate(q);renderStudy();
+}
+
+// ── MCQ Mode ──────────────────────────────────────────────
+function renderMCQMode(card){
+  const fh=esc(card.front).replace(/___/g,'<span class="gap">___</span>');
+  if(!card.word){S.studyMode='flip';renderFlipMode(card);return}
+
+  if(!S.mcqAnswered){
+    const opts=S.mcqOptions.length?S.mcqOptions:buildMCQOptions(card);
+    S.mcqOptions=opts;
+    $('study-stage').innerHTML=`
+      <div class="scene" style="cursor:default">
+        <div class="flipper">
+          <div class="face">
+            <div class="face-tag">🎯 اختر الكلمة الصحيحة</div>
+            <div class="face-sent">${fh}</div>
+            ${ttsBtnHtml('tts-m')}
+          </div>
+        </div>
+      </div>
+      <div class="mcq-grid" id="mcq-grid">
+        ${opts.map((o,i)=>`<button class="mcq-opt" id="mopt-${i}">${esc(o)}</button>`).join('')}
+      </div>
+      <div class="study-nav" id="mcq-nav"></div>`;
+    $('tts-m').addEventListener('click',e=>{e.stopPropagation();speak(card.front,'tts-m')});
+    opts.forEach((_,i)=>$(`mopt-${i}`).addEventListener('click',()=>selectMCQ(i,card,opts)));
+  } else {
+    // Already answered — show result + next button
+    const opts=S.mcqOptions;
+    const target=(card.word||'').toLowerCase().trim();
+    const isLast=S.studyIdx===S.studyCards.length-1;
+    let bh=esc(card.back);
+    if(card.word){const re=new RegExp(`\\b${escRe(esc(card.word))}\\b`,'gi');bh=bh.replace(re,m=>`<span class="hl">${m}</span>`)}
+    $('study-stage').innerHTML=`
+      <div class="scene" style="cursor:default">
+        <div class="flipper flipped">
+          <div class="face"><div class="face-sent">${fh}</div></div>
+          <div class="face face-back">
+            <div class="face-tag" style="color:#c0ae92">الجملة الكاملة</div>
+            <div class="face-sent">${bh}</div>
+            ${backExtras(card)}
+            ${ttsBtnHtml('tts-mr')}
+          </div>
+        </div>
+      </div>
+      <div class="mcq-grid">
+        ${opts.map((o,i)=>{
+          const cl=o.toLowerCase().trim()===target?'correct':
+                   (S.mcqWrongIdx===i?'wrong':'');
+          return `<button class="mcq-opt ${cl}" disabled>${esc(o)}</button>`;
+        }).join('')}
+      </div>
+      <div class="study-nav"><button class="nav-btn gold" id="nb-mnext">${isLast?'إنهاء ✓':'التالية ›'}</button></div>`;
+    $('tts-mr').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-mr')});
+    $('nb-mnext').addEventListener('click',()=>{S.mcqAnswered=false;S.mcqOptions=[];S.mcqWrongIdx=-1;advanceCard()});
+    speak(card.back,'tts-mr');
+  }
+}
+function selectMCQ(idx,card,opts){
+  if(S.mcqAnswered)return;
+  S.mcqAnswered=true;
+  const sel=opts[idx];const target=(card.word||'').toLowerCase().trim();
+  const isCorrect=sel.toLowerCase().trim()===target;
+  S.mcqWrongIdx=isCorrect?-1:idx;
+  doRate(isCorrect?5:0);
+  if(navigator.vibrate)navigator.vibrate(isCorrect?30:[15,40,15]);
+  // Visual feedback immediately
+  opts.forEach((o,i)=>{
+    const btn=$(`mopt-${i}`);
+    if(o.toLowerCase().trim()===target)btn.classList.add('correct');
+    else if(i===idx&&!isCorrect)btn.classList.add('wrong');
+    btn.disabled=true;
+  });
+  // Show result after short pause
+  setTimeout(()=>renderStudy(),900);
+}
+
+// ── Rating & Advance ──────────────────────────────────────
+function doRate(quality){
+  const card=S.studyCards[S.studyIdx];
+  const real=activeDeck()?.cards.find(c=>c.id===card.id);
+  if(real)updateSRS(real,quality);
+  if(quality===0){S.sessionWrong++;S.sessionWrongIds.push(card.id)}
+  else S.sessionCorrect++;
+  persist();
+}
+function rateCard(quality){
+  doRate(quality);
+  if(navigator.vibrate)navigator.vibrate(quality>0?30:[15,40,15]);
+  const scene=$('scene');
+  if(scene){scene.classList.add(quality>0?'exit-r':'exit-l');setTimeout(advanceCard,260)}
+  else advanceCard();
+}
+function advanceCard(){
+  if(S.studyIdx>=S.studyCards.length-1){finishSession()}
+  else{
+    S.studyIdx++;S.isFlipped=false;
+    S.typingChecked=false;S.typingResult=null;
+    S.mcqAnswered=false;S.mcqOptions=[];S.mcqWrongIdx=-1;
+    renderStudy();
+  }
+}
+function finishSession(){
+  const today=new Date().toDateString();
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  if(S.lastStudyDate===yesterday)S.streak++;
+  else if(S.lastStudyDate!==today)S.streak=1;
+  S.lastStudyDate=today;S.studiedToday=(S.studiedToday||0)+S.studyCards.length;
+  S.lastDate=today;
+  // Record history
+  const hist=S.studyHistory.find(h=>h.date===today);
+  if(hist){hist.studied=(hist.studied||0)+S.studyCards.length;hist.correct=(hist.correct||0)+S.sessionCorrect;hist.wrong=(hist.wrong||0)+S.sessionWrong}
+  else{S.studyHistory.push({date:today,studied:S.studyCards.length,correct:S.sessionCorrect,wrong:S.sessionWrong})}
+  if(S.studyHistory.length>60)S.studyHistory=S.studyHistory.slice(-60);
+  persist();S.studyDone=true;renderStudy();
+}
+
+// ── Done Screen ───────────────────────────────────────────
+function renderDone(){
+  const total=S.studyCards.length,cor=S.sessionCorrect,wrn=S.sessionWrong,skp=S.sessionSkipped;
+  const pct=total?Math.round(cor/total*100):0;
+  $('prog-fill').style.width='100%';$('study-cnt').textContent=`${total}/${total}`;
+  let emoji='🎉',title='أحسنت!',sub='مذاكرة ممتازة، استمر!';
+  if(pct>=90){emoji='🏆';title='ممتاز جداً!';sub='تقدم رائع — استمر بهذا الإيقاع!'}
+  else if(pct>=60){emoji='💪';title='أحسنت!';sub='تقدم جيد — راجع الصعبة مرة أخرى!'}
+  else if(cor===0){emoji='📖';title='لنبدأ!';sub='هذه كلمات جديدة، المراجعة المنتظمة هي السر.'}
+  else{emoji='🎯';title='في الطريق!';sub='راجع الصعبة مجدداً لتثبّتها.'}
+  const hasWeak=wrn>0&&S.sessionWrongIds.length>0;
+  $('study-stage').innerHTML=`
     <div class="done-wrap">
-      <div class="done-emoji">🎉</div>
-      <div class="done-title">أحسنت يا مجد!</div>
-      <div class="done-desc">راجعت ${total} بطاقة اليوم.<br>الاستمرار هو سر النجاح في اللغات!</div>
+      <div class="done-emoji">${emoji}</div>
+      <div class="done-title">${title}</div>
+      <div class="done-sub">${sub}</div>
+      <div class="done-score">
+        <div class="score-box g"><div class="score-n g">${cor}</div><div class="score-l">✓ صحيحة</div></div>
+        <div class="score-box r"><div class="score-n r">${wrn}</div><div class="score-l">✗ خاطئة</div></div>
+        <div class="score-box a"><div class="score-n a">${skp}</div><div class="score-l">تخطيت</div></div>
+      </div>
       <div class="done-btns">
-        <button class="btn-main" id="btn-again">مراجعة مجدداً</button>
+        ${hasWeak?`<button class="btn-weak" id="btn-retry-weak">🔄 أعِد الصعبة (${wrn})</button>`:''}
+        <button class="btn-main" id="btn-again">مراجعة من البداية</button>
         <button class="btn-sub"  id="btn-to-deck">العودة للمجموعة</button>
       </div>
     </div>`;
-
-  $('btn-again').addEventListener('click', () => {
-    S.studyCards = [...activeDeck().cards];
-    if (S.shuffle) shuffleArr(S.studyCards);
-    S.studyIdx  = 0;
-    S.isFlipped = false;
-    S.studyDone = false;
-    renderStudy();
-  });
-
-  $('btn-to-deck').addEventListener('click', () => {
-    $('screen-study').classList.add('slide-right');
-    $('screen-deck').classList.remove('slide-left');
-  });
+  if(hasWeak){
+    $('btn-retry-weak').onclick=()=>{
+      S.studyCards=activeDeck().cards.filter(c=>S.sessionWrongIds.includes(c.id));
+      if(S.shuffle)shuffleArr(S.studyCards);
+      resetStudySession();renderStudy();
+    };
+  }
+  $('btn-again').onclick=()=>{
+    const dk=activeDeck();
+    S.studyCards=[...(S.studySet==='due'?dueCards(dk):S.studySet==='weak'?weakCards(dk):dk.cards)];
+    if(S.shuffle)shuffleArr(S.studyCards);
+    resetStudySession();renderStudy();
+  };
+  $('btn-to-deck').onclick=()=>{
+    speechSynthesis.cancel&&speechSynthesis.cancel();
+    $('screen-study').classList.add('sr');$('screen-deck').classList.remove('sl');renderDeck();
+  };
 }
 
-// ─── Modals ─────────────────────────────────────────────────
-function openModal(id) {
-  $(id).classList.remove('hidden');
-}
-function closeModal(id) {
-  $(id).classList.add('hidden');
-}
+// ── Modals ────────────────────────────────────────────────
+const openModal=id=>$(id).classList.remove('hidden');
+const closeModal=id=>$(id).classList.add('hidden');
 
 // Deck modal
-function openNewDeck() {
-  S.editDeckId = null;
-  S.selEmoji   = '📚';
-  $('mdeck-title').textContent = 'مجموعة جديدة';
-  $('in-dname').value = '';
-  $('in-ddesc').value = '';
-  buildEmojiGrid();
-  openModal('modal-deck');
-  setTimeout(() => $('in-dname').focus(), 320);
-}
-
-function openEditDeck() {
-  const d = activeDeck();
-  S.editDeckId = d.id;
-  S.selEmoji   = d.emoji || '📚';
-  $('mdeck-title').textContent = 'تعديل المجموعة';
-  $('in-dname').value = d.name;
-  $('in-ddesc').value = d.desc || '';
-  buildEmojiGrid();
-  openModal('modal-deck');
-}
-
-function buildEmojiGrid() {
-  const g = $('emoji-grid');
-  g.innerHTML = '';
-  EMOJIS.forEach(e => {
-    const btn = document.createElement('button');
-    btn.className = 'emj-btn' + (e === S.selEmoji ? ' sel' : '');
-    btn.textContent = e;
-    btn.addEventListener('click', () => {
-      S.selEmoji = e;
-      buildEmojiGrid();
-    });
-    g.appendChild(btn);
-  });
-}
-
-function saveDeck() {
-  const name = $('in-dname').value.trim();
-  if (!name) { toast('أدخل اسم المجموعة'); return; }
-
-  if (S.editDeckId) {
-    const d = getDeck(S.editDeckId);
-    d.name  = name;
-    d.desc  = $('in-ddesc').value.trim();
-    d.emoji = S.selEmoji;
-    toast('تم تحديث المجموعة ✓');
-  } else {
-    S.decks.unshift({
-      id: uid(), name,
-      desc:  $('in-ddesc').value.trim(),
-      emoji: S.selEmoji,
-      cards: [],
-      ts:    Date.now(),
-    });
-    toast('تمت إضافة المجموعة ✓');
-  }
-
-  persist();
-  closeModal('modal-deck');
-
-  // refresh whichever screen is active
-  if ($('screen-deck').classList.contains('slide-right') || S.activeDeckId === S.editDeckId) {
-    renderDeck();
-  }
-  renderHome(); // always refresh stats
+function openNewDeck(){S.editDeckId=null;S.selEmoji='📚';$('mdeck-t').textContent='مجموعة جديدة';$('in-dname').value='';$('in-ddesc').value='';buildEmjGrid();openModal('modal-deck');setTimeout(()=>$('in-dname').focus(),320)}
+function openEditDeck(){const d=activeDeck();S.editDeckId=d.id;S.selEmoji=d.emoji||'📚';$('mdeck-t').textContent='تعديل المجموعة';$('in-dname').value=d.name;$('in-ddesc').value=d.desc||'';buildEmjGrid();openModal('modal-deck')}
+function buildEmjGrid(){const g=$('emj-grid');g.innerHTML='';EMOJIS.forEach(e=>{const b=document.createElement('button');b.className='emj'+(e===S.selEmoji?' sel':'');b.textContent=e;b.onclick=()=>{S.selEmoji=e;buildEmjGrid()};g.appendChild(b)})}
+function saveDeck(){
+  const name=$('in-dname').value.trim();if(!name){toast('أدخل اسم المجموعة');return}
+  if(S.editDeckId){const d=getDeck(S.editDeckId);d.name=name;d.desc=$('in-ddesc').value.trim();d.emoji=S.selEmoji;toast('تم تحديث المجموعة ✓')}
+  else{S.decks.unshift({id:uid(),name,desc:$('in-ddesc').value.trim(),emoji:S.selEmoji,cards:[],ts:Date.now()});toast('تمت إضافة المجموعة ✓')}
+  persist();closeModal('modal-deck');if(S.editDeckId===S.activeDeckId)renderDeck();else renderHome();
 }
 
 // Card modal
-function openNewCard() {
-  S.editCardId = null;
-  $('mcard-title').textContent = 'بطاقة جديدة';
-  $('in-front').value = '';
-  $('in-back').value  = '';
-  $('in-word').value  = '';
-  $('in-note').value  = '';
-  openModal('modal-card');
-  setTimeout(() => $('in-front').focus(), 320);
+function openNewCard(){
+  S.editCardId=null;$('mcard-t').textContent='بطاقة جديدة';
+  ['in-front','in-back','in-word','in-trans','in-syn','in-note'].forEach(id=>$(id).value='');
+  setLvlSel('');openModal('modal-card');setTimeout(()=>$('in-front').focus(),320);
 }
-
-function openEditCard(card) {
-  S.editCardId = card.id;
-  $('mcard-title').textContent = 'تعديل البطاقة';
-  $('in-front').value = card.front;
-  $('in-back').value  = card.back;
-  $('in-word').value  = card.word  || '';
-  $('in-note').value  = card.note  || '';
-  openModal('modal-card');
+function openEditCard(card){
+  S.editCardId=card.id;$('mcard-t').textContent='تعديل البطاقة';
+  $('in-front').value=card.front;$('in-back').value=card.back;$('in-word').value=card.word||'';
+  $('in-trans').value=card.translation||'';$('in-syn').value=card.synonyms||'';$('in-note').value=card.note||'';
+  setLvlSel(card.level||'');openModal('modal-card');
 }
-
-function saveCard() {
-  const front = $('in-front').value.trim();
-  const back  = $('in-back').value.trim();
-  const word  = $('in-word').value.trim();
-  const note  = $('in-note').value.trim();
-
-  if (!front || !back)        { toast('أدخل الجملتين أولاً'); return; }
-  if (!front.includes('___')) { toast('ضع ___ مكان الكلمة الجديدة'); return; }
-
-  const deck = activeDeck();
-
-  if (S.editCardId) {
-    const c = deck.cards.find(c => c.id === S.editCardId);
-    Object.assign(c, { front, back, word, note });
-    toast('تم تحديث البطاقة ✓');
+function setLvlSel(lv){
+  $('lvl-sel-row').querySelectorAll('.lvl-sel-btn').forEach(b=>{
+    b.classList.toggle('sel',b.dataset.lvl===lv);
+  });
+}
+function getSelLvl(){
+  const sel=$('lvl-sel-row').querySelector('.lvl-sel-btn.sel');
+  return sel?sel.dataset.lvl:'';
+}
+function saveCard(){
+  const front=$('in-front').value.trim(),back=$('in-back').value.trim();
+  const word=$('in-word').value.trim(),note=$('in-note').value.trim();
+  const translation=$('in-trans').value.trim(),synonyms=$('in-syn').value.trim();
+  const level=getSelLvl();
+  if(!front||!back){toast('أدخل الجملتين أولاً');return}
+  if(!front.includes('___')){toast('ضع ___ مكان الكلمة الجديدة');return}
+  const deck=activeDeck();
+  if(S.editCardId){
+    const c=deck.cards.find(c=>c.id===S.editCardId);
+    Object.assign(c,{front,back,word,note,translation,synonyms,level});toast('تم تحديث البطاقة ✓');
   } else {
-    deck.cards.push({ id: uid(), front, back, word, note, ts: Date.now() });
+    deck.cards.push(normalizeCard({front,back,word,note,translation,synonyms,level}));
     toast('تمت إضافة البطاقة ✓');
   }
-
-  persist();
-  closeModal('modal-card');
-  renderDeck();
+  persist();closeModal('modal-card');renderDeck();
 }
 
-function deleteCard(cardId) {
-  if (!confirm('حذف هذه البطاقة؟')) return;
-  const deck = activeDeck();
-  deck.cards = deck.cards.filter(c => c.id !== cardId);
-  persist();
-  renderDeck();
-  toast('تم حذف البطاقة');
+// Auto-detect word
+$('in-back')?.addEventListener('blur',()=>{
+  if($('in-word').value.trim())return;
+  const front=$('in-front').value.trim(),back=$('in-back').value.trim();
+  if(!front.includes('___')||!back)return;
+  try{
+    const[bf,af]=front.split('___');
+    const bl=back.toLowerCase(),bfl=bf.trim().toLowerCase(),afl=af.trim().toLowerCase();
+    const lw=bfl.split(/\s+/).pop()||'',fw=afl.split(/\s+/)[0]||'';
+    let s=lw?bl.lastIndexOf(lw)+lw.length:0;
+    let e=fw?bl.indexOf(fw,s):bl.length;
+    if(s>=0&&e>s){const w=back.slice(s,e).trim().replace(/^[,.\s'"]+|[,.\s'"]+$/g,'');if(w&&w.split(/\s+/).length<=3)$('in-word').value=w}
+  }catch(e){}
+});
+
+// ── Stats Screen ──────────────────────────────────────────
+function navStats(){
+  $('screen-home').classList.add('sl');
+  $('screen-stats').classList.remove('sr');
+  renderStats();
 }
 
-function deleteDeck() {
-  const d = activeDeck();
-  if (!confirm(`حذف مجموعة "${d.name}" وكل بطاقاتها؟`)) return;
-  S.decks = S.decks.filter(x => x.id !== S.activeDeckId);
-  persist();
-  navHome();
-  toast('تم حذف المجموعة');
+function getLast7(){
+  const DAY_AR=['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'];
+  return Array.from({length:7},(_,i)=>{
+    const d=new Date(Date.now()-(6-i)*86400000);
+    const dateStr=d.toDateString();
+    const h=S.studyHistory.find(x=>x.date===dateStr);
+    return{label:DAY_AR[d.getDay()],count:h?h.studied:0,correct:h?h.correct:0,wrong:h?h.wrong:0,isToday:i===6};
+  });
 }
 
-// ─── Toast ──────────────────────────────────────────────────
-let _toastTmr;
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('on');
-  clearTimeout(_toastTmr);
-  _toastTmr = setTimeout(() => t.classList.remove('on'), 2600);
+function renderStats(){
+  const allCards=S.decks.flatMap(d=>d.cards);
+  const total=allCards.length;
+  if(total===0&&S.studyHistory.length===0){
+    $('stats-wrap').innerHTML=`<div class="stats-empty">📊<br><br>لا توجد إحصاءات بعد.<br>ابدأ المراجعة لترى تقدمك هنا!</div>`;
+    return;
+  }
+
+  // Overall accuracy
+  const totC=allCards.reduce((n,c)=>n+(c.correct||0),0);
+  const totW=allCards.reduce((n,c)=>n+(c.wrong||0),0);
+  const totAns=totC+totW;
+  const acc=totAns>0?Math.round(totC/totAns*100):0;
+  const mastered=allCards.filter(c=>(c.mastery||0)>=4).length;
+
+  // This week total
+  const days7=getLast7();
+  const weekTotal=days7.reduce((n,d)=>n+d.count,0);
+  const maxD=Math.max(...days7.map(d=>d.count),1);
+
+  // Mastery distribution
+  const mCounts=[0,0,0,0,0]; // new/learning/reviewing/known/mastered
+  allCards.forEach(c=>{
+    const m=c.mastery||0;
+    if(m===0)mCounts[0]++;
+    else if(m<=2)mCounts[1]++;
+    else if(m===3)mCounts[2]++;
+    else if(m===4)mCounts[3]++;
+    else mCounts[4]++;
+  });
+  const mMax=Math.max(...mCounts,1);
+  const mColors=['#404055','var(--acc)','var(--ylw)','#8ad840','var(--grn)'];
+  const mLabels=['جديدة','تعلّم','مراجعة','معروفة','مُتقنة'];
+
+  // SVG accuracy ring
+  const R=34,CX=44,CY=44,SW=10,CIRC=2*Math.PI*R;
+  const accFill=acc/100*CIRC;
+  const accRing=`
+    <svg width="88" height="88" viewBox="0 0 88 88">
+      <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="var(--s3)" stroke-width="${SW}"/>
+      <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="var(--grn)" stroke-width="${SW}"
+        stroke-dasharray="${accFill} ${CIRC}" stroke-dashoffset="${CIRC/4}"
+        stroke-linecap="round" transform="rotate(-90 ${CX} ${CY})"/>
+    </svg>`;
+
+  // Per-deck stats
+  const deckRows=S.decks.map(dk=>{
+    const tc=dk.cards.reduce((n,c)=>n+(c.correct||0),0);
+    const tw=dk.cards.reduce((n,c)=>n+(c.wrong||0),0);
+    const a=tc+tw>0?Math.round(tc/(tc+tw)*100):-1;
+    const mst=dk.cards.filter(c=>(c.mastery||0)>=4).length;
+    const accCls=a<0?'na':a>=80?'hi':a>=50?'mid':'lo';
+    const accTxt=a<0?'—':a+'%';
+    return `<div class="dstat-row">
+      <div class="dstat-icon">${dk.emoji||'📚'}</div>
+      <div class="dstat-info">
+        <div class="dstat-name">${esc(dk.name)}</div>
+        <div class="dstat-sub">${dk.cards.length} بطاقة · ${mst} مُتقنة</div>
+      </div>
+      <div class="dstat-acc ${accCls}">${accTxt}</div>
+    </div>`;
+  }).join('');
+
+  // Week bars HTML
+  const bars=days7.map((d,i)=>{
+    const pct=d.count>0?Math.round(d.count/maxD*100):0;
+    const cls=d.isToday?'lit':d.count>0?'dim':'none';
+    return `<div class="wbar-col">
+      <div class="wbar-count">${d.count||''}</div>
+      <div class="wbar-outer"><div class="wbar-inner ${cls}" style="height:${Math.max(pct,d.count>0?8:3)}%"></div></div>
+    </div>`;
+  }).join('');
+  const dayLabels=days7.map((d,i)=>`<span class="${d.isToday?'hi':''}">${d.label}</span>`).join('');
+
+  $('stats-wrap').innerHTML=`
+    <!-- Summary -->
+    <div class="sum-grid">
+      <div class="sum-box"><div class="sum-icon">🔥</div><div><div class="sum-val">${S.streak}</div><div class="sum-lbl">يوم متواصل</div></div></div>
+      <div class="sum-box"><div class="sum-icon">✅</div><div><div class="sum-val">${acc}%</div><div class="sum-lbl">دقة إجمالية</div></div></div>
+      <div class="sum-box"><div class="sum-icon">🏆</div><div><div class="sum-val">${mastered}</div><div class="sum-lbl">بطاقة مُتقنة</div></div></div>
+      <div class="sum-box"><div class="sum-icon">📅</div><div><div class="sum-val">${weekTotal}</div><div class="sum-lbl">هذا الأسبوع</div></div></div>
+    </div>
+
+    <!-- Week chart -->
+    <div class="stat-card">
+      <div class="stat-card-title">نشاط آخر 7 أيام</div>
+      <div class="week-chart">${bars}</div>
+      <div class="week-days">${dayLabels}</div>
+    </div>
+
+    <!-- Accuracy breakdown -->
+    <div class="stat-card">
+      <div class="stat-card-title">دقة الإجابات</div>
+      <div class="acc-row">
+        <div class="acc-ring-wrap">${accRing}<div class="acc-ring-pct">${acc}%</div></div>
+        <div class="acc-detail">
+          <div class="acc-stat-row"><span class="acc-stat-lbl">✓ صحيحة</span><span class="acc-stat-val g">${totC}</span></div>
+          <div class="acc-stat-row"><span class="acc-stat-lbl">✗ خاطئة</span><span class="acc-stat-val r">${totW}</span></div>
+          <div class="acc-stat-row"><span class="acc-stat-lbl">إجمالي الإجابات</span><span class="acc-stat-val a">${totAns}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mastery distribution -->
+    <div class="stat-card">
+      <div class="stat-card-title">توزيع الإتقان (${total} بطاقة)</div>
+      ${mLabels.map((lbl,i)=>`
+        <div class="mbar-row">
+          <div class="mbar-lbl">${lbl}</div>
+          <div class="mbar-track"><div class="mbar-fill" style="width:${mMax>0?Math.round(mCounts[i]/mMax*100):0}%;background:${mColors[i]}"></div></div>
+          <div class="mbar-num">${mCounts[i]}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Per-deck -->
+    ${S.decks.length>1?`<div class="stat-card"><div class="stat-card-title">تفاصيل المجموعات — الدقة</div>${deckRows}</div>`:''}
+  `;
 }
 
-// ─── Context Menu ────────────────────────────────────────────
-let _ctxOpen = false;
-function showCtx(e) {
-  const m = $('ctx');
-  m.classList.remove('hidden');
-  // Position below the button
-  const rect = e.currentTarget.getBoundingClientRect();
-  m.style.top  = (rect.bottom + 6) + 'px';
-  m.style.left  = '50%';
-  m.style.transform = 'translateX(-50%)';
-  _ctxOpen = true;
-  e.stopPropagation();
-}
-function hideCtx() { $('ctx').classList.add('hidden'); _ctxOpen = false; }
+// ── Reverse Mode ──────────────────────────────────────────
+function renderReverseMode(card){
+  const word=card.word||'';
+  if(!word){S.studyMode='flip';renderFlipMode(card);return}
+  let backHtml=esc(card.back);
+  const re=new RegExp(`\\b${escRe(esc(word))}\\b`,'gi');
+  backHtml=backHtml.replace(re,m=>`<span class="hl">${m}</span>`);
+  const reviewed=(card.correct||0)+(card.wrong||0);
+  const stage=$('study-stage');
+  stage.innerHTML=`
+    <div class="scene" id="scene">
+      <div class="flipper${S.isFlipped?' flipped':''}" id="flipper">
+        <div class="face">
+          <div class="face-tag">🔀 الوضع العكسي — ما السياق؟</div>
+          <div class="face-word-box">
+            <div class="face-word-big">${esc(word)}</div>
+            ${card.level?`<span class="lvl-badge lvl-${(card.level||'').toLowerCase()}">${card.level}</span>`:''}
+            ${reviewed>0?`<div class="face-word-count">راجعت هذه الكلمة ${reviewed} مرة</div>`:''}
+          </div>
+          <div class="face-word-hint">اقلب البطاقة لرؤية الجملة</div>
+          ${ttsBtnHtml('tts-rv-f')}
+        </div>
+        <div class="face face-back">
+          <div class="face-tag" style="color:#c0ae92">الجملة في سياقها</div>
+          <div class="face-sent">${backHtml}</div>
+          ${card.synonyms?`<div class="syn-row">${card.synonyms.split(',').map(s=>`<span class="syn-chip">${esc(s.trim())}</span>`).join('')}</div>`:''}
+          ${card.translation?`<div class="card-trans">${esc(card.translation)}</div>`:''}
+          ${card.note?`<div class="card-note">📝 ${esc(card.note)}</div>`:''}
+          ${ttsBtnHtml('tts-rv-b')}
+        </div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tap-hint" style="opacity:${S.isFlipped?0:1}">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 10.5V5a2 2 0 0 1 4 0v5.5M11 5a2 2 0 0 1 4 0v3M15 8a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7H8a7 7 0 0 1-5-3L1 15"/></svg>
+      اضغط للكشف عن الجملة
+    </div>
+    <div class="study-nav" id="study-nav"></div>`;
 
-// ─── Events ──────────────────────────────────────────────────
-function initEvents() {
+  updateFlipNav();
+  $('tts-rv-f').addEventListener('click',e=>{e.stopPropagation();speak(word,'tts-rv-f')});
+  $('tts-rv-b').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-rv-b')});
+  const scene=$('scene');
+  scene.addEventListener('click',handleFlipClick);
+  scene.addEventListener('touchstart',e=>{_tX=e.touches[0].clientX;_tY=e.touches[0].clientY;_tMv=false},{passive:true});
+  scene.addEventListener('touchmove',e=>{if(Math.abs(e.touches[0].clientX-_tX)>8)_tMv=true},{passive:true});
+  scene.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-_tX,dy=e.changedTouches[0].clientY-_tY;
+    if(Math.abs(dx)>52&&Math.abs(dx)>Math.abs(dy)*1.4){
+      if(S.isFlipped)rateCard(dx>0?5:0);else flipCard();e.preventDefault();
+    }
+  },{passive:false});
+}
+
+// ── Export / Import ───────────────────────────────────────
+function dlFile(content,filename,mime){
+  const blob=new Blob([content],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function csvCell(v){
+  v=String(v||'');
+  return(v.includes(',')||v.includes('"')||v.includes('\n'))?'"'+v.replace(/"/g,'""')+'"':v;
+}
+function parseCSVLine(line){
+  const r=[];let cur='',q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}
+    else if(c===','&&!q){r.push(cur.trim());cur=''}
+    else cur+=c;
+  }
+  r.push(cur.trim());return r;
+}
+function exportDeckCSV(deck){
+  const hdr='front,back,word,translation,synonyms,note,level';
+  const rows=deck.cards.map(c=>[c.front,c.back,c.word||'',c.translation||'',c.synonyms||'',c.note||'',c.level||''].map(csvCell).join(','));
+  dlFile([hdr,...rows].join('\r\n'),`${deck.name}.csv`,'text/csv;charset=utf-8;');
+  toast('تم تصدير الملف CSV ✓');
+}
+function exportAllJSON(){
+  const data={version:'5',exportedAt:new Date().toISOString(),decks:S.decks};
+  dlFile(JSON.stringify(data,null,2),'fliplearn-backup.json','application/json');
+  toast('تم تصدير النسخة الاحتياطية ✓');
+}
+function normalizeCard(c){
+  return{id:c.id||uid(),front:c.front||'',back:c.back||'',word:c.word||'',
+    translation:c.translation||'',synonyms:c.synonyms||'',note:c.note||'',level:c.level||'',
+    mastery:c.mastery??0,correct:c.correct??0,wrong:c.wrong??0,
+    srsInterval:c.srsInterval??1,srsDue:c.srsDue??null,
+    srsEase:c.srsEase??2.5,srsReps:c.srsReps??0,lastReview:c.lastReview??null,
+    ts:c.ts||Date.now()};
+}
+function importCSV(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const lines=e.target.result.split(/\r?\n/).filter(l=>l.trim());
+    if(lines.length<2){toast('الملف فارغ أو غير صحيح');return}
+    const deck=activeDeck();if(!deck)return;
+    let added=0,skipped=0;
+    for(let i=1;i<lines.length;i++){
+      const c=parseCSVLine(lines[i]);
+      if(c.length>=2&&c[0].includes('___')&&c[1].trim()){
+        deck.cards.push(normalizeCard({front:c[0],back:c[1],word:c[2]||'',translation:c[3]||'',synonyms:c[4]||'',note:c[5]||'',level:c[6]||''}));
+        added++;
+      } else skipped++;
+    }
+    persist();renderDeck();
+    toast(`تمت إضافة ${added} بطاقة${skipped?` · تجاهل ${skipped}`:''} ✓`);
+  };
+  reader.readAsText(file,'UTF-8');
+}
+function importJSON(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const list=data.decks||(data.cards?[data]:[]);
+      if(!list.length){toast('لا توجد بيانات صالحة في الملف');return}
+      let added=0,updated=0;
+      list.forEach(dk=>{
+        dk.cards=(dk.cards||[]).map(normalizeCard);
+        const ex=S.decks.find(d=>d.id===dk.id);
+        if(ex){Object.assign(ex,{...dk,id:ex.id});updated++}
+        else{S.decks.push({id:dk.id||uid(),name:dk.name||'مجموعة مستوردة',emoji:dk.emoji||'📚',desc:dk.desc||'',cards:dk.cards,ts:dk.ts||Date.now()});added++}
+      });
+      persist();navHome();
+      toast(`تم الاستيراد: ${added} جديدة${updated?` · ${updated} محدّثة`:''} ✓`);
+    }catch(err){toast('خطأ في قراءة الملف — تأكد من صحة JSON')}
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+// ── Settings ──────────────────────────────────────────────
+function openSettings(){
+  $('s-goal').value=S.dailyGoal;
+  $('s-time').value=S.reminderTime;
+  $('s-notif-toggle').classList.toggle('on',S.notifyEnabled);
+  $('s-time-row').style.display=S.notifyEnabled?'flex':'none';
+  updateNotifPermBtn();
+  openModal('modal-settings');
+}
+function updateNotifPermBtn(){
+  const btn=$('s-notif-perm');const lbl=$('s-notif-perm-lbl');
+  if(!('Notification' in window)){btn.style.display='none';return}
+  const p=Notification.permission;
+  btn.classList.toggle('granted',p==='granted');
+  btn.classList.toggle('denied',p==='denied');
+  if(p==='granted'){lbl.textContent='✓ إذن الإشعارات ممنوح'}
+  else if(p==='denied'){lbl.textContent='✗ الإشعارات محظورة في المتصفح'}
+  else{lbl.textContent='اطلب إذن الإشعارات'}
+}
+function saveSettings(){
+  const g=parseInt($('s-goal').value)||10;
+  S.dailyGoal=Math.max(1,Math.min(200,g));
+  S.reminderTime=$('s-time').value||'20:00';
+  S.notifyEnabled=$('s-notif-toggle').classList.contains('on');
+  persist();closeModal('modal-settings');renderHome();
+  toast('تم حفظ الإعدادات ✓');
+}
+async function requestNotifPerm(){
+  if(!('Notification' in window)){toast('المتصفح لا يدعم الإشعارات');return}
+  if(Notification.permission==='granted'){toast('الإذن ممنوح بالفعل ✓');return}
+  if(Notification.permission==='denied'){toast('الإشعارات محظورة — تحقق من إعدادات المتصفح');return}
+  const result=await Notification.requestPermission();
+  updateNotifPermBtn();
+  if(result==='granted'){S.notifyEnabled=true;$('s-notif-toggle').classList.add('on');$('s-time-row').style.display='flex';persist();toast('تم تفعيل الإشعارات ✓')}
+  else toast('لم يُمنح الإذن');
+}
+function checkReminder(){
+  if(!S.notifyEnabled||!('Notification' in window)||Notification.permission!=='granted')return;
+  if(S.studiedToday>=S.dailyGoal)return;
+  const now=new Date(),today=now.toDateString();
+  const[rh,rm]=(S.reminderTime||'20:00').split(':').map(Number);
+  const passed=now.getHours()>rh||(now.getHours()===rh&&now.getMinutes()>=rm);
+  if(!passed)return;
+  const key='fl_notif_'+today;
+  if(localStorage.getItem(key))return;
+  localStorage.setItem(key,'1');
+  new Notification('FlipLearn 🃏 تذكير',{
+    body:`هدفك اليومي: راجع ${S.dailyGoal-S.studiedToday} بطاقة أخرى لتصل للهدف`,
+    icon:'./icon.svg',tag:'fl-daily',
+  });
+}
+
+// ── Custom Confirm ────────────────────────────────────────
+let _confCb=null;
+function showConfirm(title,desc,ok,cb){$('conf-t').textContent=title;$('conf-d').textContent=desc;$('conf-yes').textContent=ok||'حذف';_confCb=cb;$('conf-ov').classList.remove('hidden')}
+function hideConfirm(){$('conf-ov').classList.add('hidden');_confCb=null}
+function confirmDeleteCard(id){showConfirm('حذف البطاقة','هل تريد حذف هذه البطاقة نهائياً؟','حذف',()=>{activeDeck().cards=activeDeck().cards.filter(c=>c.id!==id);persist();renderDeck();toast('تم حذف البطاقة')})}
+function confirmDeleteDeck(){const d=activeDeck();showConfirm(`حذف "${d.name}"`,`سيتم حذف المجموعة و${d.cards.length} بطاقة.`,'حذف',()=>{S.decks=S.decks.filter(x=>x.id!==S.activeDeckId);persist();navHome();toast('تم حذف المجموعة')})}
+
+// ── Toast ─────────────────────────────────────────────────
+let _tTmr;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(_tTmr);_tTmr=setTimeout(()=>t.classList.remove('on'),2600)}
+
+// ── Context Menu ──────────────────────────────────────────
+let _ctxOpen=false;
+function showCtx(e){const m=$('ctx');m.classList.remove('hidden');const r=e.currentTarget.getBoundingClientRect();m.style.top=(r.bottom+6)+'px';m.style.left='50%';m.style.transform='translateX(-50%)';_ctxOpen=true;e.stopPropagation()}
+function hideCtx(){$('ctx').classList.add('hidden');_ctxOpen=false}
+
+// ── Events ────────────────────────────────────────────────
+function initEvents(){
   // Home
-  $('btn-new-deck').addEventListener('click', openNewDeck);
+  $('btn-new-deck').onclick=openNewDeck;
+  $('btn-stats').onclick=navStats;
+  $('btn-stats-back').onclick=()=>{$('screen-stats').classList.add('sr');$('screen-home').classList.remove('sl');renderHome()};
+  $('btn-settings').onclick=openSettings;
+  $('due-strip').onclick=()=>{if(allDueCount()>0)startDueSession()};
 
-  // Deck detail
-  $('btn-back').addEventListener('click', () => {
-    $('screen-deck').classList.add('slide-right');
-    $('screen-home').classList.remove('slide-left');
-    renderHome();
+  // Deck
+  $('btn-back').onclick=()=>{$('screen-deck').classList.add('sr');$('screen-home').classList.remove('sl');renderHome()};
+  $('btn-deck-menu').onclick=showCtx;
+  $('btn-study').onclick=openStudyOptions;
+  $('btn-new-card').onclick=openNewCard;
+
+  $('btn-start-study').onclick=startStudy;
+
+  // Study bar
+  $('btn-exit').onclick=()=>{speechSynthesis.cancel&&speechSynthesis.cancel();$('screen-study').classList.add('sr');$('screen-deck').classList.remove('sl');renderDeck()};
+  $('btn-mode-toggle').onclick=()=>{
+    const modes=['flip','type','mcq','reverse'];const i=modes.indexOf(S.studyMode);
+    S.studyMode=modes[(i+1)%4];S.isFlipped=false;S.typingChecked=false;S.mcqAnswered=false;S.mcqOptions=[];
+    updateModeChip();if(!S.studyDone)renderStudy();
+    toast({flip:'وضع القلب 🔄',type:'وضع الكتابة ✍️',mcq:'الاختيار المتعدد 🎯',reverse:'الوضع العكسي 🔀'}[S.studyMode]);
+  };
+  $('btn-shuffle').onclick=e=>{S.shuffle=!S.shuffle;e.currentTarget.classList.toggle('on',S.shuffle);toast(S.shuffle?'تم تفعيل الترتيب العشوائي':'تم إلغاء الترتيب العشوائي')};
+
+  // Modals close
+  $('btn-save-deck').onclick=saveDeck;
+  $('btn-save-card').onclick=saveCard;
+  $('in-dname').onkeydown=e=>{if(e.key==='Enter')saveDeck()};
+  ['modal-deck','modal-card','modal-study-opts','modal-settings'].forEach(id=>{
+    $(id).addEventListener('click',e=>{if(e.target===$(id))closeModal(id)});
   });
-  $('btn-deck-menu').addEventListener('click', showCtx);
-  $('btn-study').addEventListener('click', navStudy);
-  $('btn-new-card').addEventListener('click', openNewCard);
 
-  // Study
-  $('btn-exit').addEventListener('click', () => {
-    $('screen-study').classList.add('slide-right');
-    $('screen-deck').classList.remove('slide-left');
+  // Settings
+  $('s-notif-toggle').onclick=()=>{
+    $('s-notif-toggle').classList.toggle('on');
+    $('s-time-row').style.display=$('s-notif-toggle').classList.contains('on')?'flex':'none';
+  };
+  $('s-notif-perm').onclick=requestNotifPerm;
+  $('btn-save-settings').onclick=saveSettings;
+
+  // Context
+  $('ctx-edit').onclick=()=>{hideCtx();openEditDeck()};
+  $('ctx-export-csv').onclick=()=>{hideCtx();exportDeckCSV(activeDeck())};
+  $('ctx-import-csv').onclick=()=>{hideCtx();$('file-import-csv').click()};
+  $('ctx-del').onclick=()=>{hideCtx();confirmDeleteDeck()};
+  document.addEventListener('click',()=>{if(_ctxOpen)hideCtx()});
+
+  // Study options — mode & set & reverse
+  ['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(id=>{
+    $(id).onclick=()=>{if($(id).classList.contains('empty-opt'))return;['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(x=>$(x).classList.remove('sel'));$(id).classList.add('sel');S.optMode=$(id).dataset.mode};
   });
-  $('btn-shuffle').addEventListener('click', e => {
-    S.shuffle = !S.shuffle;
-    e.currentTarget.classList.toggle('on', S.shuffle);
-    toast(S.shuffle ? 'تم تفعيل الخلط العشوائي' : 'تم إلغاء الخلط');
+  ['opt-all','opt-due','opt-weak'].forEach(id=>{
+    $(id).onclick=()=>{if($(id).classList.contains('empty-opt'))return;['opt-all','opt-due','opt-weak'].forEach(x=>$(x).classList.remove('sel'));$(id).classList.add('sel');S.optSet=$(id).dataset.set};
   });
 
-  // Modals — save
-  $('btn-save-deck').addEventListener('click', saveDeck);
-  $('btn-save-card').addEventListener('click', saveCard);
-
-  // Modals — close on backdrop
-  ['modal-deck','modal-card'].forEach(id => {
-    $(id).addEventListener('click', e => { if (e.target === $(id)) closeModal(id); });
+  // Level selector in card form
+  $('lvl-sel-row').addEventListener('click',e=>{
+    const btn=e.target.closest('.lvl-sel-btn');
+    if(!btn)return;
+    $('lvl-sel-row').querySelectorAll('.lvl-sel-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
   });
 
-  // Context menu
-  $('ctx-edit').addEventListener('click', () => { hideCtx(); openEditDeck(); });
-  $('ctx-del').addEventListener('click',  () => { hideCtx(); deleteDeck(); });
-  document.addEventListener('click', () => { if (_ctxOpen) hideCtx(); });
+  // Export / Import
+  $('btn-export-all').onclick=exportAllJSON;
+  $('btn-import-all').onclick=()=>$('file-import-json').click();
+  $('file-import-json').onchange=e=>{const f=e.target.files[0];if(f){importJSON(f);e.target.value=''}};
+  $('file-import-csv').onchange=e=>{const f=e.target.files[0];if(f){importCSV(f);e.target.value=''}};
 
-  // Keyboard shortcuts
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeModal('modal-deck');
-      closeModal('modal-card');
-      hideCtx();
+  // Confirm
+  $('conf-yes').onclick=()=>{if(_confCb)_confCb();hideConfirm()};
+  $('conf-no').onclick=hideConfirm;
+  $('conf-ov').addEventListener('click',e=>{if(e.target===$('conf-ov'))hideConfirm()});
+
+  // Keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){['modal-deck','modal-card','modal-study-opts','modal-settings'].forEach(closeModal);hideCtx();hideConfirm()}
+    const inStudy=!$('screen-study').classList.contains('sr')&&!S.studyDone;
+    if(inStudy&&S.studyMode==='flip'){
+      if(e.key===' '){e.preventDefault();flipCard()}
+      if(S.isFlipped){if(e.key==='ArrowRight')rateCard(5);if(e.key==='ArrowLeft')rateCard(0);if(e.key==='ArrowDown')rateCard(3)}
     }
-    // Study shortcuts (spacebar = flip, arrows = nav)
-    if (!$('screen-study').classList.contains('slide-right') && !S.studyDone) {
-      if (e.key === ' ') { e.preventDefault(); $('scene')?.click(); }
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        const btn = e.key === 'ArrowRight' ? $('btn-next') : $('btn-prev');
-        btn?.click();
-      }
-    }
   });
 
-  // Enter in deck name input
-  $('in-dname').addEventListener('keydown', e => { if (e.key === 'Enter') saveDeck(); });
+  // Visibility change → check reminder
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkReminder()});
 
-  // PWA install prompt
-  let _deferredPrompt;
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    _deferredPrompt = e;
-    $('install-bar').classList.remove('gone');
-  });
-  $('install-bar').addEventListener('click', async () => {
-    if (!_deferredPrompt) return;
-    _deferredPrompt.prompt();
-    await _deferredPrompt.userChoice;
-    _deferredPrompt = null;
-    $('install-bar').classList.add('gone');
-  });
-  window.addEventListener('appinstalled', () => {
-    $('install-bar').classList.add('gone');
-  });
+  // PWA install
+  let _dp;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_dp=e;$('install-bar').classList.remove('gone')});
+  $('install-bar').onclick=async()=>{if(!_dp)return;_dp.prompt();await _dp.userChoice;_dp=null;$('install-bar').classList.add('gone')};
+  window.addEventListener('appinstalled',()=>$('install-bar').classList.add('gone'));
 }
 
-// ─── SW Registration ─────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .catch(err => console.warn('SW:', err));
-}
+// ── SW ────────────────────────────────────────────────────
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('SW:',e));
 
-// ─── Bootstrap ───────────────────────────────────────────────
-hydrate();
-renderHome();
-initEvents();
+// ── Init ──────────────────────────────────────────────────
+hydrate();addSampleIfNew();renderHome();initEvents();checkReminder();
 </script>
 </body>
 </html>

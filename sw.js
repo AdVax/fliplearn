@@ -1,8 +1,8 @@
 /* ============================================================
-   FlipLearn Service Worker — Cache-First Strategy
+   FlipLearn Service Worker v2 — Full Offline Support
    ============================================================ */
 
-const CACHE_NAME = 'fliplearn-v1';
+const CACHE = 'fliplearn-v2';
 
 const PRECACHE = [
   './',
@@ -10,71 +10,85 @@ const PRECACHE = [
   './manifest.json',
   './icon.svg',
   './icon-maskable.svg',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Tajawal:wght@300;400;500;700&display=swap',
 ];
 
-// ── Install: pre-cache all static assets ──────────────────
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE))
+// ── Install: pre-cache app shell ──────────────────────────
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(PRECACHE))
       .then(() => self.skipWaiting())
-      .catch(err => console.warn('[SW] Pre-cache failed:', err))
+      .catch(err => console.warn('[SW] pre-cache failed:', err))
   );
 });
 
-// ── Activate: remove old caches ───────────────────────────
-self.addEventListener('activate', event => {
-  event.waitUntil(
+// ── Activate: delete old caches ───────────────────────────
+self.addEventListener('activate', e => {
+  e.waitUntil(
     caches.keys()
-      .then(keys =>
-        Promise.all(
-          keys
-            .filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k))
-        )
-      )
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
+      ))
       .then(() => self.clients.claim())
   );
 });
 
-// ── Fetch: cache-first, fall back to network ──────────────
-self.addEventListener('fetch', event => {
-  // Only handle GET requests
-  if (event.request.method !== 'GET') return;
+// ── Fetch ─────────────────────────────────────────────────
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
 
-  // Skip cross-origin requests we don't care about
-  const url = new URL(event.request.url);
-  const isSameOrigin = url.origin === self.location.origin;
-  const isGoogleFont  = url.hostname === 'fonts.googleapis.com'
-                     || url.hostname === 'fonts.gstatic.com';
+  const url = new URL(e.request.url);
+  const sameOrigin   = url.origin === self.location.origin;
+  const isGFontsCss  = url.hostname === 'fonts.googleapis.com';
+  const isGFontsFile = url.hostname === 'fonts.gstatic.com';
 
-  if (!isSameOrigin && !isGoogleFont) return;
+  // ── Google Fonts CSS → Network first, cache fallback ──
+  if (isGFontsCss) {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
 
-  event.respondWith(
-    caches.match(event.request)
-      .then(cached => {
+  // ── Google Fonts files (.woff2) → Cache first ─────────
+  if (isGFontsFile) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
         if (cached) return cached;
-
-        return fetch(event.request)
-          .then(response => {
-            // Only cache valid responses
-            if (!response || response.status !== 200 || response.type === 'error') {
-              return response;
-            }
-
-            const toCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => cache.put(event.request, toCache));
-
-            return response;
-          })
-          .catch(() => {
-            // Offline fallback: return index.html for navigation requests
-            if (event.request.mode === 'navigate') {
-              return caches.match('./index.html');
-            }
-          });
+        return fetch(e.request).then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        });
       })
-  );
+    );
+    return;
+  }
+
+  // ── App shell → Cache first, network fallback ─────────
+  if (sameOrigin) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(res => {
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone));
+          }
+          return res;
+        }).catch(() => {
+          // Offline fallback: return index.html for navigation
+          if (e.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+      })
+    );
+  }
 });
