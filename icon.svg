@@ -1,29 +1,134 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Dark background -->
-  <rect width="512" height="512" rx="96" fill="#0b0b12"/>
+  <defs>
+    <!-- Background gradient: deep night blue → purple -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0c29"/>
+      <stop offset="50%" stop-color="#1a1040"/>
+      <stop offset="100%" stop-color="#0d0820"/>
+    </linearGradient>
+    <!-- Gold glow gradient for light bulb -->
+    <radialGradient id="glow" cx="50%" cy="45%" r="38%">
+      <stop offset="0%" stop-color="#ffe066" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffe066" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Bulb fill gradient -->
+    <linearGradient id="bulbFill" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#ffe566"/>
+      <stop offset="60%" stop-color="#f0b020"/>
+      <stop offset="100%" stop-color="#c87010"/>
+    </linearGradient>
+    <!-- Brain accent gradient -->
+    <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <!-- Sparkle gradient -->
+    <linearGradient id="spark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glowFilter" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="roundedRect">
+      <rect width="512" height="512" rx="112" ry="112"/>
+    </clipPath>
+  </defs>
 
-  <!-- Back card (rotated, darker) -->
-  <rect x="88" y="148" width="288" height="210" rx="22"
-        fill="#1c1c2a" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"
-        transform="rotate(-7 232 253)"/>
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
 
-  <!-- Front card (cream) -->
-  <rect x="136" y="138" width="288" height="210" rx="22" fill="#fefcf7"/>
+  <!-- Subtle noise texture overlay -->
+  <rect width="512" height="512" rx="112" ry="112" fill="none"
+    stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
 
-  <!-- Lines on front card (sentence with blank) -->
-  <rect x="164" y="198" width="100" height="5" rx="2.5" fill="#d4c4a0"/>
-  <!-- Blank underline (gold) -->
-  <rect x="272" y="198" width="70" height="5" rx="2.5" fill="#c8901a"/>
-  <rect x="350" y="198" width="58" height="5" rx="2.5" fill="#d4c4a0"/>
+  <!-- Radial glow behind bulb -->
+  <ellipse cx="256" cy="230" rx="130" ry="120" fill="url(#glow)" filter="url(#glowFilter)"/>
 
-  <rect x="164" y="224" width="240" height="5" rx="2.5" fill="#d4c4a0"/>
-  <rect x="164" y="248" width="180" height="5" rx="2.5" fill="#d4c4a0"/>
+  <!-- ══ OPEN BOOK base ══ -->
+  <g filter="url(#shadow)">
+    <!-- Left page -->
+    <path d="M 256 355 Q 200 348 148 338 Q 130 334 128 320 L 128 195 Q 130 182 148 186 Q 200 196 256 204 Z"
+      fill="#1e1650" stroke="rgba(167,139,250,0.3)" stroke-width="1.5"/>
+    <!-- Right page -->
+    <path d="M 256 355 Q 312 348 364 338 Q 382 334 384 320 L 384 195 Q 382 182 364 186 Q 312 196 256 204 Z"
+      fill="#1e1650" stroke="rgba(167,139,250,0.3)" stroke-width="1.5"/>
+    <!-- Book spine -->
+    <path d="M 250 204 Q 256 202 262 204 L 262 355 Q 256 357 250 355 Z"
+      fill="rgba(167,139,250,0.5)"/>
+    <!-- Page lines left -->
+    <line x1="152" y1="218" x2="244" y2="226" stroke="rgba(167,139,250,0.25)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="152" y1="238" x2="244" y2="244" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="152" y1="258" x2="244" y2="262" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="152" y1="278" x2="244" y2="280" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+    <!-- Page lines right -->
+    <line x1="360" y1="218" x2="268" y2="226" stroke="rgba(167,139,250,0.25)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="360" y1="238" x2="268" y2="244" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="360" y1="258" x2="268" y2="262" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="360" y1="278" x2="268" y2="280" stroke="rgba(167,139,250,0.18)" stroke-width="2" stroke-linecap="round"/>
+  </g>
 
-  <!-- Word badge at bottom of card -->
-  <rect x="196" y="280" width="120" height="30" rx="15"
-        fill="rgba(200,144,26,0.15)" stroke="rgba(200,144,26,0.4)" stroke-width="1.5"/>
-  <rect x="214" y="291" width="84" height="8" rx="4" fill="#c8901a" opacity="0.85"/>
+  <!-- ══ LIGHT BULB rising from book ══ -->
+  <g filter="url(#softGlow)">
+    <!-- Bulb glass body -->
+    <path d="M 256 110
+             C 224 110 200 134 200 164
+             C 200 186 212 204 228 218
+             C 234 224 237 232 237 240
+             L 275 240
+             C 275 232 278 224 284 218
+             C 300 204 312 186 312 164
+             C 312 134 288 110 256 110 Z"
+      fill="url(#bulbFill)" opacity="0.95"/>
+    <!-- Inner bright core -->
+    <ellipse cx="256" cy="158" rx="26" ry="28"
+      fill="#fff9c4" opacity="0.55"/>
+    <!-- Bulb base rings -->
+    <rect x="237" y="240" width="38" height="10" rx="4" fill="#c8901a" opacity="0.9"/>
+    <rect x="240" y="252" width="32" height="9" rx="4" fill="#b07818" opacity="0.85"/>
+    <rect x="243" y="263" width="26" height="9" rx="4" fill="#986010" opacity="0.8"/>
+    <!-- Screw thread line -->
+    <rect x="243" y="274" width="26" height="3" rx="1.5" fill="#7a4c08" opacity="0.6"/>
+  </g>
 
-  <!-- Gold sparkle accent top-right of card -->
-  <text x="392" y="168" font-size="28" text-anchor="middle" font-family="serif" fill="#c8901a">✦</text>
+  <!-- ══ SPARKLES around bulb ══ -->
+  <!-- Top sparkle -->
+  <g filter="url(#softGlow)">
+    <path d="M 256 78 L 259 90 L 272 93 L 259 96 L 256 108 L 253 96 L 240 93 L 253 90 Z"
+      fill="url(#spark)" opacity="0.9"/>
+    <!-- Upper right sparkle -->
+    <path d="M 320 102 L 322 110 L 330 112 L 322 114 L 320 122 L 318 114 L 310 112 L 318 110 Z"
+      fill="url(#spark)" opacity="0.75" transform="scale(0.8) translate(80,20)"/>
+    <!-- Upper left sparkle -->
+    <path d="M 192 102 L 194 110 L 202 112 L 194 114 L 192 122 L 190 114 L 182 112 L 190 110 Z"
+      fill="url(#spark)" opacity="0.65" transform="scale(0.7) translate(-56,25)"/>
+    <!-- Small dot sparkles -->
+    <circle cx="314" cy="130" r="4" fill="#fde68a" opacity="0.7"/>
+    <circle cx="198" cy="140" r="3" fill="#fde68a" opacity="0.6"/>
+    <circle cx="330" cy="168" r="2.5" fill="#fde68a" opacity="0.5"/>
+    <circle cx="184" cy="175" r="2" fill="#fde68a" opacity="0.5"/>
+  </g>
+
+  <!-- ══ FL text below book ══ -->
+  <text x="256" y="408"
+    font-family="'Georgia', serif"
+    font-size="42"
+    font-weight="700"
+    text-anchor="middle"
+    letter-spacing="6"
+    fill="url(#spark)"
+    opacity="0.92">FL</text>
+
+  <!-- Bottom brand line -->
+  <rect x="176" y="418" width="160" height="2" rx="1"
+    fill="url(#spark)" opacity="0.3"/>
 </svg>

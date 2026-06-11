@@ -12,7 +12,8 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Tajawal:wght@300;400;500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta name="color-scheme" content="dark">
 <style>
 /* ═══ RESET / TOKENS ═══════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -31,6 +32,7 @@ input,textarea{font-family:inherit;outline:none;border:none;background:none}
   --r:16px; --rsm:10px;
   --far:'Tajawal','Segoe UI',Arial,sans-serif;
   --fen:'Playfair Display',Georgia,serif;
+  --fnum:'Inter','Tajawal',sans-serif;
   --ease:cubic-bezier(.4,0,.2,1);
 }
 html,body{height:100%;overflow:hidden}
@@ -44,24 +46,24 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .scroll::-webkit-scrollbar{display:none}
 .topbar{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top,14px)) 18px 12px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:var(--bg)}
-.topbar-title{flex:1;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-title{flex:1;font-size:17px;font-weight:800;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:38px;height:38px;border-radius:50%;background:var(--s2);color:var(--t1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
 .ib:active{transform:scale(.88)} .ib:hover{background:var(--s3)}
 
 /* ═══ HOME ══════════════════════════════════════════ */
-.home-head{padding:22px 20px 14px}
+.home-head{padding:0}
 .brand{display:flex;align-items:center;gap:10px;margin-bottom:5px}
 .brand-icon{width:42px;height:42px;background:var(--acc);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 4px 18px rgba(200,144,26,.38);flex-shrink:0}
 .brand-name{font-size:22px;font-weight:700;letter-spacing:-.4px;flex:1}
 .brand-name span{color:var(--acc)}
 .home-sub{font-size:13px;color:var(--t2);margin-bottom:16px}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:0;margin-top:14px}
 .stat-box{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rsm);padding:10px 6px 9px;text-align:center}
 .stat-val{font-size:21px;font-weight:700;color:var(--acc-lt);line-height:1;font-variant-numeric:tabular-nums}
 .stat-lbl{font-size:10px;color:var(--t2);margin-top:3px;font-weight:500}
 
 /* Goal bar */
-.goal-wrap{margin-top:12px}
+.goal-wrap{margin-top:0}
 .goal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .goal-lbl{font-size:12px;font-weight:600;color:var(--t2)}
 .goal-cnt{font-size:12px;font-weight:700;color:var(--acc-lt)}
@@ -114,7 +116,9 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 .del-btn{color:var(--t3);padding:3px;border-radius:6px;transition:color .14s;flex-shrink:0} .del-btn:hover{color:var(--red)}
 
 /* ═══ STUDY BAR ═════════════════════════════════════ */
-#screen-study{background:var(--bg)}
+#screen-study{
+  background: radial-gradient(ellipse 100% 70% at 50% 30%, rgba(200,144,26,.04) 0%, transparent 70%), var(--bg);
+}
 .study-bar{display:flex;align-items:center;gap:8px;padding:max(13px,env(safe-area-inset-top,13px)) 14px 10px;flex-shrink:0}
 .prog-track{flex:1;height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:var(--acc);border-radius:2px;transition:width .45s var(--ease)}
@@ -221,7 +225,7 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 
 /* Study Options */
 .sel-row{display:flex;gap:8px;margin-bottom:6px}
-.sel-opt{flex:1;padding:12px 6px;background:var(--s2);border:2px solid var(--bdr);border-radius:var(--r);font-size:12px;font-weight:600;color:var(--t2);text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.sel-opt{flex:1;min-width:0;padding:10px 3px;background:var(--s2);border:2px solid var(--bdr);border-radius:var(--r);font-size:11px;font-weight:600;color:var(--t2);text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px}
 .sel-opt .si{font-size:20px} .sel-opt.sel{border-color:var(--acc);background:var(--acc-dim);color:var(--acc-lt)}
 .sel-opt.empty-opt{opacity:.4;cursor:not-allowed} .sel-count{font-size:10px;color:var(--t3);font-weight:400}
 
@@ -360,6 +364,1029 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 .lvl-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
 .lvl-filter-btn{padding:7px 12px;border-radius:20px;background:var(--s2);border:1.5px solid var(--bdr);color:var(--t2);font-size:12px;font-weight:700;transition:all .15s;cursor:pointer}
 .lvl-filter-btn.sel{border-color:var(--acc);background:var(--acc-dim);color:var(--acc-lt)}
+
+/* ═══ DEEP LEARNING MODE ═════════════════════════════════ */
+.deep-step-indicator{display:flex;gap:6px;justify-content:center;margin-bottom:2px}
+.deep-dot{width:7px;height:7px;border-radius:50%;background:var(--s3);transition:background .3s}
+.deep-dot.active{background:var(--acc)}
+.deep-dot.done{background:var(--grn)}
+.deep-step-lbl{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.2px;text-align:center;margin-bottom:8px}
+.listen-pulse{width:72px;height:72px;border-radius:50%;background:var(--acc-dim);border:2px solid rgba(200,144,26,.35);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:12px auto;transition:all .2s;animation:lpulse 2s ease-in-out infinite}
+.listen-pulse:active{transform:scale(.94)}
+@keyframes lpulse{0%,100%{box-shadow:0 0 0 0 rgba(200,144,26,.3)}50%{box-shadow:0 0 0 14px rgba(200,144,26,0)}}
+.listen-pulse.done{animation:none;background:rgba(78,201,138,.15);border-color:rgba(78,201,138,.35)}
+.deep-hint{font-size:12px;color:var(--t2);text-align:center;margin-top:4px}
+.deep-reveal-btn{width:100%;max-width:460px;height:52px;background:var(--acc);color:#fff;border-radius:var(--r);font-size:16px;font-weight:700;transition:opacity .14s,transform .12s}
+.deep-reveal-btn:active{transform:scale(.97);opacity:.9}
+
+/* ═══ COLLOCATION BADGE ══════════════════════════════ */
+.colloc-badge{margin:10px auto 2px;padding:5px 14px;background:rgba(90,180,232,.12);border:1px solid rgba(90,180,232,.25);border-radius:20px;font-family:var(--fen);font-size:13px;font-weight:600;color:var(--blu);display:inline-block;direction:ltr}
+
+/* ═══ WEEKLY STREAK STRIP ════════════════════════════ */
+.week-strip{display:flex;gap:5px;padding:12px 16px 4px;justify-content:space-between}
+.wday{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wday-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .25s;flex-shrink:0}
+.wday-dot.done{background:var(--grn);box-shadow:0 0 0 2px rgba(78,201,138,.3)}
+.wday-dot.today{background:var(--acc);box-shadow:0 0 0 3px rgba(200,144,26,.3)}
+.wday-dot.today.done{background:var(--grn);box-shadow:0 0 0 3px rgba(78,201,138,.4)}
+.wday-dot.empty{background:var(--s2);border:1.5px solid var(--bdr)}
+.wday-lbl{font-size:9px;color:var(--t3);font-weight:600;font-family:var(--far)}
+.wday-lbl.today{color:var(--acc-lt);font-weight:700}
+.streak-reward{margin:4px 14px 0;padding:10px 14px;background:rgba(78,201,138,.1);border:1px solid rgba(78,201,138,.28);border-radius:var(--r);font-size:12px;font-weight:600;color:var(--grn);text-align:center;display:none}
+.streak-reward.on{display:block;animation:fadeUp .4s var(--ease)}
+
+/* ═══ QUICK-ADD FAB ══════════════════════════════════ */
+.fab-qa{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:max(20px,env(safe-area-inset-left,20px));width:50px;height:50px;border-radius:50%;background:var(--s2);border:1.5px solid rgba(200,144,26,.35);color:var(--acc-lt);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 18px rgba(0,0,0,.38);transition:transform .14s,background .14s;z-index:10}
+.fab-qa:active{transform:scale(.9)} .fab-qa:hover{background:var(--s3)}
+
+/* ═══ QUICK-ADD MODAL ════════════════════════════════ */
+.qa-deck-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;max-height:45dvh;overflow-y:auto}
+.qa-deck-btn{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:13px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:background .13s;text-align:right}
+.qa-deck-btn:hover{background:var(--s3)} .qa-deck-btn:active{transform:scale(.98)}
+.qa-deck-em{font-size:22px;flex-shrink:0}
+.qa-deck-nm{font-size:14px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qa-deck-cnt{font-size:11px;color:var(--t2);flex-shrink:0}
+
+/* ══════════════════════════════════════════════════════
+   VISUAL OVERHAUL — FlipLearn v7 Design Refresh
+   ══════════════════════════════════════════════════════ */
+
+/* ─── Refined token layer ─────────────────────────────
+   Keep all old tokens, layer new ones on top */
+:root {
+  --bg:#080810;
+  --s1:#10101a;
+  --s2:#181826;
+  --s3:#20202e;
+  --bdr:rgba(255,255,255,.06);
+  --bdr-hi:rgba(200,144,26,.22);
+  --acc:#c8901a;
+  --acc-lt:#e8a828;
+  --acc-dim:rgba(200,144,26,.13);
+  --acc-glow:rgba(200,144,26,.28);
+  --card:#fefcf7;
+  --card-bg:linear-gradient(160deg,#fffdf8 0%,#fef9ee 100%);
+  --card-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  --t1:#edeae3;
+  --t2:#8e8a9e;
+  --t3:#46445a;
+  --r:14px;
+  --rsm:9px;
+  --sheet-r:24px;
+  --shadow-card:0 24px 64px rgba(0,0,0,.62),0 2px 8px rgba(0,0,0,.3);
+  --shadow-fab:0 8px 32px rgba(200,144,26,.45),0 2px 8px rgba(0,0,0,.4);
+}
+
+/* ─── Body texture ────────────────────────────────────*/
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200,144,26,.06) 0%, transparent 60%);
+}
+
+/* ─── Topbar lift ─────────────────────────────────────*/
+.topbar {
+  border-bottom: 1px solid var(--bdr);
+  background: rgba(8,8,16,.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ─── Brand header ────────────────────────────────────*/
+.home-head {
+  padding: 0 0 8px;
+  position: relative;
+}
+.brand-hero {
+  padding: 28px 20px 20px;
+  background: linear-gradient(170deg, #13121f 0%, #0d0c18 60%, #080810 100%);
+  border-bottom: 1px solid var(--bdr);
+  position: relative;
+  overflow: hidden;
+}
+.brand-hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 50%, rgba(200,144,26,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 90% 20%, rgba(90,180,232,.04) 0%, transparent 50%);
+  pointer-events:none;
+}
+.brand-hero::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:1px;
+  background: linear-gradient(to right, transparent, rgba(200,144,26,.3), transparent);
+}
+.brand {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+}
+.brand-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(200,144,26,.42), inset 0 1px 0 rgba(255,255,255,.18);
+  font-size: 22px;
+}
+.brand-name {
+  font-size: 24px;
+  letter-spacing: -.6px;
+  font-weight: 800;
+}
+.brand-name span { color: var(--acc-lt); }
+.home-sub {
+  position: relative; z-index: 1;
+  font-size: 13px; color: var(--t2);
+  margin-bottom: 0;
+}
+
+/* ─── Stats row inside hero ───────────────────────────*/
+.stats-row {
+  position: relative; z-index: 1;
+  margin-top: 16px; margin-bottom: 0;
+  gap: 6px;
+}
+.stat-box {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 10px 4px 9px;
+  backdrop-filter: blur(4px);
+}
+.stat-val { font-size: 20px; }
+
+/* ─── Goal bar section ────────────────────────────────*/
+.goal-section {
+  padding: 14px 20px 8px;
+  border-bottom: 1px solid var(--bdr);
+}
+.goal-track { height: 4px; border-radius: 2px; }
+.goal-bar {
+  background: linear-gradient(to left, #f0b830, #c8901a);
+  border-radius: 2px;
+}
+
+/* ─── Due strip ───────────────────────────────────────*/
+.due-strip {
+  margin: 10px 14px 0;
+  border-radius: var(--r);
+  border: 1px solid rgba(200,144,26,.2);
+  background: linear-gradient(135deg, rgba(200,144,26,.08) 0%, rgba(200,144,26,.12) 100%);
+}
+.due-strip:hover { background: linear-gradient(135deg, rgba(200,144,26,.14) 0%, rgba(200,144,26,.18) 100%); }
+.due-btn {
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: 0 2px 10px rgba(200,144,26,.35);
+}
+
+/* ─── Section head ────────────────────────────────────*/
+.sec-head {
+  padding: 14px 20px 6px;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: var(--t3);
+}
+
+/* ─── Deck cards ──────────────────────────────────────*/
+.deck-list { gap: 7px; padding: 0 12px 120px; }
+.deck-card {
+  background: var(--s1);
+  border: 1px solid var(--bdr);
+  border-radius: 14px;
+  padding: 14px 16px;
+  gap: 12px;
+  transition: transform .18s var(--ease), background .18s, box-shadow .18s;
+}
+.deck-card:hover {
+  background: var(--s2);
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.deck-card:active { transform: scale(.972); }
+.deck-card::after {
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(to bottom, var(--acc-lt), var(--acc));
+}
+.deck-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  background: rgba(200,144,26,.1);
+  border: 1px solid rgba(200,144,26,.12);
+  font-size: 22px;
+}
+.deck-name { font-size: 15px; letter-spacing: -.2px; }
+.deck-mbar { height: 2px; margin-top: 8px; border-radius: 1px; }
+.deck-mfill { border-radius: 1px; background: linear-gradient(to left, #6de0a0, #4ec98a); }
+
+/* ─── FAB ─────────────────────────────────────────────*/
+.fab {
+  border-radius: 28px;
+  height: 54px;
+  padding: 0 26px;
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: var(--shadow-fab);
+  letter-spacing: -.1px;
+  font-size: 14px;
+}
+.fab:active { transform: translateX(-50%) scale(.93); box-shadow: 0 4px 14px rgba(200,144,26,.35); }
+.fab-plus { font-size: 20px; font-weight: 300; }
+
+/* ─── Quick-add FAB ───────────────────────────────────*/
+.fab-qa {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--s2);
+  border: 1px solid rgba(200,144,26,.28);
+  color: var(--acc-lt);
+  font-size: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.35);
+}
+.fab-qa:active { transform: scale(.88); }
+
+/* ─── Study bar ───────────────────────────────────────*/
+.study-bar {
+  background: rgba(8,8,16,.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--bdr);
+  gap: 10px;
+}
+.prog-track { height: 3px; border-radius: 2px; background: rgba(255,255,255,.06); }
+.prog-fill {
+  background: linear-gradient(to right, var(--acc), var(--acc-lt));
+  border-radius: 2px;
+}
+.mode-chip, .shuf-btn {
+  border-radius: 18px;
+  font-size: 11px;
+  border: 1px solid var(--bdr);
+  background: rgba(255,255,255,.04);
+}
+.mode-chip.on { background: rgba(90,180,232,.1); border-color: rgba(90,180,232,.3); color: #7ccff0; }
+.shuf-btn.on { background: rgba(200,144,26,.1); border-color: rgba(200,144,26,.35); color: var(--acc-lt); }
+
+/* ─── Flip card face ──────────────────────────────────*/
+.face {
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  padding: 28px 24px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.face::before {
+  content:'';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--acc-lt), var(--acc));
+  border-radius: 20px 20px 0 0;
+}
+.face-back::before {
+  background: linear-gradient(to right, #6de0a0, #4ec98a);
+}
+.face-tag { font-size: 9px; letter-spacing: 2.2px; color: #b8a07a; margin-bottom: 14px; }
+.face-sent { font-size: 17px; line-height: 1.75; color: #24221c; }
+.face-sent .gap {
+  border-bottom: 2px solid var(--acc);
+  color: #c0a86a;
+  min-width: 48px;
+}
+.face-sent .hl { color: #9a6b0a; font-weight: 700; }
+.word-badge {
+  margin-top: 14px;
+  background: rgba(200,144,26,.1);
+  border: 1px solid rgba(200,144,26,.22);
+  border-radius: 18px;
+  padding: 4px 16px;
+  font-size: 13px;
+  letter-spacing: .2px;
+}
+.card-trans {
+  margin-top: 10px;
+  background: rgba(0,0,0,.04);
+  border-radius: 8px;
+  border-right: 2px solid rgba(200,144,26,.35);
+  font-size: 12px;
+  color: #6e6658;
+}
+.syn-chip {
+  font-size: 11px;
+  padding: 3px 10px;
+  background: rgba(78,201,138,.09);
+  border: 1px solid rgba(78,201,138,.18);
+  border-radius: 10px;
+  color: #50b87a;
+}
+.colloc-badge {
+  background: rgba(90,180,232,.1);
+  border: 1px solid rgba(90,180,232,.2);
+  border-radius: 18px;
+  color: #5ab0d8;
+  font-size: 12px;
+}
+
+/* ─── TTS button ──────────────────────────────────────*/
+.tts-btn {
+  bottom: 10px; right: 12px;
+  width: 30px; height: 30px;
+  background: rgba(200,144,26,.08);
+  border: 1px solid rgba(200,144,26,.15);
+  border-radius: 50%;
+}
+
+/* ─── Tap hint ────────────────────────────────────────*/
+.tap-hint { font-size: 11px; color: var(--t3); letter-spacing: .2px; }
+
+/* ─── Nav buttons ─────────────────────────────────────*/
+.nav-btn {
+  height: 52px;
+  border-radius: var(--r);
+  font-size: 13px;
+  letter-spacing: -.1px;
+  border: 1px solid var(--bdr);
+  background: rgba(255,255,255,.03);
+}
+.nav-btn.gold {
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  border-color: transparent;
+  box-shadow: 0 3px 14px rgba(200,144,26,.3);
+}
+.nav-btn.easy {
+  background: rgba(78,201,138,.1);
+  border-color: rgba(78,201,138,.25);
+  color: #5cd090;
+}
+.nav-btn.hard {
+  background: rgba(212,168,32,.1);
+  border-color: rgba(212,168,32,.25);
+  color: #c8a020;
+}
+.nav-btn.wrong {
+  background: rgba(224,85,85,.1);
+  border-color: rgba(224,85,85,.25);
+  color: #d85050;
+}
+.nav-btn.dim { background: rgba(255,255,255,.04); }
+
+/* ─── MCQ options ─────────────────────────────────────*/
+.mcq-opt {
+  border-radius: var(--r);
+  font-size: 15px;
+  background: rgba(255,255,255,.03);
+  border: 1.5px solid var(--bdr);
+  min-height: 64px;
+}
+.mcq-opt:hover:not(:disabled) { background: rgba(200,144,26,.08); border-color: rgba(200,144,26,.3); }
+
+/* ─── Done screen ─────────────────────────────────────*/
+.done-emoji { font-size: 60px; }
+.done-title { font-size: 23px; letter-spacing: -.3px; }
+.score-box { border-radius: 12px; padding: 14px 8px; }
+.btn-main {
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  border-radius: var(--r);
+  padding: 15px;
+  font-size: 15px;
+  box-shadow: 0 3px 14px rgba(200,144,26,.3);
+}
+.btn-sub { border-radius: var(--r); background: rgba(255,255,255,.04); }
+.btn-weak { border-radius: var(--r); }
+
+/* ─── Modals / Sheets ─────────────────────────────────*/
+.overlay { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); background: rgba(0,0,0,.7); }
+.sheet {
+  background: var(--s1);
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding-top: 4px;
+}
+.s-handle {
+  width: 40px; height: 4px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px;
+  margin: 10px auto 18px;
+}
+.s-title { font-size: 18px; letter-spacing: -.2px; }
+@media(min-width:600px){
+  .sheet { max-width: 480px; margin: auto; border-radius: var(--sheet-r); }
+}
+
+/* ─── Form fields ─────────────────────────────────────*/
+.fi, .fta {
+  background: rgba(255,255,255,.04);
+  border: 1.5px solid var(--bdr);
+  border-radius: var(--rsm);
+  font-size: 15px;
+}
+.fi:focus, .fta:focus { border-color: rgba(200,144,26,.5); background: rgba(200,144,26,.04); }
+.fl { font-size: 10px; letter-spacing: 1px; color: var(--t3); }
+.fsub {
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  border-radius: var(--r);
+  padding: 16px;
+  font-size: 16px;
+  box-shadow: 0 3px 14px rgba(200,144,26,.28);
+  margin-top: 12px;
+}
+.fh { font-size: 10px; color: var(--t3); }
+
+/* ─── Study options selectors ─────────────────────────*/
+.sel-opt {
+  border-radius: 12px;
+  border: 1.5px solid var(--bdr);
+  background: rgba(255,255,255,.03);
+  padding: 10px 4px;
+  font-size: 10px;
+  gap: 4px;
+}
+.sel-opt .si { font-size: 18px; }
+.sel-opt.sel {
+  border-color: rgba(200,144,26,.45);
+  background: rgba(200,144,26,.1);
+  color: #e8b030;
+}
+
+/* ─── Level badges ────────────────────────────────────*/
+.lvl-badge { border-radius: 6px; font-size: 9px; letter-spacing: .6px; padding: 2px 7px; }
+.lvl-sel-btn { border-radius: 8px; font-size: 12px; padding: 7px 14px; }
+.lvl-sel-btn.sel { border-color: rgba(200,144,26,.5); background: rgba(200,144,26,.1); }
+
+/* ─── Week strip ──────────────────────────────────────*/
+.week-strip {
+  padding: 14px 18px 8px;
+  gap: 4px;
+}
+.wday-dot {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+}
+.wday-dot.done {
+  background: linear-gradient(135deg, #6de0a0 0%, #4ec98a 100%);
+  box-shadow: 0 2px 10px rgba(78,201,138,.3);
+  color: #fff;
+  font-size: 13px;
+}
+.wday-dot.today {
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: 0 2px 12px rgba(200,144,26,.4);
+  color: #fff;
+}
+.wday-dot.today.done {
+  background: linear-gradient(135deg, #6de0a0 0%, #3db87a 100%);
+  box-shadow: 0 2px 14px rgba(78,201,138,.4);
+}
+.wday-dot.empty {
+  background: rgba(255,255,255,.04);
+  border: 1.5px solid rgba(255,255,255,.08);
+}
+.wday-lbl { font-size: 9px; letter-spacing: .4px; color: var(--t3); font-weight: 600; }
+.wday-lbl.today { color: var(--acc-lt); }
+.streak-reward {
+  margin: 0 14px 4px;
+  padding: 9px 14px;
+  background: linear-gradient(135deg, rgba(78,201,138,.1) 0%, rgba(78,201,138,.06) 100%);
+  border: 1px solid rgba(78,201,138,.22);
+  border-radius: var(--r);
+  font-size: 12px;
+  letter-spacing: -.1px;
+}
+
+/* ─── Toast ───────────────────────────────────────────*/
+.toast {
+  background: rgba(28,28,42,.96);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  bottom: max(90px, calc(env(safe-area-inset-bottom, 0px) + 90px));
+}
+
+/* ─── Context menu ────────────────────────────────────*/
+.ctx {
+  background: rgba(22,22,34,.96);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+}
+.ctx-item { font-size: 14px; padding: 12px 16px; }
+.ctx-item:hover { background: rgba(255,255,255,.04); }
+
+/* ─── Confirm dialog ──────────────────────────────────*/
+.conf-box {
+  background: var(--s1);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.6);
+}
+.conf-no {
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+}
+.conf-yes {
+  background: linear-gradient(135deg, #e86060 0%, #c84040 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(200,60,60,.3);
+}
+
+/* ─── Deck detail ─────────────────────────────────────*/
+.study-launch {
+  margin: 16px 16px 0;
+  border-radius: var(--r);
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: 0 4px 18px rgba(200,144,26,.32);
+  font-size: 16px;
+  letter-spacing: -.1px;
+}
+.card-row {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--bdr);
+  border-radius: 11px;
+  padding: 13px 14px;
+  transition: background .16s, transform .12s;
+}
+.card-row:hover { background: rgba(255,255,255,.04); }
+.card-row:active { transform: scale(.99); }
+.cfp { font-size: 14px; }
+.cfp .bl { color: var(--acc-lt); }
+.m-dot { width: 7px; height: 7px; margin-top: 6px; }
+
+/* ─── Io buttons ──────────────────────────────────────*/
+.io-btn {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 14px;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.io-btn:hover { background: rgba(255,255,255,.06); }
+
+/* ─── Deep mode ───────────────────────────────────────*/
+.deep-step-indicator { gap: 8px; margin-bottom: 4px; }
+.deep-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.08); }
+.deep-dot.active { background: var(--acc-lt); box-shadow: 0 0 6px rgba(200,144,26,.5); }
+.deep-dot.done { background: #4ec98a; }
+.deep-step-lbl { font-size: 10px; letter-spacing: 1.4px; color: var(--t3); margin-bottom: 10px; }
+.listen-pulse {
+  width: 70px; height: 70px;
+  background: rgba(200,144,26,.08);
+  border: 1.5px solid rgba(200,144,26,.28);
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+}
+.listen-pulse.done {
+  background: rgba(78,201,138,.1);
+  border-color: rgba(78,201,138,.3);
+}
+.deep-reveal-btn {
+  border-radius: var(--r);
+  height: 52px;
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: 0 3px 14px rgba(200,144,26,.28);
+  font-size: 15px;
+}
+
+/* ─── Emojis picker ───────────────────────────────────*/
+.emj { border-radius: 10px; font-size: 18px; background: rgba(255,255,255,.03); border: 1.5px solid transparent; }
+.emj.sel { border-color: rgba(200,144,26,.5); background: rgba(200,144,26,.1); }
+.emj-row { gap: 5px; margin-bottom: 14px; }
+
+/* ─── Quick-add modal ─────────────────────────────────*/
+.qa-deck-btn {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--bdr);
+  border-radius: 12px;
+  padding: 13px 14px;
+  transition: background .15s, transform .1s;
+}
+.qa-deck-btn:hover { background: rgba(255,255,255,.06); }
+.qa-deck-btn:active { transform: scale(.98); }
+
+/* ─── Settings rows ───────────────────────────────────*/
+.srow { border-bottom: 1px solid rgba(255,255,255,.05); }
+.stoggle { background: rgba(255,255,255,.08); border-radius: 12px; }
+.stoggle.on { background: var(--acc); }
+.stoggle-knob { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+
+/* ─── Stats screen ────────────────────────────────────*/
+.stat-card {
+  background: var(--s1);
+  border: 1px solid var(--bdr);
+  border-radius: var(--r);
+}
+.sum-box {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--bdr);
+  border-radius: var(--r);
+}
+.sum-val { font-size: 22px; color: var(--acc-lt); }
+
+/* ─── Deck cards animation stagger ───────────────────*/
+.deck-card:nth-child(1){animation-delay:.03s}
+.deck-card:nth-child(2){animation-delay:.07s}
+.deck-card:nth-child(3){animation-delay:.11s}
+.deck-card:nth-child(4){animation-delay:.15s}
+.deck-card:nth-child(5){animation-delay:.18s}
+.deck-card:nth-child(6){animation-delay:.21s}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ─── Colloc & level badges alignment ────────────────*/
+.lvl-filter-btn {
+  border-radius: 18px;
+  font-size: 11px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,.04);
+  border: 1.5px solid var(--bdr);
+}
+.lvl-filter-btn.sel {
+  background: rgba(200,144,26,.1);
+  border-color: rgba(200,144,26,.4);
+  color: var(--acc-lt);
+}
+
+/* ══════════════════════════════════════════════════════
+   PASS 2 — Micro-details & Polish
+   ══════════════════════════════════════════════════════ */
+
+/* ─── Brand icon pulse on load ────────────────────────*/
+@keyframes iconPop {
+  0%   { transform: scale(.7); opacity:0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity:1; }
+}
+.brand-icon { animation: iconPop .45s var(--ease) both; }
+
+/* ─── Stat boxes — hover lift ─────────────────────────*/
+.stat-box {
+  transition: transform .18s var(--ease), background .18s;
+  cursor: default;
+}
+.stat-box:hover { transform: translateY(-2px); background: rgba(255,255,255,.06); }
+
+/* ─── Deck card — glow on the left accent bar ─────────*/
+.deck-card:hover::after {
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(200,144,26,.4);
+}
+
+/* ─── Deck icon — subtle scale on card hover ──────────*/
+.deck-card:hover .deck-icon { transform: scale(1.06); }
+.deck-icon { transition: transform .2s var(--ease); }
+
+/* ─── Mastery bar gradient ────────────────────────────*/
+.m0 { background: rgba(255,255,255,.1); }
+.m1,.m2 { background: linear-gradient(to right, #c07010, #e89020); }
+.m3 { background: linear-gradient(to right, #b0a010, #d4c020); }
+.m4 { background: linear-gradient(to right, #60c040, #8ad840); }
+.m5 { background: linear-gradient(to right, #30b870, #4ec98a); }
+
+/* ─── Study launch button — icon bounce ──────────────*/
+.study-launch svg { transition: transform .2s var(--ease); }
+.study-launch:hover svg { transform: scale(1.15); }
+
+/* ─── Progress fill — shimmer ─────────────────────────*/
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.prog-fill {
+  background: linear-gradient(
+    90deg,
+    var(--acc) 0%,
+    var(--acc-lt) 40%,
+    var(--acc) 60%,
+    var(--acc-lt) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Type input — cleaner focus ring ────────────────*/
+.type-inp {
+  background: rgba(255,255,255,.04);
+  border: 1.5px solid rgba(255,255,255,.08);
+  border-radius: var(--r);
+  font-size: 17px;
+  letter-spacing: .2px;
+}
+.type-inp:focus {
+  border-color: rgba(200,144,26,.5);
+  background: rgba(200,144,26,.04);
+  box-shadow: 0 0 0 3px rgba(200,144,26,.1);
+}
+.type-inp.inp-correct { border-color: rgba(78,201,138,.6); background: rgba(78,201,138,.06); box-shadow: 0 0 0 3px rgba(78,201,138,.1); }
+.type-inp.inp-close   { border-color: rgba(212,168,32,.6);  background: rgba(212,168,32,.06);  box-shadow: 0 0 0 3px rgba(212,168,32,.1); }
+.type-inp.inp-wrong   { border-color: rgba(224,85,85,.6);   background: rgba(224,85,85,.06);   box-shadow: 0 0 0 3px rgba(224,85,85,.1); }
+
+.type-chk {
+  height: 52px;
+  border-radius: var(--r);
+  font-size: 15px;
+  background: linear-gradient(135deg, var(--acc-lt) 0%, var(--acc) 100%);
+  box-shadow: 0 3px 12px rgba(200,144,26,.28);
+  flex-shrink: 0;
+}
+
+/* ─── MCQ correct/wrong — cleaner ────────────────────*/
+.mcq-opt.correct {
+  background: rgba(78,201,138,.12) !important;
+  border-color: rgba(78,201,138,.5) !important;
+  color: #5cd090 !important;
+  box-shadow: 0 0 0 2px rgba(78,201,138,.15) !important;
+}
+.mcq-opt.wrong {
+  background: rgba(224,85,85,.1) !important;
+  border-color: rgba(224,85,85,.45) !important;
+  color: #d86060 !important;
+}
+
+/* ─── Done screen — emoji pop ────────────────────────*/
+@keyframes emojiDrop {
+  0%   { transform: translateY(-30px) scale(.6); opacity:0; }
+  65%  { transform: translateY(4px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); opacity:1; }
+}
+.done-emoji { animation: emojiDrop .55s var(--ease) both; }
+.done-title { letter-spacing: -.4px; font-weight: 800; }
+
+/* ─── Score boxes ─────────────────────────────────────*/
+.score-box.g {
+  background: rgba(78,201,138,.1);
+  border: 1px solid rgba(78,201,138,.25);
+}
+.score-box.r {
+  background: rgba(224,85,85,.1);
+  border: 1px solid rgba(224,85,85,.25);
+}
+.score-n { font-size: 26px; font-weight: 800; letter-spacing: -.5px; font-family:var(--fnum); }
+.score-l { font-size: 10px; letter-spacing: .4px; text-transform: uppercase; }
+
+/* ─── Empty state ─────────────────────────────────────*/
+.empty { padding: 52px 28px; }
+.e-ic {
+  font-size: 52px;
+  margin-bottom: 16px;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(200,144,26,.2));
+}
+.e-ti { font-size: 18px; font-weight: 700; letter-spacing: -.2px; margin-bottom: 8px; }
+.e-de { font-size: 13px; color: var(--t2); line-height: 1.75; }
+
+/* ─── Study bar IB buttons ────────────────────────────*/
+.ib {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.07);
+  transition: background .15s, transform .1s;
+}
+.ib:hover { background: rgba(255,255,255,.09); }
+.ib:active { transform: scale(.86); }
+
+/* ─── Topbar in deck / study ──────────────────────────*/
+#screen-deck .topbar,
+#screen-study .topbar,
+#screen-stats .topbar {
+  background: rgba(8,8,16,.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ─── Card list item — level badge align ──────────────*/
+.card-row-body { gap: 2px; }
+.srs-info { font-size: 9px; letter-spacing: .2px; }
+
+/* ─── Due strip icon ──────────────────────────────────*/
+.due-strip svg { flex-shrink: 0; color: var(--acc-lt); }
+
+/* ─── Week strip divider ──────────────────────────────*/
+.week-strip {
+  border-bottom: 1px solid var(--bdr);
+  margin-bottom: 2px;
+}
+
+/* ─── Reverse mode word box ───────────────────────────*/
+.face-word-big {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1e1c16;
+  letter-spacing: -.8px;
+}
+.face-word-hint { font-size: 11px; color: #b0988a; letter-spacing: .2px; }
+.face-word-count {
+  font-size: 10px;
+  background: rgba(200,144,26,.08);
+  color: #b08830;
+  border: 1px solid rgba(200,144,26,.15);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+/* ─── Stats screen summaries ──────────────────────────*/
+.stats-wrap { gap: 14px; padding: 14px 14px 100px; }
+.stat-card-title { font-size: 10px; letter-spacing: 1.4px; margin-bottom: 12px; }
+.acc-ring-pct { font-size: 15px; font-weight: 800; }
+.dstat-name { font-size: 14px; letter-spacing: -.1px; }
+.wbar-inner.lit {
+  background: linear-gradient(to top, var(--acc), var(--acc-lt));
+}
+.wbar-inner.dim {
+  background: linear-gradient(to top, rgba(200,144,26,.25), rgba(200,144,26,.38));
+}
+
+/* ─── install bar ─────────────────────────────────────*/
+.install-bar {
+  margin: 6px 14px 0;
+  border-radius: var(--r);
+  background: rgba(200,144,26,.06);
+  border: 1px solid rgba(200,144,26,.18);
+}
+
+/* ─── Scrollbar (desktop) ─────────────────────────────*/
+.scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent; }
+
+/* ─── Selection highlight ─────────────────────────────*/
+::selection { background: rgba(200,144,26,.25); color: var(--t1); }
+
+/* ══════════════════════════════════════════════════════
+   PASS 3 — Final Details
+   ══════════════════════════════════════════════════════ */
+
+/* ─── Deck card mastery bar — rounded ends ────────────*/
+.deck-mbar { overflow: visible; }
+
+/* ─── Mode chip active state ──────────────────────────*/
+.mode-chip:active, .shuf-btn:active { opacity: .7; transform: scale(.93); }
+
+/* ─── Nav button active micro-bounce ─────────────────*/
+.nav-btn:active { transform: scale(.94); }
+.nav-btn.easy:active, .nav-btn.hard:active, .nav-btn.wrong:active {
+  transform: scale(.93);
+}
+
+/* ─── Screen slide transition — smoother ─────────────*/
+.screen {
+  transition: transform .32s cubic-bezier(.4,0,.15,1),
+              opacity .32s cubic-bezier(.4,0,.15,1);
+}
+
+/* ─── Sheet open animation ────────────────────────────*/
+@keyframes sheetUp {
+  from { transform: translateY(60px); opacity: .4; }
+  to   { transform: translateY(0);    opacity: 1;  }
+}
+.overlay:not(.hidden) .sheet { animation: sheetUp .28s var(--ease) both; }
+
+/* ─── Streak reward banner ────────────────────────────*/
+.streak-reward {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -.1px;
+  color: #5cd090;
+}
+
+/* ─── fab-qa tooltip ──────────────────────────────────*/
+.fab-qa::after {
+  content: attr(title);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(22,22,34,.95);
+  color: var(--t1);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--bdr);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.fab-qa:hover::after { opacity: 1; }
+
+/* ─── deep-reveal-btn disabled ───────────────────────*/
+.deep-reveal-btn:disabled {
+  background: rgba(255,255,255,.07);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+/* ─── type-chk hover ──────────────────────────────────*/
+.type-chk:hover { opacity: .9; }
+.type-chk:active { transform: scale(.96); opacity: .85; }
+
+/* ─── Stats ring — drop shadow ────────────────────────*/
+.acc-ring-wrap svg circle { filter: drop-shadow(0 0 4px rgba(200,144,26,.3)); }
+
+/* ─── Wbar lit — rounder top ─────────────────────────*/
+.wbar-inner { border-radius: 4px 4px 2px 2px; }
+
+/* ─── Due count badge ─────────────────────────────────*/
+.due-title { font-size: 14px; font-weight: 800; letter-spacing: -.1px; }
+.due-sub   { font-size: 12px; }
+
+/* ─── Deck count meta ────────────────────────────────*/
+.deck-meta { font-size: 11px; color: var(--t2); }
+.deck-due  { font-size: 11px; font-weight: 700; color: var(--acc-lt); }
+
+/* ─── Section header divider ─────────────────────────*/
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--bdr);
+}
+
+/* ─── fa-qa accessible focus ─────────────────────────*/
+.fab-qa:focus-visible {
+  outline: 2px solid var(--acc-lt);
+  outline-offset: 3px;
+}
+
+/* ─── Scrollable sheet — fade bottom ─────────────────*/
+.sheet::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent, var(--s1));
+  pointer-events: none;
+  display: block;
+}
+
+/* ─── Confirm box animation ───────────────────────────*/
+@keyframes confPop {
+  from { transform: scale(.88); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.conf-ov:not(.hidden) .conf-box { animation: confPop .22s var(--ease) both; }
+
+/* ─── word-badge on back card ────────────────────────*/
+.word-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .1px;
+}
+
+/* ─── Typing result overlay ───────────────────────────*/
+.type-res-ov { font-size: 12px; font-weight: 700; letter-spacing: .2px; }
+.type-res-ov.correct { background: rgba(78,201,138,.14); color: #5cd090; }
+.type-res-ov.close   { background: rgba(212,168,32,.14);  color: #c8a020; }
+.type-res-ov.wrong   { background: rgba(224,85,85,.14);   color: #d86060; }
+
+/* ─── home-sub text ───────────────────────────────────*/
+.home-sub { font-size: 12px; line-height: 1.5; opacity: .7; }
+
+/* ─── Reminder bar ────────────────────────────────────*/
+.notif-perm-btn {
+  background: rgba(78,201,138,.06);
+  border: 1px solid rgba(78,201,138,.22);
+  border-radius: var(--r);
+  color: #5cd090;
+}
+.notif-perm-btn:hover { background: rgba(78,201,138,.1); }
+
+/* ─── Scrollbar on sheet ──────────────────────────────*/
+.sheet { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.07) transparent; }
+
+/* ─── Flip card perspective tweak ────────────────────*/
+.scene { perspective: 900px; }
+.flipper { transition: transform .48s cubic-bezier(.3,.1,.2,1.08); }
+
+/* ─── Deep learn step dots pulse ─────────────────────*/
+.deep-dot.active {
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(200,144,26,.4); }
+  50%     { box-shadow: 0 0 0 5px rgba(200,144,26,0); }
+}
 </style>
 </head>
 <body>
@@ -369,28 +1396,34 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 <div id="screen-home" class="screen">
   <div class="scroll">
     <div class="home-head">
-      <div class="brand">
-        <div class="brand-icon">🃏</div>
-        <div class="brand-name">Flip<span>Learn</span></div>
-        <button class="ib" id="btn-stats" title="الإحصاءات">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </button>
-        <button class="ib" id="btn-settings" title="الإعدادات">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </button>
+      <!-- Hero zone -->
+      <div class="brand-hero">
+        <div class="brand">
+          <div class="brand-icon">🃏</div>
+          <div class="brand-name">Flip<span>Learn</span></div>
+          <button class="ib" id="btn-stats" title="الإحصاءات">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </button>
+          <button class="ib" id="btn-settings" title="الإعدادات">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+        <div class="home-sub">تعلّم الإنجليزية بالطريقة العلمية — SRS · مفردات أكاديمية · تعلم عميق</div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-val" id="s-decks">0</div><div class="stat-lbl">مجموعة</div></div>
+          <div class="stat-box"><div class="stat-val" id="s-cards">0</div><div class="stat-lbl">بطاقة</div></div>
+          <div class="stat-box"><div class="stat-val" id="s-today">0</div><div class="stat-lbl">اليوم</div></div>
+          <div class="stat-box"><div class="stat-val" id="s-streak">0</div><div class="stat-lbl">🔥 يوم</div></div>
+        </div>
       </div>
-      <div class="home-sub">بطاقاتك الذكية لحفظ المفردات الإنجليزية</div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-val" id="s-decks">0</div><div class="stat-lbl">مجموعة</div></div>
-        <div class="stat-box"><div class="stat-val" id="s-cards">0</div><div class="stat-lbl">بطاقة</div></div>
-        <div class="stat-box"><div class="stat-val" id="s-today">0</div><div class="stat-lbl">اليوم</div></div>
-        <div class="stat-box"><div class="stat-val" id="s-streak">0</div><div class="stat-lbl">🔥 يوم</div></div>
-      </div>
-      <div id="goal-wrap" class="goal-wrap">
+      <!-- Goal bar -->
+      <div id="goal-wrap" class="goal-section goal-wrap">
         <div class="goal-row"><span class="goal-lbl">🎯 الهدف اليومي</span><span class="goal-cnt" id="goal-cnt">0/10</span></div>
         <div class="goal-track"><div class="goal-bar" id="goal-bar" style="width:0%"></div></div>
       </div>
     </div>
+    <div id="week-strip" class="week-strip"></div>
+    <div id="streak-reward" class="streak-reward"></div>
     <div id="due-strip" class="due-strip hidden">
       <div class="due-body"><div class="due-title">📅 لديك <span id="due-count">0</span> بطاقة مستحقة للمراجعة</div><div class="due-sub">راجعها الآن لتحافظ على تقدمك</div></div>
       <div class="due-btn">راجع الآن</div>
@@ -404,6 +1437,7 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
     <div id="deck-list" class="deck-list"></div>
   </div>
   <button class="fab" id="btn-new-deck"><span class="fab-plus">+</span> مجموعة جديدة</button>
+  <button class="fab-qa" id="btn-quick-add" title="إضافة بطاقة سريعة">✦</button>
 </div>
 
 <!-- ══ DECK DETAIL ══ -->
@@ -442,10 +1476,12 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
       <label class="fl">وضع الدراسة</label>
       <div class="sel-row">
         <button class="sel-opt sel" data-mode="flip" id="opt-flip"><span class="si">🔄</span>قلب</button>
+        <button class="sel-opt" data-mode="deep" id="opt-deep"><span class="si">🧠</span>عميق</button>
         <button class="sel-opt" data-mode="type" id="opt-type"><span class="si">✍️</span>كتابة</button>
         <button class="sel-opt" data-mode="mcq" id="opt-mcq"><span class="si">🎯</span>اختيار</button>
         <button class="sel-opt" data-mode="reverse" id="opt-reverse"><span class="si">🔀</span>عكسي</button>
       </div>
+      <div id="mode-desc-row" style="font-size:12px;color:var(--t2);margin-top:8px;padding:9px 12px;background:var(--s2);border-radius:var(--rsm);line-height:1.6;display:none"></div>
     </div>
     <div class="fg">
       <label class="fl">البطاقات</label>
@@ -462,6 +1498,20 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
       </div>
     </div>
     <button class="fsub" id="btn-start-study">ابدأ المراجعة ←</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: QUICK-ADD DECK PICKER ══ -->
+<div class="overlay hidden" id="modal-qa-pick">
+  <div class="sheet">
+    <div class="s-handle"></div>
+    <div class="s-title">⚡ إضافة بطاقة سريعة</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:12px">اختر المجموعة التي تريد إضافة البطاقة إليها</div>
+    <div id="qa-deck-list" class="qa-deck-list"></div>
+    <button class="io-btn" id="qa-new-deck-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      أنشئ مجموعة جديدة
+    </button>
   </div>
 </div>
 
@@ -514,6 +1564,11 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
       <label class="fl">مرادفات (اختياري)</label>
       <input class="fi ltr" id="in-syn" type="text" placeholder="locate, retrieve, discover">
       <div class="fh">افصل بين المرادفات بفاصلة</div>
+    </div>
+    <div class="fg">
+      <label class="fl">تعبير جاهز / Collocation (اختياري)</label>
+      <input class="fi ltr" id="in-colloc" type="text" placeholder="make a decision, take into account, carry out">
+      <div class="fh">إذا كانت البطاقة تعلّم تعبيرًا ثابتًا اكتبه هنا</div>
     </div>
     <div class="fg">
       <label class="fl">ملاحظة (اختياري)</label>
@@ -569,7 +1624,12 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
       استيراد نسخة احتياطية (JSON)
     </button>
 
-    <button class="fsub" id="btn-save-settings" style="margin-top:16px">حفظ الإعدادات</button>
+    <div style="margin-top:16px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px">مجموعات جاهزة</div>
+    <button class="io-btn" id="btn-import-awl">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      📖 أضف الكلمات الأكاديمية AWL (80 كلمة)
+    </button>
+    <button class="fsub" id="btn-save-settings" style="margin-top:8px">حفظ الإعدادات</button>
   </div>
 </div>
 
@@ -607,7 +1667,8 @@ body{font-family:var(--far);background:var(--bg);color:var(--t1);-webkit-font-sm
 
 <script>
 /* ════════════════════════════════════════════════════════
-   FLIPLEARN v4  —  SRS · Typing · MCQ · TTS · Daily Goal
+   FLIPLEARN v7  —  SRS · Deep Learning · AWL · Collocations
+                   Weekly Streak · Quick Add
    ════════════════════════════════════════════════════════ */
 
 // ── Helpers ──────────────────────────────────────────────
@@ -625,11 +1686,96 @@ const WORD_BANK = ['resolve','reluctant','rearrange','achieve','obtain','refuse'
   'acknowledge','negotiate','anticipate','contribute','distinguish','pursue','hesitate',
   'embrace','overcome','perceive','collaborate','allocate','eliminate','generate','sustain'];
 
+// ── Academic Word List (AWL) ─────────────────────────────────
+// 120 high-frequency AWL words with full card data (sentence, translation, synonyms, level)
+const AWL_CARDS = [
+  {w:'analyse',f:'Scientists need to ___ the data carefully before drawing conclusions.',b:'Scientists need to analyse the data carefully before drawing conclusions.',t:'يحلل البيانات',s:'examine, study, investigate',lv:'B2'},
+  {w:'approach',f:'We need a new ___ to solve this complex problem.',b:'We need a new approach to solve this complex problem.',t:'نهج، أسلوب',s:'method, strategy, way',lv:'B1'},
+  {w:'assess',f:'The teacher will ___ each student\'s progress at the end of the term.',b:'The teacher will assess each student\'s progress at the end of the term.',t:'يقيّم',s:'evaluate, measure, judge',lv:'B2'},
+  {w:'assume',f:'Don\'t ___ that everyone agrees with your opinion.',b:'Don\'t assume that everyone agrees with your opinion.',t:'يفترض',s:'presume, suppose, take for granted',lv:'B2'},
+  {w:'authority',f:'The ___ decided to close the school due to the storm.',b:'The authority decided to close the school due to the storm.',t:'السلطة، الجهة المختصة',s:'power, government, administration',lv:'B2'},
+  {w:'available',f:'The report will be ___ online from next Monday.',b:'The report will be available online from next Monday.',t:'متاح، موجود',s:'accessible, obtainable, on hand',lv:'B1'},
+  {w:'benefit',f:'Regular exercise can ___ both your physical and mental health.',b:'Regular exercise can benefit both your physical and mental health.',t:'يفيد، يعود بالنفع',s:'help, improve, aid',lv:'B1'},
+  {w:'concept',f:'The ___ of freedom means different things to different people.',b:'The concept of freedom means different things to different people.',t:'مفهوم',s:'idea, notion, principle',lv:'B2'},
+  {w:'conclude',f:'The researchers ___ that the drug was safe for human use.',b:'The researchers concluded that the drug was safe for human use.',t:'يخلص، يستنتج',s:'determine, deduce, decide',lv:'B2'},
+  {w:'conduct',f:'The university will ___ a survey about student satisfaction.',b:'The university will conduct a survey about student satisfaction.',t:'يجري، ينفذ',s:'carry out, perform, run',lv:'B2'},
+  {w:'consequence',f:'Ignoring climate change will have serious ___s for future generations.',b:'Ignoring climate change will have serious consequences for future generations.',t:'عاقبة، نتيجة',s:'result, outcome, effect',lv:'B2'},
+  {w:'consistent',f:'You need to be ___ in your study habits to improve your English.',b:'You need to be consistent in your study habits to improve your English.',t:'ثابت، منتظم',s:'steady, regular, persistent',lv:'B2'},
+  {w:'constitute',f:'Women ___ more than half of the university\'s student population.',b:'Women constitute more than half of the university\'s student population.',t:'يشكّل، يكوّن',s:'make up, form, represent',lv:'C1'},
+  {w:'context',f:'You must understand the historical ___ to fully appreciate this novel.',b:'You must understand the historical context to fully appreciate this novel.',t:'سياق',s:'background, setting, circumstances',lv:'B2'},
+  {w:'contract',f:'She signed a two-year ___ with the company last week.',b:'She signed a two-year contract with the company last week.',t:'عقد',s:'agreement, deal, document',lv:'B1'},
+  {w:'contradict',f:'His actions completely ___ what he said in the meeting.',b:'His actions completely contradict what he said in the meeting.',t:'يتناقض مع، ينفي',s:'deny, oppose, conflict with',lv:'C1'},
+  {w:'contribute',f:'Everyone should ___ to the discussion and share their ideas.',b:'Everyone should contribute to the discussion and share their ideas.',t:'يساهم',s:'add to, give, participate',lv:'B2'},
+  {w:'create',f:'The program aims to ___ new opportunities for young graduates.',b:'The program aims to create new opportunities for young graduates.',t:'يُنشئ، يخلق',s:'establish, produce, generate',lv:'A2'},
+  {w:'data',f:'The ___ collected from the experiment supports our hypothesis.',b:'The data collected from the experiment supports our hypothesis.',t:'البيانات، المعطيات',s:'information, evidence, statistics',lv:'B1'},
+  {w:'define',f:'Please ___ the term "sustainability" in your own words.',b:'Please define the term "sustainability" in your own words.',t:'يعرّف',s:'explain, describe, clarify',lv:'B1'},
+  {w:'demonstrate',f:'The scientist used a simple experiment to ___ her theory.',b:'The scientist used a simple experiment to demonstrate her theory.',t:'يوضح، يُبيّن',s:'show, prove, illustrate',lv:'B2'},
+  {w:'derive',f:'English words often ___ from Latin or Greek roots.',b:'English words often derive from Latin or Greek roots.',t:'يُشتق من',s:'come from, originate, stem from',lv:'C1'},
+  {w:'design',f:'The engineers were asked to ___ a more fuel-efficient engine.',b:'The engineers were asked to design a more fuel-efficient engine.',t:'يُصمّم',s:'plan, create, develop',lv:'B1'},
+  {w:'distinct',f:'These two concepts are completely ___ and should not be confused.',b:'These two concepts are completely distinct and should not be confused.',t:'متميز، مختلف',s:'different, separate, unique',lv:'B2'},
+  {w:'distribute',f:'The volunteers will ___ food packages to families in need.',b:'The volunteers will distribute food packages to families in need.',t:'يوزع',s:'hand out, spread, allocate',lv:'B2'},
+  {w:'economy',f:'The global ___ has been growing slowly since the financial crisis.',b:'The global economy has been growing slowly since the financial crisis.',t:'الاقتصاد',s:'financial system, market',lv:'B1'},
+  {w:'environment',f:'We all have a responsibility to protect the natural ___.',b:'We all have a responsibility to protect the natural environment.',t:'البيئة',s:'surroundings, ecosystem, habitat',lv:'B1'},
+  {w:'establish',f:'The company was ___ in 1990 by two university professors.',b:'The company was established in 1990 by two university professors.',t:'يُؤسس',s:'set up, found, create',lv:'B2'},
+  {w:'evaluate',f:'At the end of the course, students will ___ each other\'s projects.',b:'At the end of the course, students will evaluate each other\'s projects.',t:'يُقيّم',s:'assess, judge, measure',lv:'B2'},
+  {w:'evidence',f:'There is strong ___ that regular sleep improves academic performance.',b:'There is strong evidence that regular sleep improves academic performance.',t:'دليل',s:'proof, indication, data',lv:'B2'},
+  {w:'factor',f:'Stress is one of the key ___s that affects exam performance.',b:'Stress is one of the key factors that affects exam performance.',t:'عامل',s:'element, aspect, component',lv:'B1'},
+  {w:'focus',f:'You need to ___ on your weakest areas to improve your score.',b:'You need to focus on your weakest areas to improve your score.',t:'يُركّز على',s:'concentrate on, pay attention to',lv:'B1'},
+  {w:'foundation',f:'A strong ___ in grammar is essential for academic writing.',b:'A strong foundation in grammar is essential for academic writing.',t:'أساس',s:'basis, base, groundwork',lv:'B2'},
+  {w:'function',f:'The main ___ of a thesis statement is to express the main argument.',b:'The main function of a thesis statement is to express the main argument.',t:'وظيفة، دور',s:'role, purpose, task',lv:'B1'},
+  {w:'fundamental',f:'Critical thinking is a ___ skill for university-level study.',b:'Critical thinking is a fundamental skill for university-level study.',t:'أساسي، جوهري',s:'basic, essential, core',lv:'B2'},
+  {w:'generate',f:'Wind turbines can ___ enough electricity to power thousands of homes.',b:'Wind turbines can generate enough electricity to power thousands of homes.',t:'يولّد',s:'produce, create, make',lv:'B2'},
+  {w:'global',f:'Climate change is a ___ problem that requires international cooperation.',b:'Climate change is a global problem that requires international cooperation.',t:'عالمي',s:'worldwide, international, universal',lv:'B1'},
+  {w:'hypothesis',f:'The scientist developed a ___ and then tested it through experiments.',b:'The scientist developed a hypothesis and then tested it through experiments.',t:'فرضية',s:'theory, assumption, proposition',lv:'C1'},
+  {w:'identify',f:'Can you ___ the main argument in this paragraph?',b:'Can you identify the main argument in this paragraph?',t:'يُحدد، يتعرف على',s:'recognize, pinpoint, determine',lv:'B1'},
+  {w:'impact',f:'The new law will have a major ___ on small businesses.',b:'The new law will have a major impact on small businesses.',t:'تأثير',s:'effect, influence, consequence',lv:'B1'},
+  {w:'indicate',f:'The results clearly ___ that the treatment was effective.',b:'The results clearly indicate that the treatment was effective.',t:'يُشير إلى',s:'show, suggest, point to',lv:'B2'},
+  {w:'individual',f:'Each ___ in the group contributed something unique to the project.',b:'Each individual in the group contributed something unique to the project.',t:'فرد',s:'person, single, particular',lv:'B1'},
+  {w:'interpret',f:'Different readers may ___ the poem in different ways.',b:'Different readers may interpret the poem in different ways.',t:'يفسّر',s:'explain, understand, read',lv:'B2'},
+  {w:'involve',f:'The research project will ___ over 500 participants.',b:'The research project will involve over 500 participants.',t:'يتضمن، يشمل',s:'include, require, entail',lv:'B1'},
+  {w:'issue',f:'Unemployment is the most pressing ___ facing the country right now.',b:'Unemployment is the most pressing issue facing the country right now.',t:'قضية، مسألة',s:'topic, problem, matter',lv:'B1'},
+  {w:'justify',f:'You must ___ your argument with evidence from reliable sources.',b:'You must justify your argument with evidence from reliable sources.',t:'يبرر',s:'explain, support, defend',lv:'B2'},
+  {w:'labour',f:'The new machines reduced the amount of manual ___ needed.',b:'The new machines reduced the amount of manual labour needed.',t:'عمل (جسدي)، عمالة',s:'work, effort, workforce',lv:'B2'},
+  {w:'legal',f:'You should seek ___ advice before signing the contract.',b:'You should seek legal advice before signing the contract.',t:'قانوني',s:'lawful, official, authorized',lv:'B2'},
+  {w:'link',f:'Researchers have found a strong ___ between diet and mental health.',b:'Researchers have found a strong link between diet and mental health.',t:'رابط، صلة',s:'connection, relationship, tie',lv:'B1'},
+  {w:'maintain',f:'It\'s important to ___ a healthy balance between work and rest.',b:'It\'s important to maintain a healthy balance between work and rest.',t:'يحافظ على',s:'keep, preserve, sustain',lv:'B2'},
+  {w:'method',f:'The ___ used in this study is different from previous research.',b:'The method used in this study is different from previous research.',t:'طريقة، منهج',s:'approach, technique, procedure',lv:'B1'},
+  {w:'occur',f:'Major breakthroughs in science often ___ by accident.',b:'Major breakthroughs in science often occur by accident.',t:'يحدث، يقع',s:'happen, take place, arise',lv:'B2'},
+  {w:'policy',f:'The university has a strict ___ against plagiarism.',b:'The university has a strict policy against plagiarism.',t:'سياسة',s:'rule, regulation, guideline',lv:'B2'},
+  {w:'principle',f:'The ___ of equality is central to democratic systems.',b:'The principle of equality is central to democratic systems.',t:'مبدأ',s:'rule, belief, value',lv:'B2'},
+  {w:'proceed',f:'Once you have read the instructions, you may ___ with the exam.',b:'Once you have read the instructions, you may proceed with the exam.',t:'يمضي قُدُماً، يتابع',s:'continue, go ahead, move forward',lv:'B2'},
+  {w:'process',f:'Learning a language is a slow ___ that takes time and patience.',b:'Learning a language is a slow process that takes time and patience.',t:'عملية',s:'procedure, system, method',lv:'B1'},
+  {w:'require',f:'This course will ___ students to submit weekly written assignments.',b:'This course will require students to submit weekly written assignments.',t:'يتطلب',s:'need, demand, call for',lv:'B1'},
+  {w:'research',f:'Her ___ on climate change was published in a major journal.',b:'Her research on climate change was published in a major journal.',t:'بحث',s:'study, investigation, analysis',lv:'B1'},
+  {w:'respond',f:'The government failed to ___ quickly to the humanitarian crisis.',b:'The government failed to respond quickly to the humanitarian crisis.',t:'يستجيب',s:'react, answer, reply',lv:'B1'},
+  {w:'role',f:'Teachers play a critical ___ in shaping students\' critical thinking skills.',b:'Teachers play a critical role in shaping students\' critical thinking skills.',t:'دور',s:'function, part, position',s:'function, position, part',lv:'B1'},
+  {w:'section',f:'The reading ___ of the exam is worth 40% of the total score.',b:'The reading section of the exam is worth 40% of the total score.',t:'قسم، جزء',s:'part, chapter, division',lv:'B1'},
+  {w:'significant',f:'There was a ___ improvement in her writing after three months of practice.',b:'There was a significant improvement in her writing after three months of practice.',t:'كبير، مهم، ذو دلالة',s:'major, notable, important',lv:'B2'},
+  {w:'source',f:'Wikipedia is not an acceptable academic ___ for university essays.',b:'Wikipedia is not an acceptable academic source for university essays.',t:'مصدر',s:'reference, origin, supply',lv:'B1'},
+  {w:'specific',f:'The professor gave ___ instructions about how to format the essay.',b:'The professor gave specific instructions about how to format the essay.',t:'محدد، خاص',s:'particular, precise, exact',lv:'B1'},
+  {w:'strategy',f:'She developed a clear ___ for studying 10 new words every day.',b:'She developed a clear strategy for studying 10 new words every day.',t:'استراتيجية',s:'plan, approach, method',lv:'B2'},
+  {w:'structure',f:'The ___ of your argument should be clear from the introduction.',b:'The structure of your argument should be clear from the introduction.',t:'هيكل، بنية',s:'framework, organization, layout',lv:'B2'},
+  {w:'sufficient',f:'Two hours of daily practice is ___ to make real progress.',b:'Two hours of daily practice is sufficient to make real progress.',t:'كافٍ',s:'enough, adequate, ample',lv:'B2'},
+  {w:'theory',f:'Darwin\'s ___ of evolution changed how we understand life on Earth.',b:'Darwin\'s theory of evolution changed how we understand life on Earth.',t:'نظرية',s:'hypothesis, model, framework',lv:'B1'},
+  {w:'vary',f:'The results ___ significantly depending on the conditions of the experiment.',b:'The results vary significantly depending on the conditions of the experiment.',t:'يتفاوت، يختلف',s:'differ, change, fluctuate',lv:'B2'},
+  // Collocations deck extras
+  {w:'make a decision',f:'It is difficult to ___ when you don\'t have all the information.',b:'It is difficult to make a decision when you don\'t have all the information.',t:'يتخذ قرارًا',s:'decide, choose, determine',lv:'B1'},
+  {w:'take into account',f:'You need to ___ all the risks before starting the project.',b:'You need to take into account all the risks before starting the project.',t:'يأخذ بعين الاعتبار',s:'consider, factor in, account for',lv:'B2'},
+  {w:'carry out',f:'The team will ___ a series of tests on the new vaccine.',b:'The team will carry out a series of tests on the new vaccine.',t:'يُجري، يُنفّذ',s:'conduct, perform, execute',lv:'B2'},
+  {w:'put forward',f:'She ___ a convincing argument for changing the policy.',b:'She put forward a convincing argument for changing the policy.',t:'يطرح، يقترح',s:'propose, suggest, present',lv:'C1'},
+  {w:'draw a conclusion',f:'From this evidence, we can ___ that the hypothesis is correct.',b:'From this evidence, we can draw a conclusion that the hypothesis is correct.',t:'يستخلص نتيجة',s:'conclude, determine, infer',lv:'B2'},
+  {w:'raise awareness',f:'The campaign aims to ___ about the dangers of plastic pollution.',b:'The campaign aims to raise awareness about the dangers of plastic pollution.',t:'يرفع مستوى الوعي',s:'highlight, promote understanding',lv:'B2'},
+  {w:'reach a conclusion',f:'After months of research, they were finally able to ___.',b:'After months of research, they were finally able to reach a conclusion.',t:'يصل إلى نتيجة',s:'conclude, determine, settle',lv:'B2'},
+  {w:'play a role',f:'Social media ___s a major ___ in shaping public opinion today.',b:'Social media plays a major role in shaping public opinion today.',t:'يؤدي دورًا',s:'contribute, participate, influence',lv:'B1'},
+];
+
+
 // ── State ─────────────────────────────────────────────────
 const S = {
   decks:[], activeDeckId:null,
   studyCards:[], studyIdx:0, isFlipped:false, studyDone:false,
-  studyMode:'flip',        // 'flip' | 'type' | 'mcq' | 'reverse'
+  studyMode:'flip',        // 'flip' | 'type' | 'mcq' | 'reverse' | 'deep'
+  deepStep:0,              // 0=listen 1=type 2=review
   typingChecked:false, typingResult:null,
   mcqAnswered:false, mcqOptions:[], mcqWrongIdx:-1,
   studySet:'all', optLvl:'',   // level filter in study options
@@ -674,7 +1820,7 @@ function hydrate(){
       c.srsEase=c.srsEase??2.5; c.srsReps=c.srsReps??0;
       c.lastReview=c.lastReview??null;
       c.translation=c.translation??''; c.synonyms=c.synonyms??'';
-      c.level=c.level??'';
+      c.level=c.level??''; c.collocation=c.collocation??'';
     }));
   }catch(e){console.warn('hydrate:',e)}
 }
@@ -797,12 +1943,14 @@ function show(name){
 function navHome(){
   speechSynthesis.cancel&&speechSynthesis.cancel();
   show('home');renderHome();
+  pushNav('home');
 }
 function navDeck(id){
   S.activeDeckId=id;
   $('screen-home').classList.add('sl');
   $('screen-deck').classList.remove('sr');
   renderDeck();
+  pushNav('deck');
 }
 function openStudyOptions(){
   const deck=activeDeck();
@@ -814,7 +1962,7 @@ function openStudyOptions(){
   $('opt-due').classList.toggle('empty-opt',dueN===0);
   $('opt-weak').classList.toggle('empty-opt',weakN===0);
   S.optMode='flip';S.optSet='all';S.optLvl='';
-  ['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(id=>$(id).classList.remove('sel'));
+  ['opt-flip','opt-deep','opt-type','opt-mcq','opt-reverse'].forEach(id=>$(id).classList.remove('sel'));
   ['opt-all','opt-due','opt-weak'].forEach(id=>$(id).classList.remove('sel'));
   $('opt-flip').classList.add('sel');$('opt-all').classList.add('sel');
   // Level filter: show only if deck has tagged cards
@@ -846,6 +1994,7 @@ function startStudy(){
   $('screen-deck').classList.add('sl');
   $('screen-study').classList.remove('sr');
   updateModeChip();renderStudy();
+  pushNav('study');
 }
 function startDueSession(){
   for(const deck of S.decks){
@@ -862,12 +2011,13 @@ function resetStudySession(){
   S.studyIdx=0;S.isFlipped=false;S.studyDone=false;
   S.typingChecked=false;S.typingResult=null;
   S.mcqAnswered=false;S.mcqOptions=[];S.mcqWrongIdx=-1;
+  S.deepStep=0;
   S.sessionCorrect=0;S.sessionWrong=0;S.sessionSkipped=0;S.sessionWrongIds=[];
 }
 function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
 function updateModeChip(){
   const chip=$('btn-mode-toggle');const lbl=$('mode-label');
-  const map={flip:'🔄 قلب',type:'✍️ كتابة',mcq:'🎯 اختيار',reverse:'🔀 عكسي'};
+  const map={flip:'🔄 قلب',deep:'🧠 عميق',type:'✍️ كتابة',mcq:'🎯 اختيار',reverse:'🔀 عكسي'};
   lbl.textContent=map[S.studyMode]||'🔄 قلب';
   chip.classList.toggle('on',S.studyMode!=='flip');
 }
@@ -885,6 +2035,9 @@ function renderHome(){
   $('goal-cnt').textContent=`${S.studiedToday}/${S.dailyGoal}`;
   $('goal-bar').style.width=pct+'%';
   $('goal-wrap').classList.toggle('goal-done',S.studiedToday>=S.dailyGoal);
+
+  // Weekly streak strip
+  renderWeekStrip();
 
   // Due strip
   const due=allDueCount();
@@ -953,6 +2106,7 @@ function renderStudy(){
   if(S.studyMode==='type') renderTypingMode(card);
   else if(S.studyMode==='mcq') renderMCQMode(card);
   else if(S.studyMode==='reverse') renderReverseMode(card);
+  else if(S.studyMode==='deep') renderDeepMode(card);
   else renderFlipMode(card);
 }
 
@@ -965,6 +2119,7 @@ function lvlBadge(lv){
 // Back face shared HTML
 function backExtras(card){
   return `
+    ${card.collocation?`<div class="colloc-badge">🔗 ${esc(card.collocation)}</div>`:''}
     ${card.word?`<div class="word-badge">${esc(card.word)} ${card.level?lvlBadge(card.level):''}</div>`:''}
     ${card.synonyms?`<div class="syn-row">${card.synonyms.split(',').map(s=>`<span class="syn-chip">${esc(s.trim())}</span>`).join('')}</div>`:''}
     ${card.translation?`<div class="card-trans">${esc(card.translation)}</div>`:''}
@@ -1208,6 +2363,7 @@ function advanceCard(){
     S.studyIdx++;S.isFlipped=false;
     S.typingChecked=false;S.typingResult=null;
     S.mcqAnswered=false;S.mcqOptions=[];S.mcqWrongIdx=-1;
+    S.deepStep=0;
     renderStudy();
   }
 }
@@ -1248,7 +2404,7 @@ function renderDone(){
         <div class="score-box a"><div class="score-n a">${skp}</div><div class="score-l">تخطيت</div></div>
       </div>
       <div class="done-btns">
-        ${hasWeak?`<button class="btn-weak" id="btn-retry-weak">🔄 أعِد الصعبة (${wrn})</button>`:''}
+        ${hasWeak?`<button class="btn-weak" id="btn-retry-weak">🔄 أعِد الصعبة بوضع عميق (${wrn})</button>`:''}
         <button class="btn-main" id="btn-again">مراجعة من البداية</button>
         <button class="btn-sub"  id="btn-to-deck">العودة للمجموعة</button>
       </div>
@@ -1257,7 +2413,9 @@ function renderDone(){
     $('btn-retry-weak').onclick=()=>{
       S.studyCards=activeDeck().cards.filter(c=>S.sessionWrongIds.includes(c.id));
       if(S.shuffle)shuffleArr(S.studyCards);
-      resetStudySession();renderStudy();
+      S.studyMode='deep';  // force deep mode for weak cards retry
+      resetStudySession();updateModeChip();renderStudy();
+      toast('وضع التعلم العميق 🧠 — للبطاقات الصعبة');
     };
   }
   $('btn-again').onclick=()=>{
@@ -1290,13 +2448,14 @@ function saveDeck(){
 // Card modal
 function openNewCard(){
   S.editCardId=null;$('mcard-t').textContent='بطاقة جديدة';
-  ['in-front','in-back','in-word','in-trans','in-syn','in-note'].forEach(id=>$(id).value='');
+  ['in-front','in-back','in-word','in-trans','in-syn','in-note','in-colloc'].forEach(id=>$(id).value='');
   setLvlSel('');openModal('modal-card');setTimeout(()=>$('in-front').focus(),320);
 }
 function openEditCard(card){
   S.editCardId=card.id;$('mcard-t').textContent='تعديل البطاقة';
   $('in-front').value=card.front;$('in-back').value=card.back;$('in-word').value=card.word||'';
   $('in-trans').value=card.translation||'';$('in-syn').value=card.synonyms||'';$('in-note').value=card.note||'';
+  $('in-colloc').value=card.collocation||'';
   setLvlSel(card.level||'');openModal('modal-card');
 }
 function setLvlSel(lv){
@@ -1312,15 +2471,16 @@ function saveCard(){
   const front=$('in-front').value.trim(),back=$('in-back').value.trim();
   const word=$('in-word').value.trim(),note=$('in-note').value.trim();
   const translation=$('in-trans').value.trim(),synonyms=$('in-syn').value.trim();
+  const collocation=$('in-colloc').value.trim();
   const level=getSelLvl();
   if(!front||!back){toast('أدخل الجملتين أولاً');return}
   if(!front.includes('___')){toast('ضع ___ مكان الكلمة الجديدة');return}
   const deck=activeDeck();
   if(S.editCardId){
     const c=deck.cards.find(c=>c.id===S.editCardId);
-    Object.assign(c,{front,back,word,note,translation,synonyms,level});toast('تم تحديث البطاقة ✓');
+    Object.assign(c,{front,back,word,note,translation,synonyms,collocation,level});toast('تم تحديث البطاقة ✓');
   } else {
-    deck.cards.push(normalizeCard({front,back,word,note,translation,synonyms,level}));
+    deck.cards.push(normalizeCard({front,back,word,note,translation,synonyms,collocation,level}));
     toast('تمت إضافة البطاقة ✓');
   }
   persist();closeModal('modal-card');renderDeck();
@@ -1346,6 +2506,7 @@ function navStats(){
   $('screen-home').classList.add('sl');
   $('screen-stats').classList.remove('sr');
   renderStats();
+  pushNav('stats');
 }
 
 function getLast7(){
@@ -1553,8 +2714,8 @@ function parseCSVLine(line){
   r.push(cur.trim());return r;
 }
 function exportDeckCSV(deck){
-  const hdr='front,back,word,translation,synonyms,note,level';
-  const rows=deck.cards.map(c=>[c.front,c.back,c.word||'',c.translation||'',c.synonyms||'',c.note||'',c.level||''].map(csvCell).join(','));
+  const hdr='front,back,word,translation,synonyms,note,level,collocation';
+  const rows=deck.cards.map(c=>[c.front,c.back,c.word||'',c.translation||'',c.synonyms||'',c.note||'',c.level||'',c.collocation||''].map(csvCell).join(','));
   dlFile([hdr,...rows].join('\r\n'),`${deck.name}.csv`,'text/csv;charset=utf-8;');
   toast('تم تصدير الملف CSV ✓');
 }
@@ -1565,7 +2726,7 @@ function exportAllJSON(){
 }
 function normalizeCard(c){
   return{id:c.id||uid(),front:c.front||'',back:c.back||'',word:c.word||'',
-    translation:c.translation||'',synonyms:c.synonyms||'',note:c.note||'',level:c.level||'',
+    translation:c.translation||'',synonyms:c.synonyms||'',note:c.note||'',level:c.level||'',collocation:c.collocation||'',
     mastery:c.mastery??0,correct:c.correct??0,wrong:c.wrong??0,
     srsInterval:c.srsInterval??1,srsDue:c.srsDue??null,
     srsEase:c.srsEase??2.5,srsReps:c.srsReps??0,lastReview:c.lastReview??null,
@@ -1581,7 +2742,7 @@ function importCSV(file){
     for(let i=1;i<lines.length;i++){
       const c=parseCSVLine(lines[i]);
       if(c.length>=2&&c[0].includes('___')&&c[1].trim()){
-        deck.cards.push(normalizeCard({front:c[0],back:c[1],word:c[2]||'',translation:c[3]||'',synonyms:c[4]||'',note:c[5]||'',level:c[6]||''}));
+        deck.cards.push(normalizeCard({front:c[0],back:c[1],word:c[2]||'',translation:c[3]||'',synonyms:c[4]||'',note:c[5]||'',level:c[6]||'',collocation:c[7]||''}));
         added++;
       } else skipped++;
     }
@@ -1683,6 +2844,7 @@ function hideCtx(){$('ctx').classList.add('hidden');_ctxOpen=false}
 function initEvents(){
   // Home
   $('btn-new-deck').onclick=openNewDeck;
+  $('btn-quick-add').onclick=openQuickAdd;
   $('btn-stats').onclick=navStats;
   $('btn-stats-back').onclick=()=>{$('screen-stats').classList.add('sr');$('screen-home').classList.remove('sl');renderHome()};
   $('btn-settings').onclick=openSettings;
@@ -1697,12 +2859,24 @@ function initEvents(){
   $('btn-start-study').onclick=startStudy;
 
   // Study bar
-  $('btn-exit').onclick=()=>{speechSynthesis.cancel&&speechSynthesis.cancel();$('screen-study').classList.add('sr');$('screen-deck').classList.remove('sl');renderDeck()};
+  $('btn-exit').onclick=()=>{
+    if(!S.studyDone&&S.studyIdx>0&&S.studyIdx<S.studyCards.length-1){
+      showConfirm('إنهاء الجلسة؟','لم تكمل جميع البطاقات. إنهاء وحفظ التقدم؟','إنهاء',()=>{
+        speechSynthesis.cancel&&speechSynthesis.cancel();
+        $('screen-study').classList.add('sr');$('screen-deck').classList.remove('sl');renderDeck();
+        pushNav('deck');
+      });
+    } else {
+      speechSynthesis.cancel&&speechSynthesis.cancel();
+      $('screen-study').classList.add('sr');$('screen-deck').classList.remove('sl');renderDeck();
+      pushNav('deck');
+    }
+  };
   $('btn-mode-toggle').onclick=()=>{
-    const modes=['flip','type','mcq','reverse'];const i=modes.indexOf(S.studyMode);
-    S.studyMode=modes[(i+1)%4];S.isFlipped=false;S.typingChecked=false;S.mcqAnswered=false;S.mcqOptions=[];
+    const modes=['flip','deep','type','mcq','reverse'];const i=modes.indexOf(S.studyMode);
+    S.studyMode=modes[(i+1)%5];S.isFlipped=false;S.typingChecked=false;S.mcqAnswered=false;S.mcqOptions=[];S.deepStep=0;
     updateModeChip();if(!S.studyDone)renderStudy();
-    toast({flip:'وضع القلب 🔄',type:'وضع الكتابة ✍️',mcq:'الاختيار المتعدد 🎯',reverse:'الوضع العكسي 🔀'}[S.studyMode]);
+    toast({flip:'وضع القلب 🔄',deep:'التعلم العميق 🧠',type:'وضع الكتابة ✍️',mcq:'الاختيار المتعدد 🎯',reverse:'الوضع العكسي 🔀'}[S.studyMode]);
   };
   $('btn-shuffle').onclick=e=>{S.shuffle=!S.shuffle;e.currentTarget.classList.toggle('on',S.shuffle);toast(S.shuffle?'تم تفعيل الترتيب العشوائي':'تم إلغاء الترتيب العشوائي')};
 
@@ -1710,7 +2884,7 @@ function initEvents(){
   $('btn-save-deck').onclick=saveDeck;
   $('btn-save-card').onclick=saveCard;
   $('in-dname').onkeydown=e=>{if(e.key==='Enter')saveDeck()};
-  ['modal-deck','modal-card','modal-study-opts','modal-settings'].forEach(id=>{
+  ['modal-deck','modal-card','modal-study-opts','modal-settings','modal-qa-pick'].forEach(id=>{
     $(id).addEventListener('click',e=>{if(e.target===$(id))closeModal(id)});
   });
 
@@ -1721,6 +2895,7 @@ function initEvents(){
   };
   $('s-notif-perm').onclick=requestNotifPerm;
   $('btn-save-settings').onclick=saveSettings;
+  $('btn-import-awl').onclick=()=>{closeModal('modal-settings');importAWL()};
 
   // Context
   $('ctx-edit').onclick=()=>{hideCtx();openEditDeck()};
@@ -1730,9 +2905,24 @@ function initEvents(){
   document.addEventListener('click',()=>{if(_ctxOpen)hideCtx()});
 
   // Study options — mode & set & reverse
-  ['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(id=>{
-    $(id).onclick=()=>{if($(id).classList.contains('empty-opt'))return;['opt-flip','opt-type','opt-mcq','opt-reverse'].forEach(x=>$(x).classList.remove('sel'));$(id).classList.add('sel');S.optMode=$(id).dataset.mode};
+  const _modeDescs={
+    flip:'🔄 تقلب البطاقة وتقيّم نفسك — الأسرع والأنسب للمراجعة اليومية السريعة.',
+    deep:'🧠 3 خطوات: استمع للجملة كاملة → اكتب الكلمة الناقصة → قيّم الصعوبة. أقوى طريقة للحفظ طويل الأمد.',
+    type:'✍️ تكتب الكلمة الناقصة بنفسك — يُقوّي الذاكرة النشطة ويُمكّنك من الكتابة الصحيحة.',
+    mcq:'🎯 تختار الإجابة من 4 خيارات — مناسب للتعرف السريع على المفردات الجديدة.',
+    reverse:'🔀 ترى الكلمة المفردة وتتذكر الجملة — يُقوّي الاستخدام النشط للكلمة.'
+  };
+  ['opt-flip','opt-deep','opt-type','opt-mcq','opt-reverse'].forEach(id=>{
+    $(id).onclick=()=>{
+      if($(id).classList.contains('empty-opt'))return;
+      ['opt-flip','opt-deep','opt-type','opt-mcq','opt-reverse'].forEach(x=>$(x).classList.remove('sel'));
+      $(id).classList.add('sel');S.optMode=$(id).dataset.mode;
+      const desc=$('mode-desc-row');
+      if(desc){desc.textContent=_modeDescs[S.optMode]||'';desc.style.display='block'}
+    };
   });
+  // Show default description for flip
+  setTimeout(()=>{const desc=$('mode-desc-row');if(desc){desc.textContent=_modeDescs['flip'];desc.style.display='block'}},100);
   ['opt-all','opt-due','opt-weak'].forEach(id=>{
     $(id).onclick=()=>{if($(id).classList.contains('empty-opt'))return;['opt-all','opt-due','opt-weak'].forEach(x=>$(x).classList.remove('sel'));$(id).classList.add('sel');S.optSet=$(id).dataset.set};
   });
@@ -1758,7 +2948,7 @@ function initEvents(){
 
   // Keyboard
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){['modal-deck','modal-card','modal-study-opts','modal-settings'].forEach(closeModal);hideCtx();hideConfirm()}
+    if(e.key==='Escape'){['modal-deck','modal-card','modal-study-opts','modal-settings','modal-qa-pick'].forEach(closeModal);hideCtx();hideConfirm()}
     const inStudy=!$('screen-study').classList.contains('sr')&&!S.studyDone;
     if(inStudy&&S.studyMode==='flip'){
       if(e.key===' '){e.preventDefault();flipCard()}
@@ -1777,10 +2967,301 @@ function initEvents(){
 }
 
 // ── SW ────────────────────────────────────────────────────
+
+// ── History / Back-button Management ──────────────────────
+function pushNav(screen){
+  history.pushState({screen},document.title);
+}
+window.addEventListener('popstate',function(e){
+  const sc=e.state&&e.state.screen;
+  // If study screen is active — ask confirm then go back
+  if(!$('screen-study').classList.contains('sr')){
+    speechSynthesis.cancel&&speechSynthesis.cancel();
+    $('screen-study').classList.add('sr');
+    // Go back to deck or home
+    if(S.activeDeckId){
+      $('screen-deck').classList.remove('sl');
+      renderDeck();
+      pushNav('deck');
+    } else {
+      $('screen-home').classList.remove('sl');
+      $('screen-deck').classList.add('sr');
+      renderHome();
+      pushNav('home');
+    }
+    return;
+  }
+  // If deck screen is active — go home
+  if(!$('screen-deck').classList.contains('sr')){
+    $('screen-deck').classList.add('sr');
+    $('screen-home').classList.remove('sl');
+    renderHome();
+    pushNav('home');
+    return;
+  }
+  // If stats screen is active — go home
+  if(!$('screen-stats').classList.contains('sr')){
+    $('screen-stats').classList.add('sr');
+    $('screen-home').classList.remove('sl');
+    renderHome();
+    pushNav('home');
+    return;
+  }
+  // If home screen and pressed back — do nothing (don't exit)
+  if(!sc){
+    history.pushState({screen:'home'},document.title);
+    return;
+  }
+});
+
+
+// ── Deep Learning Mode ────────────────────────────────────
+// 3-step method: 1) Listen  2) Type  3) Rate (SRS)
+function renderDeepMode(card){
+  const fh=esc(card.front).replace(/___/g,'<span class="gap">___</span>');
+  const step=S.deepStep;
+
+  // Step indicators HTML
+  const stepsHtml=()=>`
+    <div class="deep-step-indicator">
+      ${[0,1,2].map(i=>`<div class="deep-dot ${i<step?'done':i===step?'active':''}"></div>`).join('')}
+    </div>`;
+
+  // ── Step 0: Listen & Read ────────────────────────────────
+  if(step===0){
+    $('study-stage').innerHTML=`
+      ${stepsHtml()}
+      <div class="deep-step-lbl">الخطوة 1 — استمع وافهم</div>
+      <div class="scene" id="scene" style="cursor:default">
+        <div class="flipper">
+          <div class="face">
+            <div class="face-tag">🎧 الجملة كاملة</div>
+            <div class="face-sent">${esc(card.back).replace(new RegExp('\\b'+escRe(esc(card.word||''))+'\\b','gi'),m=>`<span class="hl">${m}</span>`)}</div>
+            ${card.translation?`<div class="card-trans">${esc(card.translation)}</div>`:''}
+            ${card.synonyms?`<div class="syn-row">${card.synonyms.split(',').map(s=>`<span class="syn-chip">${esc(s.trim())}</span>`).join('')}</div>`:''}
+          </div>
+        </div>
+      </div>
+      <div id="listen-btn" class="listen-pulse" title="اضغط للاستماع">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.3" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </div>
+      <div class="deep-hint">اضغط للاستماع — ستنتقل تلقائياً بعد الاستماع</div>
+      <div class="study-nav" style="width:100%;max-width:460px;">
+        <button class="nav-btn dim" id="deep-skip-listen" style="flex:0.4">تخطي</button>
+        <button class="deep-reveal-btn" id="deep-next0" style="flex:1;opacity:.45;cursor:not-allowed" disabled>التالية — اكتب الكلمة ✍️</button>
+      </div>`;
+
+    let _listened=false;
+    const listenBtn=$('listen-btn');
+    const nextBtn=$('deep-next0');
+    function doListen(){
+      listenBtn.classList.add('done');
+      listenBtn.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      nextBtn.disabled=false;nextBtn.style.opacity='1';nextBtn.style.cursor='pointer';
+      _listened=true;
+    }
+    listenBtn.addEventListener('click',()=>{speak(card.back);setTimeout(doListen,Math.max(700,card.back.split(' ').length*420))});
+    $('deep-skip-listen').addEventListener('click',()=>{S.deepStep=1;renderStudy()});
+    nextBtn.addEventListener('click',()=>{if(_listened){S.deepStep=1;renderStudy()}});
+    // Auto-play on first load
+    setTimeout(()=>{speak(card.back);setTimeout(doListen,Math.max(700,card.back.split(' ').length*420))},400);
+    return;
+  }
+
+  // ── Step 1: Type the word ────────────────────────────────
+  if(step===1){
+    if(S.typingChecked){
+      // Show result before moving to step 2
+      const res=S.typingResult;
+      const oc=res==='correct'?'correct':res==='close'?'close':'wrong';
+      const ot=res==='correct'?'✓ ممتاز!':res==='close'?`تقريباً — الكلمة: ${esc(card.word||'')}` :`✗ الكلمة: ${esc(card.word||'')}`;
+      let bh=esc(card.back);
+      if(card.word){const re=new RegExp('\\b'+escRe(esc(card.word))+'\\b','gi');bh=bh.replace(re,m=>`<span class="hl">${m}</span>`)}
+      $('study-stage').innerHTML=`
+        ${stepsHtml()}
+        <div class="deep-step-lbl">الخطوة 2 — تحقق من إجابتك</div>
+        <div class="scene" style="cursor:default">
+          <div class="flipper flipped">
+            <div class="face"><div class="face-sent">${fh}</div></div>
+            <div class="face face-back">
+              <div class="type-res-ov ${oc}">${ot}</div>
+              <div style="margin-top:28px"></div>
+              <div class="face-sent">${bh}</div>
+              ${backExtras(card)}
+              ${ttsBtnHtml('tts-d1')}
+            </div>
+          </div>
+        </div>
+        <div class="study-nav" style="width:100%;max-width:460px;">
+          <button class="deep-reveal-btn" id="deep-next1">التالية — قيّم صعوبتها ⭐</button>
+        </div>`;
+      $('tts-d1').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-d1')});
+      $('deep-next1').addEventListener('click',()=>{S.deepStep=2;S.typingChecked=false;renderStudy()});
+      speak(card.back,'tts-d1');
+      return;
+    }
+    $('study-stage').innerHTML=`
+      ${stepsHtml()}
+      <div class="deep-step-lbl">الخطوة 2 — اكتب الكلمة الناقصة</div>
+      <div class="scene" style="cursor:default">
+        <div class="flipper">
+          <div class="face">
+            <div class="face-tag">✍️ أكمل الجملة</div>
+            <div class="face-sent">${fh}</div>
+            ${ttsBtnHtml('tts-d0')}
+          </div>
+        </div>
+      </div>
+      <div class="type-area">
+        <div class="type-inp-wrap">
+          <input class="type-inp" id="type-inp-d" type="text" placeholder="اكتب الكلمة..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dir="ltr" inputmode="text">
+          <button class="type-chk" id="type-chk-d">تحقق</button>
+        </div>
+      </div>
+      <div class="study-nav" style="width:100%;max-width:460px;">
+        <button class="nav-btn dim" id="deep-skip-type" style="flex:0.4">تخطي</button>
+      </div>`;
+    $('tts-d0').addEventListener('click',e=>{e.stopPropagation();speak(card.front,'tts-d0')});
+    $('deep-skip-type').addEventListener('click',()=>{S.deepStep=2;renderStudy()});
+    const inp=$('type-inp-d'),chk=$('type-chk-d');
+    chk.addEventListener('click',()=>submitDeepTyping(card,inp.value));
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')submitDeepTyping(card,inp.value)});
+    setTimeout(()=>inp.focus(),350);
+    return;
+  }
+
+  // ── Step 2: Rate difficulty (SRS) ───────────────────────
+  if(step===2){
+    let bh=esc(card.back);
+    if(card.word){const re=new RegExp('\\b'+escRe(esc(card.word))+'\\b','gi');bh=bh.replace(re,m=>`<span class="hl">${m}</span>`)}
+    const isLast=S.studyIdx===S.studyCards.length-1;
+    $('study-stage').innerHTML=`
+      ${stepsHtml()}
+      <div class="deep-step-lbl">الخطوة 3 — كيف كانت صعوبتها؟</div>
+      <div class="scene" style="cursor:default">
+        <div class="flipper flipped">
+          <div class="face"><div class="face-sent">${fh}</div></div>
+          <div class="face face-back">
+            <div class="face-tag" style="color:#c0ae92">الجملة الكاملة</div>
+            <div class="face-sent">${bh}</div>
+            ${backExtras(card)}
+            ${ttsBtnHtml('tts-d2')}
+          </div>
+        </div>
+      </div>
+      <div class="study-nav" style="width:100%;max-width:460px">
+        <button class="nav-btn wrong" id="nb-d-forgot">✗ نسيت</button>
+        <button class="nav-btn hard"  id="nb-d-hard">😐 صعبة</button>
+        <button class="nav-btn easy"  id="nb-d-easy">✓ سهلة</button>
+      </div>`;
+    $('tts-d2').addEventListener('click',e=>{e.stopPropagation();speak(card.back,'tts-d2')});
+    $('nb-d-forgot').addEventListener('click',()=>rateCard(0));
+    $('nb-d-hard').addEventListener('click',()=>rateCard(3));
+    $('nb-d-easy').addEventListener('click',()=>rateCard(5));
+    // auto play
+    setTimeout(()=>speak(card.back,'tts-d2'),300);
+    return;
+  }
+}
+
+function submitDeepTyping(card,val){
+  if(!val.trim()){toast('اكتب الكلمة أولاً');return}
+  const result=card.word?evalTyping(val,card.word):'correct';
+  S.typingChecked=true;S.typingResult=result;
+  // Pre-score for SRS (will be overridden by step 2 rating if user rates differently)
+  S._deepPreScore={correct:5,close:3,wrong:0}[result];
+  renderStudy();
+}
+
+
+// ── AWL Import ────────────────────────────────────────────────
+function importAWL(){
+  const existing=S.decks.find(d=>d.id==='awl-built-in');
+  if(existing){
+    showConfirm('المجموعة موجودة','هل تريد إعادة ضبط مجموعة AWL وإضافة الكلمات من جديد؟','إعادة ضبط',()=>{
+      S.decks=S.decks.filter(d=>d.id!=='awl-built-in');
+      _doImportAWL();
+    });
+    return;
+  }
+  _doImportAWL();
+}
+function _doImportAWL(){
+  const cards=AWL_CARDS.map(c=>normalizeCard({
+    front:c.f, back:c.b, word:c.w,
+    translation:c.t, synonyms:c.s||'', note:'', level:c.lv||'B2',
+    collocation: c.w.includes(' ') ? c.w : ''
+  }));
+  S.decks.unshift({id:'awl-built-in',name:'📖 Academic Word List',emoji:'🎓',
+    desc:'أهم الكلمات الأكاديمية للاختبارات الجامعية',cards,ts:Date.now()});
+  persist();navHome();
+  toast(`تمت إضافة ${cards.length} كلمة أكاديمية ✓`);
+}
+
+
+// ── Weekly Streak Strip ──────────────────────────────────────
+function renderWeekStrip(){
+  const DAY_AR=['أحد','اثن','ثلث','أرب','خمس','جمع','سبت'];
+  const today=new Date();
+  const todayStr=today.toDateString();
+  const strip=$('week-strip');
+  if(!strip) return;
+  // Build last 7 days starting from Monday-aligned week
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(Date.now()-i*86400000);
+    const ds=d.toDateString();
+    const hist=S.studyHistory.find(h=>h.date===ds);
+    days.push({label:DAY_AR[d.getDay()],done:!!(hist&&hist.studied>0),isToday:ds===todayStr});
+  }
+  strip.innerHTML=days.map(d=>`
+    <div class="wday">
+      <div class="wday-dot ${d.done?'done':''} ${d.isToday?'today':'empty'}">
+        ${d.done?'✓':d.isToday?'●':''}
+      </div>
+      <div class="wday-lbl ${d.isToday?'today':''}">${d.label}</div>
+    </div>`).join('');
+  // Reward for 7-day streak
+  const allDone=days.every(d=>d.done);
+  const reward=$('streak-reward');
+  if(reward){
+    if(allDone){reward.textContent='🏆 أسبوع كامل! إنجاز رائع — حافظ على الزخم!';reward.classList.add('on')}
+    else reward.classList.remove('on');
+  }
+}
+
+
+// ── Quick Add (home FAB) ──────────────────────────────────────
+function openQuickAdd(){
+  if(!S.decks.length){openNewDeck();return}
+  const list=$('qa-deck-list');
+  list.innerHTML='';
+  S.decks.forEach(dk=>{
+    const btn=document.createElement('button');
+    btn.className='qa-deck-btn';
+    btn.innerHTML=`<span class="qa-deck-em">${dk.emoji||'📚'}</span>
+      <span class="qa-deck-nm">${esc(dk.name)}</span>
+      <span class="qa-deck-cnt">${dk.cards.length} بطاقة</span>`;
+    btn.addEventListener('click',()=>{
+      closeModal('modal-qa-pick');
+      S.activeDeckId=dk.id;
+      S.editCardId=null;
+      $('mcard-t').textContent='بطاقة جديدة';
+      ['in-front','in-back','in-word','in-trans','in-syn','in-note','in-colloc'].forEach(id=>$(id).value='');
+      setLvlSel('');
+      openModal('modal-card');
+      setTimeout(()=>$('in-front').focus(),320);
+    });
+    list.appendChild(btn);
+  });
+  $('qa-new-deck-btn').onclick=()=>{closeModal('modal-qa-pick');openNewDeck()};
+  openModal('modal-qa-pick');
+}
+
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('SW:',e));
 
 // ── Init ──────────────────────────────────────────────────
-hydrate();addSampleIfNew();renderHome();initEvents();checkReminder();
+hydrate();addSampleIfNew();renderHome();initEvents();checkReminder();history.replaceState({screen:'home'},document.title);
 </script>
 </body>
 </html>
