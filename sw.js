@@ -2,7 +2,7 @@
    FlipLearn Service Worker v2 — Full Offline Support
    ============================================================ */
 
-const CACHE = 'fliplearn-v2';
+const CACHE = 'fliplearn-v3';
 
 const PRECACHE = [
   './',
