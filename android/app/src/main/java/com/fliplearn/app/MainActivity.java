@@ -102,7 +102,11 @@ public class MainActivity extends Activity {
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // API 30+
+            // API 30+: disable system-enforced contrast so bars stay fully transparent
+            // (replaces android:navigationBarContrastEnforced in values-v30/styles.xml)
+            getWindow().setNavigationBarContrastEnforced(false);
+            getWindow().setStatusBarContrastEnforced(false);
+
             getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController ctrl = getWindow().getInsetsController();
             if (ctrl != null) {
