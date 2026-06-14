@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App background: matches the PWA CSS var(--bg) = #0b0b12 -->
+    <!-- App background: matches the PWA CSS bg variable = #0b0b12 -->
     <color name="app_background">#0b0b12</color>
-    <!-- App accent gold: matches the PWA CSS var(--acc) = #c8901a -->
+    <!-- App accent gold: matches the PWA CSS acc variable = #c8901a -->
     <color name="app_accent">#c8901a</color>
 </resources>
