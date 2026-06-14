@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.fliplearn.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId      "com.fliplearn.app"
+        minSdk             24          // Android 7.0 — covers 99%+ of active devices
+        targetSdk          35          // Android 15
+        versionCode        1
+        versionName        "1.0"
+    }
+
+    buildTypes {
+        debug {
+            debuggable      true
+            minifyEnabled   false
+        }
+        release {
+            debuggable      false
+            minifyEnabled   false       // enable + add rules when publishing to Play Store
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                          'proguard-rules.pro'
+            // ── Signing (uncomment when using GitHub Secrets) ──────
+            // signingConfig signingConfigs.release
+        }
+    }
+
+    // ── Signing config for release builds (uses env vars from CI) ─
+    // signingConfigs {
+    //     release {
+    //         storeFile     file('fliplearn.jks')          // decoded from secret
+    //         storePassword System.getenv('STORE_PASSWORD')
+    //         keyAlias      System.getenv('KEY_ALIAS')
+    //         keyPassword   System.getenv('KEY_PASSWORD')
+    //     }
+    // }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Suppress warning about assets being in the "wrong" place
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+}
+
+// No external dependencies needed — the app is a pure WebView wrapper
+dependencies { }

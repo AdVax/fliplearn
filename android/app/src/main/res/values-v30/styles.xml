@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        API 30+ (Android 11+): disable the system-enforced navigation bar scrim
+        so the bar stays fully transparent.
+    -->
+    <style name="AppTheme" parent="android:Theme.Material.NoTitleBar">
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:navigationBarContrastEnforced">false</item>
+        <item name="android:statusBarContrastEnforced">false</item>
+    </style>
+</resources>

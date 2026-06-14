@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App background (matches the PWA's --bg variable) -->
+    <color name="app_background">#0b0b12</color>
+    <!-- App accent gold (matches the PWA's --acc variable) -->
+    <color name="app_accent">#c8901a</color>
+</resources>

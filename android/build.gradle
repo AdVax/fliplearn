@@ -1,0 +1,6 @@
+// ─── Project-level build.gradle ────────────────────────────
+// AGP 8.5.2 requires: Java 17 | Gradle 8.7 | compileSdk 35
+
+plugins {
+    id 'com.android.application' version '8.5.2' apply false
+}
